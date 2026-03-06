@@ -1,0 +1,433 @@
+{
+  "lastUpdated": "2026-03-06",
+  "sources": [
+    {
+      "key": "Johns",
+      "name": "John's Run Walk Shop",
+      "url": "https://www.johnsrunwalkshop.com/races"
+    },
+    {
+      "key": "RaceRise",
+      "name": "RaceRise",
+      "url": "https://www.racerise.com/upcoming-races"
+    }
+  ],
+  "races": [
+    {
+      "name": "The Lucky Leprechaun Half Marathon, 10 Miler, & 5K",
+      "date": "2026-03-07",
+      "location": "Versailles, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Shamrock Shuffle 3K",
+      "date": "2026-03-14",
+      "location": "Lexington, KY",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races",
+      "notes": "Free Community 5K"
+    },
+    {
+      "name": "UK Otolaryngology World Hearing Day 5K",
+      "date": "2026-03-14",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Bluegrass Bourbon 5K",
+      "date": "2026-03-21",
+      "location": "Midway, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Reforest Frenzy 5K, 10K & 1-Mile",
+      "date": "2026-03-21",
+      "location": "Lexington, KY",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races",
+      "notes": "20% discount for John's Lexington Running Club members"
+    },
+    {
+      "name": "Strides Against Blood Cancer 5K",
+      "date": "2026-03-22",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Color Me KD Shamrock Color Run 5K",
+      "date": "2026-03-28",
+      "location": "Burlington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Healing in Motion 5K",
+      "date": "2026-04-04",
+      "location": "Richmond, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Lions Run for Sight 5K",
+      "date": "2026-04-04",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Horse Capital Marathon & Half Marathon",
+      "date": "2026-04-11",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Brandon True Memorial Heroes For The Homeless 5K",
+      "date": "2026-04-18",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Run/Walk for Hope 5K",
+      "date": "2026-04-18",
+      "location": "Richmond, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Two Bridge Run 10-Miler and 5K",
+      "date": "2026-04-18",
+      "location": "Maysville, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Thoroughbred Trot 5K & Fun Run",
+      "date": "2026-04-19",
+      "location": "Midway, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Grace in Every Step 5K",
+      "date": "2026-04-24",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Derby Festival Mini & Marathon",
+      "date": "2026-04-25",
+      "location": "Louisville, KY",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races"
+    },
+    {
+      "name": "Chicks on the Run 5K & Honor Walk",
+      "date": "2026-04-25",
+      "location": "Wilder, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Diaper Dash 5K & FREE Kid's Sprint",
+      "date": "2026-04-25",
+      "location": "Versailles, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Flying Pig Marathon Weekend",
+      "date": "2026-05-01",
+      "location": "Cincinnati, OH",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races"
+    },
+    {
+      "name": "Lunch Lady Hustle 5K Run/Walk",
+      "date": "2026-05-09",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Wanda Casey Mother's Day 3K",
+      "date": "2026-05-10",
+      "location": "Frankfort, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Run the Bluegrass Half Marathon, 10K & 5K",
+      "date": "2026-05-16",
+      "location": "Lexington, KY",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races"
+    },
+    {
+      "name": "Extreme Adventure Challenge",
+      "date": "2026-05-16",
+      "location": "Versailles, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Kentucky Hands & Voices SuperHEARo 5K",
+      "date": "2026-05-16",
+      "location": "Richmond, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Run For Hope 5K",
+      "date": "2026-05-17",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "BIG LEX 4 Miler",
+      "date": "2026-05-23",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Pisgah Farms & Furlongs Half Mare-athon, 10K & 5K",
+      "date": "2026-05-30",
+      "location": "Versailles, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "No Greater Honor 5K",
+      "date": "2026-06-06",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Wild Hearts Superhero 5K, 10K & Kids Super Sprint",
+      "date": "2026-06-13",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "The Ascent Red River Gorge 5K & 10K Trail Races",
+      "date": "2026-06-27",
+      "location": "Slade, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Run Morehead 5K",
+      "date": "2026-07-03",
+      "location": "Morehead, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Bluegrass 10,000",
+      "date": "2026-07-04",
+      "location": "Lexington, KY",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races",
+      "notes": "20% discount for John's Lexington Running Club members"
+    },
+    {
+      "name": "Blackberry Festival 5K",
+      "date": "2026-07-04",
+      "location": "Carlisle, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Distillery Dash Cross Country 10K, 5K & 2.5K",
+      "date": "2026-07-24",
+      "location": "Lexington, KY",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races"
+    },
+    {
+      "name": "Moonlit Mile 5K",
+      "date": "2026-07-24",
+      "location": "Richmond, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "A Midsummer Night's Run 5K",
+      "date": "2026-08-08",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Radler Rush Cross Country 10K, 5K & 2.5K",
+      "date": "2026-08-14",
+      "location": "Lexington, KY",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races"
+    },
+    {
+      "name": "Back The Track 5K & Woodford Track Challenge",
+      "date": "2026-08-14",
+      "location": "Versailles, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "DV8K Life Changing Run (8K & 4K)",
+      "date": "2026-08-15",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Triple Crown Trot 5K",
+      "date": "2026-08-22",
+      "location": "Versailles, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Cabernet Canter Cross Country 10K & 5K",
+      "date": "2026-08-28",
+      "location": "Lexington, KY",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races"
+    },
+    {
+      "name": "Fostering Hope 5K",
+      "date": "2026-08-29",
+      "location": "Richmond, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Freebird 5K",
+      "date": "2026-09-12",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Spoonbread Festival 5K",
+      "date": "2026-09-20",
+      "location": "Berea, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Run Baby Run 5K — Benefiting NICU Babies",
+      "date": "2026-09-26",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "The Raven 10K",
+      "date": "2026-09-27",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "The Rugged Red Trail Half Marathon",
+      "date": "2026-10-03",
+      "location": "Slade, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Monster Mash & Dash 5K Glow Run",
+      "date": "2026-10-10",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Redeeming Hope's Blueheart Twilight Run 5K",
+      "date": "2026-10-10",
+      "location": "Richmond, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Iron Horse Half Marathon, 12K & 5K",
+      "date": "2026-10-11",
+      "location": "Midway, KY",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races"
+    },
+    {
+      "name": "The Running Pumpkin",
+      "date": "2026-10-17",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Dash For A Cure 5K",
+      "date": "2026-10-18",
+      "location": "London, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Miles For Medicine 5K Run/Walk",
+      "date": "2026-10-24",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Monumental Marathon",
+      "date": "2026-11-07",
+      "location": "Indianapolis, IN",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races"
+    },
+    {
+      "name": "Turkey Strut 5K",
+      "date": "2026-11-21",
+      "location": "Nicholasville, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "The Gobbler Half Marathon, 10K & 5K",
+      "date": "2026-11-22",
+      "location": "Lexington, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Thoroughbred Classic 5K",
+      "date": "2026-11-26",
+      "location": "Keeneland, Lexington, KY",
+      "source": "Johns",
+      "sourceUrl": "https://www.johnsrunwalkshop.com/races"
+    },
+    {
+      "name": "Titletown Turkey Trot",
+      "date": "2026-11-26",
+      "location": "Danville, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "St. Nicholasville Ugly Sweater 3K",
+      "date": "2026-12-12",
+      "location": "Nicholasville, KY",
+      "source": "RaceRise",
+      "sourceUrl": "https://www.racerise.com/upcoming-races"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "runninginkentucky",
+  "version": "1.0.0",
+  "description": "Lexington KY area run clubs & events — static site with auto-updating data",
+  "type": "module",
+  "scripts": {
+    "update-data": "node scripts/update-data.mjs",
+    "build-site": "node scripts/build-site.mjs",
+    "build": "npm run update-data && npm run build-site",
+    "dev": "npx serve dist -p 3000"
+  }
+}

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running in Kentucky — Lexington Area Run Clubs</title>
+  <meta name="description" content="Find run clubs, weekly group runs, and upcoming races in Lexington, Winchester, and Mt. Sterling, Kentucky." />
+  <meta property="og:title" content="Running in Kentucky — Lexington Area Run Clubs" />
+  <meta property="og:description" content="Weekly running schedule, local clubs, and upcoming races for the Lexington KY area." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <div class="logo">
+          <span class="logo-icon">🏃</span>
+          <span class="logo-text">Running in Kentucky</span>
+        </div>
+        <a href="https://github.com/thomas-weston-adams/runninginkentucky/issues/new?title=Add+Club+or+Event&labels=new-club"
+           class="btn btn-primary" target="_blank" rel="noopener">
+          + Add Your Club
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-title">Lexington Area<br>Run Clubs &amp; Events</h1>
+      <p class="hero-subtitle">Weekly group runs, local clubs, and upcoming races — all in one place</p>
+
+      <div class="search-wrapper">
+        <input type="search" id="search-input"
+               placeholder="Search clubs, locations, days..."
+               class="search-input"
+               aria-label="Search clubs and events" />
+        <span class="search-icon" aria-hidden="true">🔍</span>
+      </div>
+
+      <div class="hero-meta">
+        <span>Last updated: <strong id="last-updated">—</strong></span>
+        <span class="sources-note">
+          Auto-filled from 3 sources:
+          <a href="https://docs.google.com/document/d/your-doc-id" target="_blank" rel="noopener">Run Club Doc</a>
+          ·
+          <a href="https://www.johnsrunwalkshop.com/races" target="_blank" rel="noopener">John's Races</a>
+          ·
+          <a href="https://www.racerise.com/upcoming-races" target="_blank" rel="noopener">RaceRise</a>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WEEKLY SCHEDULE ── -->
+  <section class="section" id="schedule-section">
+    <div class="container">
+      <h2 class="section-title">Weekly Running Schedule</h2>
+      <p class="section-subtitle">
+        <span id="event-counts"></span>
+        Click any event for map &amp; details. Today's column is highlighted.
+      </p>
+      <div id="weekly-calendar" class="calendar-grid">
+        <div style="grid-column:1/-1;padding:30px;text-align:center;color:#5C6B73">Loading schedule…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GROUPS ── -->
+  <section class="section section--alt" id="groups-section">
+    <div class="container">
+      <h2 class="section-title">Local Running Groups</h2>
+      <p class="section-subtitle">Lexington, Winchester &amp; Mt. Sterling area</p>
+      <div id="groups-grid" class="groups-grid">
+        <div style="grid-column:1/-1;padding:20px;color:#5C6B73">Loading groups…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DAILY MEETUPS ── -->
+  <section class="section" id="daily-section">
+    <div class="container">
+      <h2 class="section-title">Daily Meetups</h2>
+      <p class="section-subtitle">Local runners who run every day — feel free to reach out!</p>
+      <div id="daily-meetups" class="daily-list"></div>
+    </div>
+  </section>
+
+  <!-- ── UPCOMING RACES ── -->
+  <section class="section section--alt" id="races-section">
+    <div class="container">
+      <h2 class="section-title">Upcoming Races</h2>
+      <p class="section-subtitle">Kentucky &amp; surrounding area — sourced from John's Run Walk Shop &amp; RaceRise</p>
+
+      <div class="races-filter">
+        <button class="filter-btn active" data-filter="all">All Upcoming</button>
+        <button class="filter-btn" data-filter="lexington">Lexington Only</button>
+        <button class="filter-btn" data-filter="johns">John's Featured</button>
+      </div>
+
+      <div id="races-list" class="races-list">
+        <div style="padding:20px;color:#5C6B73">Loading races…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Don't see your club or event?</h2>
+      <p>
+        This site auto-fills from three sources: the
+        <strong>Lexington Run Club Google Doc</strong>,
+        <strong>John's Run Walk Shop race calendar</strong>, and
+        <strong>RaceRise upcoming races</strong>.
+        To add or update your club or event, edit the shared document or open a quick GitHub request:
+      </p>
+      <div class="cta-buttons">
+        <a href="https://docs.google.com/document/d/your-doc-id"
+           class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+          Edit the Run Club Doc
+        </a>
+        <a href="https://github.com/thomas-weston-adams/runninginkentucky/issues/new?title=Add+Club+or+Event&labels=new-club"
+           class="btn btn-secondary btn-lg" target="_blank" rel="noopener">
+          Open a GitHub Request
+        </a>
+      </div>
+      <p class="cta-note">Data updates automatically every 6 hours from our 3 sources.</p>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>Running in Kentucky · Lexington-area run clubs &amp; events directory</p>
+      <p>
+        Data from:
+        <a href="https://docs.google.com/document/d/your-doc-id" target="_blank" rel="noopener">Run Club Google Doc</a>
+        ·
+        <a href="https://www.johnsrunwalkshop.com/races" target="_blank" rel="noopener">John's Run Walk Shop</a>
+        ·
+        <a href="https://www.racerise.com/upcoming-races" target="_blank" rel="noopener">RaceRise</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
