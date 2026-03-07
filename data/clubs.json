@@ -147,8 +147,8 @@
   },
   "groups": [
     {
-      "name": "Winchester Runners Wednesdays",
-      "url": "https://www.facebook.com/groups/973605293137812"
+      "name": "A Running Start",
+      "url": "https://www.facebook.com/arunningstartlex"
     },
     {
       "name": "Bluegrass Runners",
@@ -190,11 +190,6 @@
       "url": "https://www.facebook.com/Mirrortwinbrewingco"
     },
     {
-      "name": "Pivot Brewing",
-      "org": "Pivot Run Club",
-      "url": "https://www.facebook.com/groups/427914337784733"
-    },
-    {
       "name": "Todds Road Stumblers",
       "url": "https://www.facebook.com/groups/39995368953"
     },
@@ -203,6 +198,11 @@
       "org": "West Sixth Run/Walk Club, Training Team",
       "url": "https://www.facebook.com/WestSixthRunningClub",
       "url2": "https://www.facebook.com/groups/575129559180392"
+    },
+    {
+      "name": "Winchester Runner Wednesdays",
+      "org": "Abettor Brewing",
+      "url": "https://www.facebook.com/groups/973605293137812"
     }
   ],
   "dailyMeetups": [
