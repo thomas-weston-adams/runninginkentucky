@@ -97,6 +97,86 @@ async function fetchUltraSignup() {
     .filter(Boolean);
 }
 
+// ── FindARace ─────────────────────────────────────────────────────────────────
+const FINDARACE_URL = 'https://findarace.com/us/running/trail-runs/kentucky/lexington-fayette';
+
+async function fetchFindARace() {
+  console.log(`Fetching FindARace: ${FINDARACE_URL}`);
+  const res = await fetch(FINDARACE_URL, {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+        '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      Accept: 'text/html,application/xhtml+xml,*/*;q=0.8',
+    },
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status} from FindARace`);
+  const html = await res.text();
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const races = [];
+
+  const stripTags = s => s.replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&')
+    .replace(/&nbsp;/g, ' ').replace(/&#?\w+;/g, '').replace(/\s+/g, ' ').trim();
+
+  // FindARace uses JSON-LD structured data — try that first
+  const jsonLdRe = /<script[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi;
+  let m;
+  while ((m = jsonLdRe.exec(html)) !== null) {
+    try {
+      const obj = JSON.parse(m[1]);
+      const items = Array.isArray(obj) ? obj : obj['@graph'] ? obj['@graph'] : [obj];
+      for (const item of items) {
+        if (item['@type'] !== 'SportsEvent' && item['@type'] !== 'Event') continue;
+        const rawDate = item.startDate || item.startDate;
+        if (!rawDate) continue;
+        const date = new Date(rawDate);
+        if (isNaN(date.getTime()) || date < today) continue;
+        const name = item.name || item.alternateName;
+        if (!name) continue;
+        const loc = item.location?.address?.addressLocality || item.location?.name || 'Kentucky';
+        const state = item.location?.address?.addressRegion || '';
+        const location = state ? `${loc}, ${state}` : loc;
+        races.push({
+          name,
+          date: toISODate(date),
+          location,
+          source: 'FindARace',
+          sourceUrl: item.url || FINDARACE_URL,
+        });
+      }
+    } catch { /* malformed JSON-LD, skip */ }
+  }
+
+  // Fallback: scrape race cards by looking for date + name patterns
+  if (races.length === 0) {
+    const cardRe = /<(?:article|div|li)[^>]*class="[^"]*race[^"]*"[^>]*>([\s\S]*?)<\/(?:article|div|li)>/gi;
+    const dateRe = /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s*\d{4})/i;
+    const hrefRe = /href="(https?:\/\/[^"]+)"/i;
+    while ((m = cardRe.exec(html)) !== null) {
+      const text = stripTags(m[1]);
+      const dm = text.match(dateRe);
+      if (!dm) continue;
+      const date = new Date(dm[1]);
+      if (isNaN(date.getTime()) || date < today) continue;
+      const name = text.replace(dm[0], '').replace(/^[\s\-–|:,]+|[\s\-–|:,]+$/g, '').trim();
+      if (name.length < 3) continue;
+      const link = m[1].match(hrefRe);
+      races.push({
+        name,
+        date: toISODate(date),
+        location: 'Kentucky',
+        source: 'FindARace',
+        sourceUrl: link ? link[1] : FINDARACE_URL,
+      });
+    }
+  }
+
+  console.log(`Parsed ${races.length} upcoming races from FindARace`);
+  return races;
+}
+
 // ── Front Runners Lexington ────────────────────────────────────────────────────
 const FRONTRUNNERS_URL = 'https://frontrunnerslex.com/kyraces/';
 
@@ -228,6 +308,13 @@ async function main() {
     console.warn('Front Runners Lex fetch failed:', e.message);
   }
 
+  let farRaces = [];
+  try {
+    farRaces = await fetchFindARace();
+  } catch (e) {
+    console.warn('FindARace fetch failed:', e.message);
+  }
+
   // Merge: manual entries take precedence; skip exact name+date duplicates
   const seen = new Set();
   const merged = [];
@@ -236,7 +323,7 @@ async function main() {
     const k = normKey(r.name, r.date);
     if (!seen.has(k)) { seen.add(k); merged.push(r); }
   }
-  for (const r of [...ultraRaces, ...frRaces]) {
+  for (const r of [...ultraRaces, ...frRaces, ...farRaces]) {
     const k = normKey(r.name, r.date);
     if (!seen.has(k)) { seen.add(k); merged.push(r); }
   }
@@ -245,9 +332,10 @@ async function main() {
 
   const ultraSource = { key: 'UltraSignup', name: 'UltraSignup', url: 'https://ultrasignup.com/events/search.aspx' };
   const frSource = { key: 'FrontRunnersLex', name: 'Front Runners Lexington', url: FRONTRUNNERS_URL };
+  const farSource = { key: 'FindARace', name: 'FindARace', url: FINDARACE_URL };
   const sources = manualData.sources
-    .filter(s => s.key !== 'UltraSignup' && s.key !== 'FrontRunnersLex')
-    .concat(ultraSource, frSource);
+    .filter(s => !['UltraSignup', 'FrontRunnersLex', 'FindARace'].includes(s.key))
+    .concat(ultraSource, frSource, farSource);
 
   const output = {
     lastUpdated: new Date().toISOString().slice(0, 10),
@@ -259,7 +347,7 @@ async function main() {
   console.log(
     `\nWrote races.json — ${merged.length} total races` +
     ` (${manualRaces.length} manual + ${ultraRaces.length} UltraSignup +` +
-    ` ${frRaces.length} FrontRunners, deduped)`
+    ` ${frRaces.length} FrontRunners + ${farRaces.length} FindARace, deduped)`
   );
 }
 

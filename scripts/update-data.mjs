@@ -94,25 +94,40 @@ function parseDoc(text) {
     }
 
     if (section === 'groups') {
+      // URL-only line (possibly pipe-separated: "https://fb.com/... | example.com")
       if (urlRe.test(line)) {
-        if (groups.length > 0 && !groups[groups.length - 1].url) {
-          groups[groups.length - 1].url = line;
-        } else if (groups.length > 0 && !groups[groups.length - 1].url2) {
-          groups[groups.length - 1].url2 = line;
+        if (groups.length > 0) {
+          const g = groups[groups.length - 1];
+          const parts = line.split(/\s*[|&]\s*/).map(s => s.trim()).filter(Boolean);
+          for (const part of parts) {
+            const url = urlRe.test(part) ? part : `https://${part}`;
+            if (!g.url) g.url = url;
+            else if (!g.url2) g.url2 = url;
+          }
         }
         continue;
       }
-      // group name line: "Name - org -" or "Name -"
+      // group name line: "Name - org -" or "Name -" or "Name - org - https://..."
       const gm = line.match(/^(.+?)\s*[-–—]+\s*(.*)$/);
       if (gm) {
         const name = gm[1].trim();
-        const rest = gm[2].trim();
+        // Split rest on " - " to separate org text from any inline URLs
+        const restParts = gm[2].split(/\s*[-–—]+\s*/);
+        // Org is the first part if it doesn't start with http
+        const orgPart = !urlRe.test(restParts[0]) ? restParts.shift().trim() : '';
         const entry = { name };
-        if (rest) entry.org = rest;
-        // check for website alongside
-        const webParts = rest.split('|').map(s => s.trim());
-        if (webParts.length > 1) {
-          entry.websiteUrl = webParts.find(p => urlRe.test(p));
+        // Clean trailing dash artifacts from org
+        const cleanOrg = orgPart.replace(/\s*[-–—]+\s*$/, '').trim();
+        if (cleanOrg) entry.org = cleanOrg;
+        // Remaining parts may contain URLs or "url & url2" patterns
+        for (const part of restParts) {
+          const subParts = part.split(/\s*[|&]\s*/).map(s => s.trim()).filter(Boolean);
+          for (const sub of subParts) {
+            const url = urlRe.test(sub) ? sub : (sub.includes('.') ? `https://${sub}` : null);
+            if (!url) continue;
+            if (!entry.url) entry.url = url;
+            else if (!entry.url2) entry.url2 = url;
+          }
         }
         groups.push(entry);
       }
