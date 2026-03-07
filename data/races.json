@@ -31,6 +31,13 @@
       "sourceUrl": "https://www.racerise.com/upcoming-races"
     },
     {
+      "name": "Info Night at John's Run/Walk Shop",
+      "date": "2026-03-10",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Lexington/InfoNightJohnsRunWalkShop"
+    },
+    {
       "name": "Shamrock Shuffle 3K",
       "date": "2026-03-14",
       "location": "Lexington, KY",
@@ -44,6 +51,76 @@
       "location": "Lexington, KY",
       "source": "RaceRise",
       "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Lexington Habitat’s Shamrock Shuffle 3K",
+      "date": "2026-03-14",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Lexington/LexHabitatShamrockShuffle"
+    },
+    {
+      "name": "2026 Johnson Elementary PTO Color Run",
+      "date": "2026-03-14",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/FortThomas/2025JohnsonColorRun"
+    },
+    {
+      "name": "Shamrock Shuffle 5K",
+      "date": "2026-03-14",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Somerset/ShamrockShuffle5K"
+    },
+    {
+      "name": "Medal Madness 5K, 10K & 13.1M at Richmond, KY (11)",
+      "date": "2026-03-14",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Richmond/Whitehall3825"
+    },
+    {
+      "name": "St. Patrick's Day 5K Run/2-Mile Walk",
+      "date": "2026-03-14",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Livingston/StPatricksDay5Mile"
+    },
+    {
+      "name": "Glow to the Beat 5K Run/Walk",
+      "date": "2026-03-14",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Bardstown/GlowToTheBeat5KRunWalk"
+    },
+    {
+      "name": "Emerald Miles 5K Run/Walk",
+      "date": "2026-03-14",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Newport/EmeraldMiles5KRunWalk"
+    },
+    {
+      "name": "2026 St. Patrick's Day 5K Virtual Run - Louisville",
+      "date": "2026-03-14",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Louisville/StPatrickSDay5KVirtualRunLouisville"
+    },
+    {
+      "name": "Loopy Leprechaun 5k/10k",
+      "date": "2026-03-15",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Louisville/LoopyLeprechaun5k10k"
+    },
+    {
+      "name": "Swags East Sidewalk Sale: Early Access Night",
+      "date": "2026-03-20",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Louisville/SwagsEastSidewalkSaleEarlyAccessNight"
     },
     {
       "name": "Bluegrass Bourbon 5K",
@@ -61,6 +138,34 @@
       "notes": "20% discount for John's Lexington Running Club members"
     },
     {
+      "name": "Lucky O'possum",
+      "date": "2026-03-21",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Nancy/Lucky"
+    },
+    {
+      "name": "Madison Central Marching Band Band On The Run 5k",
+      "date": "2026-03-21",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Richmond/MadisonCentralMarchingBandBandOnTheRun5k"
+    },
+    {
+      "name": "Kingdom 5K",
+      "date": "2026-03-21",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Shelbyville/Kingdom5KRun"
+    },
+    {
+      "name": "Reforest Frenzy",
+      "date": "2026-03-21",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Lexington/BranchingOut5k"
+    },
+    {
       "name": "Strides Against Blood Cancer 5K",
       "date": "2026-03-22",
       "location": "Lexington, KY",
@@ -68,11 +173,81 @@
       "sourceUrl": "https://www.racerise.com/upcoming-races"
     },
     {
+      "name": "Beechmont Racquet & Fitness Indoor Triathlon",
+      "date": "2026-03-22",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/OH/Cincinnati/BRFIndoorTriathlon"
+    },
+    {
+      "name": "Kentucky Trail Run Series Presented by John's Run/Walk Shop & Altra",
+      "date": "2026-03-22",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/NoCity/KentuckyTrailRunSeries"
+    },
+    {
       "name": "Color Me KD Shamrock Color Run 5K",
       "date": "2026-03-28",
       "location": "Burlington, KY",
       "source": "RaceRise",
       "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "The Perfect 10 at Mt. Brilliant Farm",
+      "date": "2026-03-28",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Lexington/THEPERFECT10"
+    },
+    {
+      "name": "Larue County Blessings Run for Hunger 5K",
+      "date": "2026-03-28",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Hodgenville/LarueCountyBlessingsRunForHunger5K"
+    },
+    {
+      "name": "Medal Madness 5K, 10K, & 13.1M at Danville, KY (13)",
+      "date": "2026-03-28",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Danville/Millennium12"
+    },
+    {
+      "name": "Green Dot Bunny Trot 5K Run/Walk",
+      "date": "2026-03-28",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Bardstown/GreenDotTrot5KRunWalk"
+    },
+    {
+      "name": "Time to Paddy 5k/10k & Lucky 13.1 - Louisville",
+      "date": "2026-03-28",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Louisville/TimeToPaddyKKLuckyLouisville"
+    },
+    {
+      "name": "La Grange",
+      "date": "2026-03-28",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/LaGrange/RoaringColorRun"
+    },
+    {
+      "name": "Bourbon Country 25k/50k/5k",
+      "date": "2026-03-28",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Shepherdsville/BourbonCountry25k50k"
+    },
+    {
+      "name": "Run For Another 2026 5K and 10K",
+      "date": "2026-03-28",
+      "location": "Kentucky",
+      "source": "FrontRunnersLex",
+      "sourceUrl": "https://runsignup.com/Race/KY/Georgetown/RunForAnother5K10K"
     },
     {
       "name": "Healing in Motion 5K",

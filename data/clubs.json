@@ -1,7 +1,7 @@
 {
   "lastUpdated": "2026-03-07",
   "totals": {
-    "weeklyEvents": 15,
+    "weeklyEvents": 18,
     "groups": 13,
     "dailyMeetups": 4
   },
@@ -44,8 +44,14 @@
         "time": "6:00 pm",
         "name": "Bluegrass Runners Track Night",
         "notes": "from April through October",
-        "location": "YMCA legacy trail start point",
+        "location": "Southern Middle School, 400 Wilson Downing Rd, Lexington, KY 40517",
         "mapUrl": "https://goo.gl/maps/JQrCfWAqLHasuCnB8"
+      },
+      {
+        "time": "6:00 pm",
+        "name": "A Running Start",
+        "notes": "also Thursday and Friday",
+        "location": "YMCA legacy trail start point"
       },
       {
         "time": "7:00pm",
@@ -81,6 +87,20 @@
         "notes": "Tuesday and Thursday",
         "location": "John’s Run/Walk Shop, 317 S Ashland Ave, Lexington, KY 40502",
         "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA"
+      },
+      {
+        "time": "6:00 pm",
+        "name": "A Running Start",
+        "notes": "also Tuesday and Friday",
+        "location": "YMCA legacy trail start point"
+      }
+    ],
+    "Friday": [
+      {
+        "time": "6:00 pm",
+        "name": "A Running Start",
+        "notes": "also Tuesday and Thursday",
+        "location": "YMCA legacy trail start point"
       }
     ],
     "Saturday": [
