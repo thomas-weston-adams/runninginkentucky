@@ -76,22 +76,21 @@ async function fetchUltraSignup() {
 
   return data
     .map(ev => {
-      const date = parseUSDate(ev.EventDate || ev.event_date);
+      // Skip cancelled events
+      if (ev.Cancelled) return null;
+
+      const date = parseUSDate(ev.EventDate);
       if (!date || date < today) return null;
 
-      const eventId = ev.event_id ?? ev.EventId ?? ev.Id;
-      const sourceUrl = eventId
-        ? `https://ultrasignup.com/register.aspx?eid=${eventId}`
+      const sourceUrl = ev.EventId
+        ? `https://ultrasignup.com/register.aspx?eid=${ev.EventId}`
         : 'https://ultrasignup.com/events/search.aspx';
 
-      const name = ev.EventName || ev.name || 'Unknown Event';
-      const city = ev.City || ev.city || '';
-      const state = ev.State || ev.state || '';
-      const location = [city, state].filter(Boolean).join(', ') || 'Kentucky';
+      const name = ev.EventName || 'Unknown Event';
+      const location = [ev.City, ev.State].filter(Boolean).join(', ') || 'Kentucky';
 
-      const distNum = ev.Distance ?? ev.distance;
-      const distUom = ev.DistanceUOM || ev.distance_uom || '';
-      const notes = distNum ? `${distNum}${distUom ? ' ' + distUom : ''}` : undefined;
+      // Distances is a single string like "50K, 25K" from the jqGrid field
+      const notes = ev.Distances || undefined;
 
       return { name, date: toISODate(date), location, source: 'UltraSignup', sourceUrl, ...(notes ? { notes } : {}) };
     })
