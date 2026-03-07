@@ -25,7 +25,7 @@ jobs:
       - name: Fetch & parse run club data
         env:
           # Set this secret in repo Settings → Secrets → Actions
-          # Value: https://docs.google.com/document/d/YOUR_DOC_ID/export?format=txt
+          # Value: https://docs.google.com/document/d/1beFCZMKbfp2xjZYN6fv-25TWa-3m3gjnWRTy1oo2LdQ/export?format=txt
           GOOGLE_DOC_URL: ${{ secrets.GOOGLE_DOC_URL }}
         run: node scripts/update-data.mjs
 
