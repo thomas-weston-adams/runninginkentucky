@@ -439,7 +439,7 @@
       "date": "2026-03-13",
       "location": "Hyden, KY",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Warbird%20100",
       "notes": "100M, 50k, 1/2 Marathon"
     },
     {
@@ -447,7 +447,7 @@
       "date": "2026-03-21",
       "location": "Old Fort, NC",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Mount%20Mitchell%20Heartbreaker",
       "notes": "50 Miler, 55K"
     },
     {
@@ -455,7 +455,7 @@
       "date": "2026-03-21",
       "location": "Poland, IN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=OPSF5050",
       "notes": "50M, 50K, 14 Miler, 10K Trail Race"
     },
     {
@@ -463,7 +463,7 @@
       "date": "2026-03-21",
       "location": "Sylva, NC",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Assault%20on%20BlackRock",
       "notes": "7 Miler"
     },
     {
@@ -471,7 +471,7 @@
       "date": "2026-03-21",
       "location": "Lucasville, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Ohio's%20Backyard%20Ultra",
       "notes": "Last Person Standing"
     },
     {
@@ -479,7 +479,7 @@
       "date": "2026-03-27",
       "location": "Batavia, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Vernal%20Equinox%2048-24-12-8%20Hour%20Run",
       "notes": "48hrs, 24hrs, 12hrs Day, Ruckers 12 Hr, 8hrs"
     },
     {
@@ -487,7 +487,7 @@
       "date": "2026-03-28",
       "location": "Coalmont, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Savage%20Gulf%20Marathon",
       "notes": "Marathon, Ruck 25k, 25K"
     },
     {
@@ -495,7 +495,7 @@
       "date": "2026-03-28",
       "location": "Ona, WV",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Kanawha%20Trace%20Trail%20Run",
       "notes": "50K, 25K, 10K"
     },
     {
@@ -503,7 +503,7 @@
       "date": "2026-03-28",
       "location": "Signal Mountain, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Flipper%20Bend%20Trail%20Race",
       "notes": "1/2 Marathon, 5 Miler"
     },
     {
@@ -511,7 +511,7 @@
       "date": "2026-04-04",
       "location": "McArthur, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Iron%20Furnace%20Trail%20Run",
       "notes": "1/2 Marathon, 5 Mile"
     },
     {
@@ -519,7 +519,7 @@
       "date": "2026-04-11",
       "location": "Montreat, NC",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Seven%20Sisters%2025k",
       "notes": "25K"
     },
     {
@@ -527,7 +527,7 @@
       "date": "2026-04-11",
       "location": "Fries, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=New%20River%20Trail%20Races",
       "notes": "100k, 50K, 25K, 10K"
     },
     {
@@ -535,7 +535,7 @@
       "date": "2026-04-11",
       "location": "Nashville, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Nashville%20Running%20Company's%20Bells%20Bend%206%20Miler",
       "notes": "6 Miler"
     },
     {
@@ -543,7 +543,7 @@
       "date": "2026-04-11",
       "location": "Soddy Daisy, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Running%20with%20Sasquatch%205k",
       "notes": "5k, Ruck-The-Rock, Wildflower Walk"
     },
     {
@@ -551,7 +551,7 @@
       "date": "2026-04-11",
       "location": "Ferguson, NC",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Leatherwood%20Marathons",
       "notes": "100 Miles, 50 Mile, 50K, 25K, 10 Miler"
     },
     {
@@ -559,7 +559,7 @@
       "date": "2026-04-11",
       "location": "Borden, IN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Knobstone%2050",
       "notes": "50 Mile"
     },
     {
@@ -567,7 +567,7 @@
       "date": "2026-04-18",
       "location": "Knoxville, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=World's%20Fair%20Ultras",
       "notes": "100K, 50 Mile, 50K, 24 Hour, 12 HR, 6 Hour"
     },
     {
@@ -575,7 +575,7 @@
       "date": "2026-04-25",
       "location": "Bristol, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Troublesome%20Hollow%2050K",
       "notes": "50K, 25K"
     },
     {
@@ -583,7 +583,7 @@
       "date": "2026-04-25",
       "location": "New River Gorge, WV",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Falling%20Water%20Ultras",
       "notes": "100K, 100K Relay, 50K"
     },
     {
@@ -591,7 +591,7 @@
       "date": "2026-04-26",
       "location": "Louisville, KY",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Backside%20Trail%20Marathon",
       "notes": "Marathon, 1/2 Marathon"
     },
     {
@@ -599,7 +599,7 @@
       "date": "2026-05-02",
       "location": "Chillicothe, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=The%20Big%20Deal%20at%20Great%20Seal",
       "notes": "100 mile, 100k, 20 Miler, 5k"
     },
     {
@@ -607,7 +607,7 @@
       "date": "2026-05-02",
       "location": "Mouth of Wilson, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Grayson%20Highlands%2050%20Mile%20%2F%2050k%20%2F%2025k",
       "notes": "50 Miler, 50K, 25K, 8 Miler"
     },
     {
@@ -615,7 +615,7 @@
       "date": "2026-05-08",
       "location": "Old Fort, NC",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Hellbender%20100",
       "notes": "100-Miler"
     },
     {
@@ -623,7 +623,7 @@
       "date": "2026-05-09",
       "location": "Athens, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Thunderbunny%20Trail%20Races",
       "notes": "50K, 25K, 11K"
     },
     {
@@ -631,7 +631,7 @@
       "date": "2026-05-16",
       "location": "Black Mountain, NC",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Cancer%20Active%20Trail%20Race",
       "notes": "5k"
     },
     {
@@ -639,7 +639,7 @@
       "date": "2026-05-16",
       "location": "Burnsville, NC",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Quest%20for%20the%20Crest%2050k%2F25k",
       "notes": "50K, 25K"
     },
     {
@@ -647,7 +647,7 @@
       "date": "2026-05-22",
       "location": "Williamson, WV",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Coalfields%20Backyard%20Ultra",
       "notes": "Last Runner Standing"
     },
     {
@@ -655,7 +655,7 @@
       "date": "2026-05-23",
       "location": "Fairdale, KY",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Louisville%20Lovin'%20the%20Hills",
       "notes": "50K, 15 Miler, 6 Miler"
     },
     {
@@ -663,7 +663,7 @@
       "date": "2026-05-23",
       "location": "Norton, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Fit%20Farmer%2012K%20Trail%20Run",
       "notes": "12K"
     },
     {
@@ -671,7 +671,7 @@
       "date": "2026-05-23",
       "location": "Cleveland, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Johnston%20Woods%20Trail%20Festival",
       "notes": "24hrs, 12hrs, 6hrs, 3hrs"
     },
     {
@@ -679,7 +679,7 @@
       "date": "2026-05-30",
       "location": "Sheridan, IN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=The%20Full%20Mo",
       "notes": "50k"
     },
     {
@@ -687,7 +687,7 @@
       "date": "2026-05-30",
       "location": "Mountain City, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Kettlefoot",
       "notes": "50K, 25K, 13K"
     },
     {
@@ -695,7 +695,7 @@
       "date": "2026-06-05",
       "location": "Harrogate, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Run%20Across%20Tennessee%20-%20170%20Mile%20Relay",
       "notes": "170 Mile Relay (3–8 person teams)"
     },
     {
@@ -703,7 +703,7 @@
       "date": "2026-06-06",
       "location": "Chillicothe, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Metahqua%2024",
       "notes": "100 Mile, 24 hour solo, 24 hour relay, 10k"
     },
     {
@@ -711,7 +711,7 @@
       "date": "2026-06-06",
       "location": "Old Fort, NC",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Ridge%20to%20Rails%2050k%2C%20Half%2C%20%26%2010k",
       "notes": "50k, Half Marathon, 10k"
     },
     {
@@ -719,7 +719,7 @@
       "date": "2026-06-06",
       "location": "Abingdon, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Dam%20Yeti%2050",
       "notes": "50 Miler, 55K"
     },
     {
@@ -727,7 +727,7 @@
       "date": "2026-06-06",
       "location": "Maryville, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Three%20Sisters%20Ultra%20Festival",
       "notes": "24 Hour, 12 Hour, 6 Hour"
     },
     {
@@ -735,7 +735,7 @@
       "date": "2026-06-13",
       "location": "Waynesville, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Night%20Owl%20Trail%20Marathon%2C%20Half%2C%20and%2010K",
       "notes": "Marathon, Half Marathon, 10K"
     },
     {
@@ -743,7 +743,7 @@
       "date": "2026-06-13",
       "location": "Norton, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Woodbooger%20100",
       "notes": "100 mile, 100k, 50k, 25k"
     },
     {
@@ -751,14 +751,14 @@
       "date": "2026-06-19",
       "location": "Mouth of Wilson, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx"
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Virginia%20Highlands%203%20Day%20Trail%20Running%20Camp"
     },
     {
       "name": "1776 Merica",
       "date": "2026-07-04",
       "location": "Madisonville, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=1776%20Merica",
       "notes": "17.76 Mile, 7.4 Mile, Ruck options"
     },
     {
@@ -766,7 +766,7 @@
       "date": "2026-07-12",
       "location": "Elizabethtown, KY",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Hardin-Meade%20Endurance%20Run",
       "notes": "31 Miler"
     },
     {
@@ -774,7 +774,7 @@
       "date": "2026-07-18",
       "location": "Tellico Plains, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=The%20Cherokee",
       "notes": "130k, 70k"
     },
     {
@@ -782,7 +782,7 @@
       "date": "2026-07-25",
       "location": "Norton, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Red%20Eft%205.5%20Miler",
       "notes": "5.5 Miler"
     },
     {
@@ -790,7 +790,7 @@
       "date": "2026-08-05",
       "location": "Sneedville, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=The%20Last%20Annual%20Third%20Circle%20of%20Hell",
       "notes": "420 Miler"
     },
     {
@@ -798,7 +798,7 @@
       "date": "2026-08-08",
       "location": "Lewis Center, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Buckeye%20Sun%20Trail%20Runs",
       "notes": "26K, 20K, 12K, 7K"
     },
     {
@@ -806,7 +806,7 @@
       "date": "2026-08-08",
       "location": "Lewis Center, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Buckeye%20Moon%20Trail%20Runs",
       "notes": "26K, 20K, 12K, 7K"
     },
     {
@@ -814,7 +814,7 @@
       "date": "2026-08-08",
       "location": "Lewis Center, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Last%20Buckeye%20Standing%20Backyard%20Ultra",
       "notes": "Last Buckeye Standing"
     },
     {
@@ -822,7 +822,7 @@
       "date": "2026-08-08",
       "location": "Wytheville, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Crystal%20Springs%20Ultra%20Races",
       "notes": "12 hour, 6 hour, 3 hour"
     },
     {
@@ -830,7 +830,7 @@
       "date": "2026-08-13",
       "location": "Norton, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Flag%20Rock%205K%20Trail%20Run",
       "notes": "5K"
     },
     {
@@ -838,7 +838,7 @@
       "date": "2026-08-15",
       "location": "Vonore, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Fort%20Frenzy%20Ultra%20Festival",
       "notes": "24 Hour, 12 Hour, 6 Hour, 3 Hour"
     },
     {
@@ -846,7 +846,7 @@
       "date": "2026-09-12",
       "location": "Logan, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Hocking%20Hills%20Trail%20Run",
       "notes": "50K, 20 Mile, 10 Mile, 5 Mile, 5K"
     },
     {
@@ -854,7 +854,7 @@
       "date": "2026-09-12",
       "location": "Sparta, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Caney%20Fork%20Ultra",
       "notes": "50 Mile, 25K Run, 25K Ruck"
     },
     {
@@ -862,7 +862,7 @@
       "date": "2026-09-12",
       "location": "Bethel, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=East%20Fork%20100",
       "notes": "100 Miler, 100K, 50K, 15 Miler"
     },
     {
@@ -870,7 +870,7 @@
       "date": "2026-09-12",
       "location": "Noblesville, IN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Prairie%20On%20Fire%20Backyard%20Ultra",
       "notes": "Last Person Standing"
     },
     {
@@ -878,7 +878,7 @@
       "date": "2026-09-13",
       "location": "Borden, IN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Sorta%20Mountain%20Stage%20Race",
       "notes": "50K, Ultimate 18, Trail Half Marathon, 5 Miler"
     },
     {
@@ -886,7 +886,7 @@
       "date": "2026-09-19",
       "location": "Morristown, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=The%20Dirt%20Circuit",
       "notes": "24HR, 12HR, 6HR, 3HR"
     },
     {
@@ -894,7 +894,7 @@
       "date": "2026-09-19",
       "location": "Frozen Head State Park, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=The%20Barkley%20Fall%20Classic",
       "notes": "50K"
     },
     {
@@ -902,7 +902,7 @@
       "date": "2026-09-19",
       "location": "Laurelville, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=YOTE",
       "notes": "50K, 25K, 10k"
     },
     {
@@ -910,7 +910,7 @@
       "date": "2026-09-19",
       "location": "Hurricane, WV",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Hurricane%20Hundred%20K",
       "notes": "100K, 100k Relay"
     },
     {
@@ -918,7 +918,7 @@
       "date": "2026-09-20",
       "location": "Norton, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Mountain%20Fork%20Half%20Marathon",
       "notes": "13.6 Miler"
     },
     {
@@ -926,7 +926,7 @@
       "date": "2026-10-03",
       "location": "West Portsmouth, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Shawnee%20Trail%20Runs",
       "notes": "50 Miler, 50K, 13.1 Mile"
     },
     {
@@ -934,7 +934,7 @@
       "date": "2026-10-03",
       "location": "Norton, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=The%20Hellbender%2010k",
       "notes": "10K"
     },
     {
@@ -942,7 +942,7 @@
       "date": "2026-10-03",
       "location": "Franklin, NC",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=The%20Naturalist",
       "notes": "50K, 25K"
     },
     {
@@ -950,7 +950,7 @@
       "date": "2026-10-09",
       "location": "Abingdon, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=The%20Yeti%20100%20Mile%20Endurance%20Run",
       "notes": "100 Miler"
     },
     {
@@ -958,7 +958,7 @@
       "date": "2026-10-10",
       "location": "Hermitage, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Long%20Hunter%20Trail%20Runs",
       "notes": "50K, Marathon, 1/2 Marathon"
     },
     {
@@ -966,7 +966,7 @@
       "date": "2026-10-10",
       "location": "Max Meadows, VA",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Virginia%20Trail%20Race",
       "notes": "100 Miler, 50 Miler, 50k, 25k"
     },
     {
@@ -974,7 +974,7 @@
       "date": "2026-10-17",
       "location": "Whittier, NC",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Viewpoint%20Endurance%20Challenge",
       "notes": "24hr, 12hr, 6hr, 3hr"
     },
     {
@@ -982,7 +982,7 @@
       "date": "2026-10-17",
       "location": "Chillicothe, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Rule%20the%20Roost",
       "notes": "12 hour, 12 hour Relay, 7K"
     },
     {
@@ -990,7 +990,7 @@
       "date": "2026-10-24",
       "location": "Greenback, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Firewater%20Ultra",
       "notes": "100K, 50K, 25K Ruck"
     },
     {
@@ -998,7 +998,7 @@
       "date": "2026-10-24",
       "location": "New River Gorge, WV",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Rim%20to%20River%20100",
       "notes": "100 Miler"
     },
     {
@@ -1006,7 +1006,7 @@
       "date": "2026-11-06",
       "location": "Jamestown, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Barn%20Creek%20Backyard%20Ultra",
       "notes": "Last Man Standing"
     },
     {
@@ -1014,7 +1014,7 @@
       "date": "2026-11-07",
       "location": "Lebanon, OH",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=A%20Day%20in%20the%20Park",
       "notes": "24hrs, 6hrs"
     },
     {
@@ -1022,7 +1022,7 @@
       "date": "2026-11-08",
       "location": "Borden, IN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Lake%20Vista%20Lunatics%20Run",
       "notes": "12 Hour, 6 Hour, Fun Run"
     },
     {
@@ -1030,7 +1030,7 @@
       "date": "2026-11-21",
       "location": "Spencer, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Fall%20Creek%20100",
       "notes": "100 Miler, 100k, 50k"
     }
   ]
