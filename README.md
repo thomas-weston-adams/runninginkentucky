@@ -49,7 +49,7 @@ node scripts/update-data.mjs
 
 **Automatically** — the `update-data.yml` workflow runs every 6 hours. To enable live Google Doc fetching:
 1. Go to your Google Doc → File → Share → Anyone with the link can view
-2. Get the export URL: `https://docs.google.com/document/d/YOUR_DOC_ID/export?format=txt`
+2. Get the export URL: `https://docs.google.com/document/d/1beFCZMKbfp2xjZYN6fv-25TWa-3m3gjnWRTy1oo2LdQ/export?format=txt`
 3. Add it as a repository secret: **Settings → Secrets → Actions → New secret**
    - Name: `GOOGLE_DOC_URL`
    - Value: the export URL above

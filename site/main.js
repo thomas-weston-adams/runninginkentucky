@@ -130,6 +130,8 @@ function renderRaces(races, filter = 'all') {
     filtered = filtered.filter(r => r.location.toLowerCase().includes('lexington'));
   } else if (filter === 'johns') {
     filtered = filtered.filter(r => r.source === 'Johns');
+  } else if (filter === 'ultrasignup') {
+    filtered = filtered.filter(r => r.source === 'UltraSignup');
   }
 
   if (filtered.length === 0) {
@@ -154,7 +156,7 @@ function renderRaces(races, filter = 'all') {
           <div class="race-name">${esc(r.name)}</div>
           <div class="race-meta">
             <span class="race-location">📍 ${esc(r.location)}</span>
-            <span class="race-badge ${esc(r.source)}">${r.source === 'Johns' ? "John's" : 'RaceRise'}</span>
+            <span class="race-badge ${esc(r.source)}">${r.source === 'Johns' ? "John's" : r.source === 'UltraSignup' ? 'UltraSignup' : 'RaceRise'}</span>
           </div>
           ${r.notes ? `<div class="race-notes">${esc(r.notes)}</div>` : ''}
         </div>

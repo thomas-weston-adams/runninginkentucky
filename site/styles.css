@@ -472,6 +472,11 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   color: #0C5460;
   border: 1px solid #BEE5EB;
 }
+.race-badge.UltraSignup {
+  background: #E8D5F5;
+  color: #5A2D82;
+  border: 1px solid #D4B8EC;
+}
 .race-notes {
   font-size: 0.72rem;
   color: var(--brown-light);

@@ -29,10 +29,13 @@ jobs:
           GOOGLE_DOC_URL: ${{ secrets.GOOGLE_DOC_URL }}
         run: node scripts/update-data.mjs
 
+      - name: Fetch races from UltraSignup
+        run: node scripts/fetch-races.mjs
+
       - name: Commit updated data
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/clubs.json data/raw-doc.txt
+          git add data/clubs.json data/raw-doc.txt data/races.json
           git diff --cached --quiet || git commit -m "chore: auto-update run club data [skip ci]"
           git push
