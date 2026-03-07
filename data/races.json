@@ -15,6 +15,11 @@
       "key": "UltraSignup",
       "name": "UltraSignup",
       "url": "https://ultrasignup.com/events/search.aspx"
+    },
+    {
+      "key": "FrontRunnersLex",
+      "name": "Front Runners Lexington",
+      "url": "https://frontrunnerslex.com/kyraces/"
     }
   ],
   "races": [

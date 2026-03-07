@@ -2,7 +2,9 @@
 /**
  * fetch-races.mjs
  *
- * Fetches upcoming races near Winchester, KY (40391) from UltraSignup
+ * Fetches upcoming races from:
+ *   - UltraSignup (near Winchester, KY)
+ *   - Front Runners Lexington KY races page
  * and merges them with the hand-curated data/races-manual.json.
  * Writes the merged result to data/races.json.
  *
@@ -74,26 +76,137 @@ async function fetchUltraSignup() {
 
   return data
     .map(ev => {
-      const date = parseUSDate(ev.EventDate || ev.event_date);
+      // Skip cancelled events
+      if (ev.Cancelled) return null;
+
+      const date = parseUSDate(ev.EventDate);
       if (!date || date < today) return null;
 
-      const eventId = ev.event_id ?? ev.EventId ?? ev.Id;
-      const sourceUrl = eventId
-        ? `https://ultrasignup.com/register.aspx?eid=${eventId}`
+      const sourceUrl = ev.EventId
+        ? `https://ultrasignup.com/register.aspx?eid=${ev.EventId}`
         : 'https://ultrasignup.com/events/search.aspx';
 
-      const name = ev.EventName || ev.name || 'Unknown Event';
-      const city = ev.City || ev.city || '';
-      const state = ev.State || ev.state || '';
-      const location = [city, state].filter(Boolean).join(', ') || 'Kentucky';
+      const name = ev.EventName || 'Unknown Event';
+      const location = [ev.City, ev.State].filter(Boolean).join(', ') || 'Kentucky';
 
-      const distNum = ev.Distance ?? ev.distance;
-      const distUom = ev.DistanceUOM || ev.distance_uom || '';
-      const notes = distNum ? `${distNum}${distUom ? ' ' + distUom : ''}` : undefined;
+      // Distances is a single string like "50K, 25K" from the jqGrid field
+      const notes = ev.Distances || undefined;
 
       return { name, date: toISODate(date), location, source: 'UltraSignup', sourceUrl, ...(notes ? { notes } : {}) };
     })
     .filter(Boolean);
+}
+
+// ── Front Runners Lexington ────────────────────────────────────────────────────
+const FRONTRUNNERS_URL = 'https://frontrunnerslex.com/kyraces/';
+
+async function fetchFrontRunners() {
+  console.log(`Fetching Front Runners Lex: ${FRONTRUNNERS_URL}`);
+  const res = await fetch(FRONTRUNNERS_URL, {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+        '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      Accept: 'text/html,application/xhtml+xml,*/*;q=0.8',
+    },
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status} from Front Runners Lex`);
+  const html = await res.text();
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const races = [];
+
+  // Strategy 1: HTML table rows — expect columns: Date | Race Name | Location/City | Distance
+  const tableBodyRe = /<tbody[^>]*>([\s\S]*?)<\/tbody>/gi;
+  const rowRe = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const cellRe = /<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi;
+  const stripTags = s => s.replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&')
+    .replace(/&nbsp;/g, ' ').replace(/&#\d+;/g, '').replace(/\s+/g, ' ').trim();
+  const hrefRe = /href="([^"]+)"/i;
+
+  let tableMatch;
+  while ((tableMatch = tableBodyRe.exec(html)) !== null) {
+    const tbody = tableMatch[1];
+    let rowMatch;
+    while ((rowMatch = rowRe.exec(tbody)) !== null) {
+      const row = rowMatch[1];
+      const cells = [];
+      let cellMatch;
+      const cellReCopy = new RegExp(cellRe.source, 'gi');
+      while ((cellMatch = cellReCopy.exec(row)) !== null) {
+        cells.push(stripTags(cellMatch[1]));
+      }
+      if (cells.length < 2) continue;
+
+      // Try to find a date in the cells (M/D/YYYY, YYYY-MM-DD, Month D YYYY, etc.)
+      const dateRe = /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|\d{4}-\d{2}-\d{2}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s*\d{4})/i;
+      let dateStr = null;
+      let dateIdx = -1;
+      for (let i = 0; i < cells.length; i++) {
+        const m = cells[i].match(dateRe);
+        if (m) { dateStr = m[1]; dateIdx = i; break; }
+      }
+      if (!dateStr) continue;
+
+      const parsed = new Date(dateStr);
+      if (isNaN(parsed.getTime()) || parsed < today) continue;
+
+      // Name: first non-date cell with meaningful text, or cell after date
+      let name = '';
+      for (let i = 0; i < cells.length; i++) {
+        if (i === dateIdx) continue;
+        if (cells[i].length > 3 && !cells[i].match(/^\d+[\/-]\d+/)) { name = cells[i]; break; }
+      }
+      if (!name) continue;
+
+      // Location: look for a cell containing ", KY" or a US state abbreviation
+      let location = '';
+      for (let i = 0; i < cells.length; i++) {
+        if (i === dateIdx) continue;
+        if (/,\s*[A-Z]{2}/.test(cells[i]) && cells[i] !== name) { location = cells[i]; break; }
+      }
+
+      // Try to grab a link from the row for registration URL
+      const linkMatch = rowMatch[1].match(hrefRe);
+      const sourceUrl = linkMatch ? linkMatch[1] : FRONTRUNNERS_URL;
+
+      races.push({
+        name,
+        date: toISODate(parsed),
+        location: location || 'Kentucky',
+        source: 'FrontRunnersLex',
+        sourceUrl,
+      });
+    }
+  }
+
+  // Strategy 2: If no table rows found, look for list items or paragraphs with dates + race names
+  if (races.length === 0) {
+    const contentRe = /<(?:li|p)[^>]*>([\s\S]*?)<\/(?:li|p)>/gi;
+    let m;
+    const dateRe = /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s*\d{4})/i;
+    while ((m = contentRe.exec(html)) !== null) {
+      const text = stripTags(m[1]);
+      const dm = text.match(dateRe);
+      if (!dm) continue;
+      const parsed = new Date(dm[1]);
+      if (isNaN(parsed.getTime()) || parsed < today) continue;
+      const name = text.replace(dm[0], '').replace(/^[\s\-–|:,]+|[\s\-–|:,]+$/g, '').trim();
+      if (name.length < 3) continue;
+      const linkMatch = m[1].match(hrefRe);
+      races.push({
+        name,
+        date: toISODate(parsed),
+        location: 'Kentucky',
+        source: 'FrontRunnersLex',
+        sourceUrl: linkMatch ? linkMatch[1] : FRONTRUNNERS_URL,
+      });
+    }
+  }
+
+  console.log(`Parsed ${races.length} upcoming races from Front Runners Lex`);
+  return races;
 }
 
 async function main() {
@@ -105,7 +218,14 @@ async function main() {
     ultraRaces = await fetchUltraSignup();
     console.log(`Parsed ${ultraRaces.length} upcoming races`);
   } catch (e) {
-    console.warn('UltraSignup fetch failed — using manual races only:', e.message);
+    console.warn('UltraSignup fetch failed:', e.message);
+  }
+
+  let frRaces = [];
+  try {
+    frRaces = await fetchFrontRunners();
+  } catch (e) {
+    console.warn('Front Runners Lex fetch failed:', e.message);
   }
 
   // Merge: manual entries take precedence; skip exact name+date duplicates
@@ -116,7 +236,7 @@ async function main() {
     const k = normKey(r.name, r.date);
     if (!seen.has(k)) { seen.add(k); merged.push(r); }
   }
-  for (const r of ultraRaces) {
+  for (const r of [...ultraRaces, ...frRaces]) {
     const k = normKey(r.name, r.date);
     if (!seen.has(k)) { seen.add(k); merged.push(r); }
   }
@@ -124,7 +244,10 @@ async function main() {
   merged.sort((a, b) => a.date.localeCompare(b.date));
 
   const ultraSource = { key: 'UltraSignup', name: 'UltraSignup', url: 'https://ultrasignup.com/events/search.aspx' };
-  const sources = manualData.sources.filter(s => s.key !== 'UltraSignup').concat(ultraSource);
+  const frSource = { key: 'FrontRunnersLex', name: 'Front Runners Lexington', url: FRONTRUNNERS_URL };
+  const sources = manualData.sources
+    .filter(s => s.key !== 'UltraSignup' && s.key !== 'FrontRunnersLex')
+    .concat(ultraSource, frSource);
 
   const output = {
     lastUpdated: new Date().toISOString().slice(0, 10),
@@ -135,8 +258,8 @@ async function main() {
   writeFileSync(OUT_FILE, JSON.stringify(output, null, 2), 'utf8');
   console.log(
     `\nWrote races.json — ${merged.length} total races` +
-    ` (${manualRaces.length} manual + ${ultraRaces.length} from UltraSignup,` +
-    ` ${merged.length - manualRaces.length} net new after dedup)`
+    ` (${manualRaces.length} manual + ${ultraRaces.length} UltraSignup +` +
+    ` ${frRaces.length} FrontRunners, deduped)`
   );
 }
 
