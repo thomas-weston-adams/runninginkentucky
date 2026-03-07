@@ -1,18 +1,12 @@
 {
   "lastUpdated": "2026-03-07",
   "totals": {
-    "weeklyEvents": 17,
+    "weeklyEvents": 15,
     "groups": 13,
     "dailyMeetups": 4
   },
   "weeklySchedule": {
     "Monday": [
-      {
-        "time": "6:00pm",
-        "name": "Track night in Winchester, KY, with the Todds Road Stumblers & Abettor Run Club",
-        "location": "Robert D. Campbell Middle School Track, 620 Boone Ave, Winchester, KY 40391",
-        "mapUrl": "https://goo.gl/maps/LgvfJqLxD9e4VT2UA"
-      },
       {
         "time": "6:00-7",
         "name": "Mirror Twin Run Club",
@@ -28,7 +22,7 @@
       {
         "time": "6:00 pm",
         "name": "John's Striders - John's Run Walk Club PALOMAR",
-        "location": "John's Run/Walk Shop, 3735 Palomar Centre Dr UNIT 140, Lexington, KY 40513",
+        "location": "John’s Run/Walk Shop, 3735 Palomar Centre Dr UNIT 140, Lexington, KY 40513",
         "mapUrl": "https://maps.app.goo.gl/QPzjc2zgaLujiR4CA"
       }
     ],
@@ -43,7 +37,7 @@
         "time": "6:00 pm",
         "name": "John's Striders - John's Run Walk Club",
         "notes": "Tuesday and Thursday",
-        "location": "John's Run/Walk Shop, 317 S Ashland Ave, Lexington, KY 40502",
+        "location": "John’s Run/Walk Shop, 317 S Ashland Ave, Lexington, KY 40502",
         "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA"
       },
       {
@@ -62,7 +56,7 @@
     "Wednesday": [
       {
         "time": "6:00pm",
-        "name": "Abettor Run Walk Wag Club",
+        "name": "Winchester Runners Wednesdays",
         "location": "Abettor Brewing Company, 301 W Lexington Ave, Winchester, KY 40391",
         "mapUrl": "https://g.page/abettorbrewingcompany?share"
       },
@@ -74,7 +68,7 @@
       },
       {
         "time": "7:00 pm",
-        "name": "frontrunners lexington",
+        "name": "Frontrunners Lexington",
         "location": "Ecton Park, 956 Turkey Foot Rd, Lexington, KY 40502",
         "mapUrl": "http://frontrunnerslex.com/routes/",
         "websiteUrl": "https://goo.gl/maps/1eXnntncDs969mkQA"
@@ -82,16 +76,10 @@
     ],
     "Thursday": [
       {
-        "time": "6:00pm",
-        "name": "Pivot Run Club",
-        "location": "Pivot Brewing, 1400 Delaware Ave, Lexington, KY 40505",
-        "mapUrl": "https://g.page/pivotbrewing?share"
-      },
-      {
         "time": "6:00 pm",
         "name": "John's Striders - John's Run Walk Club",
         "notes": "Tuesday and Thursday",
-        "location": "YMCA legacy trail start point",
+        "location": "John’s Run/Walk Shop, 317 S Ashland Ave, Lexington, KY 40502",
         "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA"
       }
     ],
@@ -119,10 +107,10 @@
         "mapUrl": "https://goo.gl/maps/wGdpPD23Xn4ihYF37"
       },
       {
-        "time": "4:00-6pm",
+        "time": "4:00- 6pm",
         "name": "Bluegrass Runner Sunday evening runs",
         "notes": "seasonal changes",
-        "location": "John's Run/Walk Shop or Commonwealth Stadium, see facebook page"
+        "location": "John’s Run/Walk Shop or Commonwealth Stadium, see facebook page"
       }
     ]
   },
@@ -149,15 +137,16 @@
       "url": "https://www.facebook.com/groups/347973312546846   |   frontrunnerslex.com"
     },
     {
-      "name": "Horse's Ass Hash House Harriers",
+      "name": "Horse’s Ass Hash House Harriers",
       "url": "https://www.facebook.com/lexingtonhah3"
     },
     {
-      "name": "John's Striders / John's Run Walk",
+      "name": "John’s Striders / John’s Run Walk",
       "url": "https://www.facebook.com/groups/292617445444/"
     },
     {
       "name": "Kentucky Horse Park Run Walk Club",
+      "org": "​​",
       "url": "https://www.khpfoundation.org/khp-runwalk-club"
     },
     {
@@ -180,14 +169,12 @@
     },
     {
       "name": "West Sixth Brewing",
-      "org": "West Sixth Run/Walk Club, Training Team -",
-      "url": "https://www.facebook.com/WestSixthRunningClub",
-      "url2": "https://www.facebook.com/groups/575129559180392"
+      "org": "West Sixth Run/Walk Club, Training Team - https://www.facebook.com/WestSixthRunningClub & https://www.facebook.com/groups/575129559180392"
     }
   ],
   "dailyMeetups": [
     {
-      "who": "John's Run Walk Shop weekday meetups",
+      "who": "John’s Run Walk Shop weekday meetups",
       "when": "See details",
       "where": "the Chevy Chase Starbucks"
     },
