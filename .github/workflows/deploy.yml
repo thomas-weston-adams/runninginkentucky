@@ -30,6 +30,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Fetch race data
+        run: node scripts/fetch-races.mjs
+
       - name: Build site
         run: node scripts/build-site.mjs
 
