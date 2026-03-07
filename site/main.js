@@ -156,7 +156,6 @@ function renderRaces(races, filter = 'all') {
           <div class="race-name">${esc(r.name)}</div>
           <div class="race-meta">
             <span class="race-location">📍 ${esc(r.location)}</span>
-            <span class="race-badge ${esc(r.source)}">${r.source === 'Johns' ? "John's" : r.source === 'UltraSignup' ? 'UltraSignup' : 'RaceRise'}</span>
           </div>
           ${r.notes ? `<div class="race-notes">${esc(r.notes)}</div>` : ''}
         </div>
