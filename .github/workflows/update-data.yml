@@ -27,7 +27,13 @@ jobs:
           # Set this secret in repo Settings → Secrets → Actions
           # Value: https://docs.google.com/document/d/1beFCZMKbfp2xjZYN6fv-25TWa-3m3gjnWRTy1oo2LdQ/export?format=txt
           GOOGLE_DOC_URL: ${{ secrets.GOOGLE_DOC_URL }}
-        run: node scripts/update-data.mjs
+        run: |
+          node scripts/update-data.mjs
+          # Abort if raw-doc.txt looks like HTML (wrong secret URL)
+          if head -1 data/raw-doc.txt | grep -qi '<!doctype\|<html'; then
+            echo "ERROR: raw-doc.txt contains HTML — GOOGLE_DOC_URL secret must end with /export?format=txt"
+            exit 1
+          fi
 
       - name: Fetch races from UltraSignup
         run: node scripts/fetch-races.mjs
