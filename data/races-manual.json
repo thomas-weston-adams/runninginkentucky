@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-03-06",
+  "lastUpdated": "2026-03-07",
   "sources": [
     {
       "key": "Johns",
@@ -499,12 +499,12 @@
       "notes": "50K, 25K, 10K"
     },
     {
-      "name": "Flipper Bend Trail Race",
+      "name": "IRON GRIDDLE",
       "date": "2026-03-28",
-      "location": "Signal Mountain, TN",
+      "location": "Nashville, TN",
       "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Flipper%20Bend%20Trail%20Race",
-      "notes": "1/2 Marathon, 5 Miler"
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=IRON%20GRIDDLE",
+      "notes": "50K, Trail Half, 6 Mile"
     },
     {
       "name": "Iron Furnace Trail Run",
@@ -587,6 +587,14 @@
       "notes": "100K, 100K Relay, 50K"
     },
     {
+      "name": "FROM START TO HEART",
+      "date": "2026-04-25",
+      "location": "Abingdon, VA",
+      "source": "UltraSignup",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=FROM%20START%20TO%20HEART",
+      "notes": "3 Race Series"
+    },
+    {
       "name": "Backside Trail Marathon",
       "date": "2026-04-26",
       "location": "Louisville, KY",
@@ -665,14 +673,6 @@
       "source": "UltraSignup",
       "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Fit%20Farmer%2012K%20Trail%20Run",
       "notes": "12K"
-    },
-    {
-      "name": "Johnston Woods Trail Festival",
-      "date": "2026-05-23",
-      "location": "Cleveland, TN",
-      "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Johnston%20Woods%20Trail%20Festival",
-      "notes": "24hrs, 12hrs, 6hrs, 3hrs"
     },
     {
       "name": "The Full Mo",
@@ -890,6 +890,14 @@
       "notes": "24HR, 12HR, 6HR, 3HR"
     },
     {
+      "name": "Table Rock Ultras",
+      "date": "2026-09-19",
+      "location": "Morganton, NC",
+      "source": "UltraSignup",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Table%20Rock%20Ultras",
+      "notes": "50K, 30K"
+    },
+    {
       "name": "The Barkley Fall Classic",
       "date": "2026-09-19",
       "location": "Frozen Head State Park, TN",
@@ -962,14 +970,6 @@
       "notes": "50K, Marathon, 1/2 Marathon"
     },
     {
-      "name": "Virginia Trail Race",
-      "date": "2026-10-10",
-      "location": "Max Meadows, VA",
-      "source": "UltraSignup",
-      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Virginia%20Trail%20Race",
-      "notes": "100 Miler, 50 Miler, 50k, 25k"
-    },
-    {
       "name": "Viewpoint Endurance Challenge",
       "date": "2026-10-17",
       "location": "Whittier, NC",
@@ -1010,6 +1010,14 @@
       "notes": "Last Man Standing"
     },
     {
+      "name": "Dirt Circus - Nashville",
+      "date": "2026-11-07",
+      "location": "Nashville, TN",
+      "source": "UltraSignup",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Dirt%20Circus%20-%20Nashville",
+      "notes": "Community Run"
+    },
+    {
       "name": "A Day in the Park",
       "date": "2026-11-07",
       "location": "Lebanon, OH",
@@ -1032,6 +1040,14 @@
       "source": "UltraSignup",
       "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Fall%20Creek%20100",
       "notes": "100 Miler, 100k, 50k"
+    },
+    {
+      "name": "Taco Bell 50K Knoxville",
+      "date": "2027-02-27",
+      "location": "Knoxville, TN",
+      "source": "UltraSignup",
+      "sourceUrl": "https://ultrasignup.com/events/search.aspx#q=Taco%20Bell%2050K%20Knoxville",
+      "notes": "50K"
     }
   ]
 }
