@@ -44,8 +44,10 @@ function parseDoc(text) {
                    Thursdays:'Thursday', Fridays:'Friday', Saturdays:'Saturday', Sundays:'Sunday' };
   const normalize = d => dayMap[d] || d;
 
-  const eventRe = /^(\d{1,2}(?::\d{2})?(?:\s*(?:am|pm|AM|PM))?(?:\s*[-–—]\s*\d{1,2}(?::\d{2})?(?:\s*(?:am|pm|AM|PM))?)?)\s*[-–—]+\s*(.+)/i;
+  // Matches times like: 7am, 730am, 7:30am, 6:00-7, 7am & 8am (multi-start)
+  const eventRe = /^(\d{1,2}:?\d{0,2}\s*(?:am|pm)?(?:\s*[-–—]\s*\d{1,2}:?\d{0,2}\s*(?:am|pm)?)?(?:\s*&\s*\d{1,2}:?\d{0,2}\s*(?:am|pm)?)*)\s*[-–—]+\s*(.+)/i;
   const urlRe = /^https?:\/\//;
+  const mapsUrlRe = /maps\.google|goo\.gl\/maps|maps\.app\.goo\.gl|g\.page|maps\.apple\.com/i;
   const groupRe = /^(.+?)\s*[-–—]+\s*$/;
 
   function pushEvent() {
@@ -85,10 +87,15 @@ function parseDoc(text) {
         continue;
       }
 
-      // URL line
+      // URL line — maps URLs go to mapUrl, everything else to websiteUrl
       if (pendingEvent && urlRe.test(line)) {
-        if (!pendingEvent.mapUrl) pendingEvent.mapUrl = line;
-        else pendingEvent.websiteUrl = line;
+        if (mapsUrlRe.test(line)) {
+          if (!pendingEvent.mapUrl) pendingEvent.mapUrl = line;
+          else if (!pendingEvent.websiteUrl) pendingEvent.websiteUrl = line;
+        } else {
+          if (!pendingEvent.websiteUrl) pendingEvent.websiteUrl = line;
+          else if (!pendingEvent.mapUrl) pendingEvent.mapUrl = line;
+        }
         continue;
       }
     }

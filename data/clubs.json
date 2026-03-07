@@ -1,7 +1,7 @@
 {
   "lastUpdated": "2026-03-07",
   "totals": {
-    "weeklyEvents": 18,
+    "weeklyEvents": 20,
     "groups": 13,
     "dailyMeetups": 4
   },
@@ -76,8 +76,8 @@
         "time": "7:00 pm",
         "name": "Frontrunners Lexington",
         "location": "Ecton Park, 956 Turkey Foot Rd, Lexington, KY 40502",
-        "mapUrl": "http://frontrunnerslex.com/routes/",
-        "websiteUrl": "https://goo.gl/maps/1eXnntncDs969mkQA"
+        "websiteUrl": "http://frontrunnerslex.com/routes/",
+        "mapUrl": "https://goo.gl/maps/1eXnntncDs969mkQA"
       }
     ],
     "Thursday": [
@@ -107,15 +107,26 @@
       {
         "time": "7am",
         "name": "Todds Road Stumblers",
+        "location": "Clubhouse at the intersection of Todd's Road (1927) and Comb's Ferry Road (1923)",
+        "mapUrl": "https://goo.gl/maps/RoKdLKQvQ4ZiDCwS8"
+      },
+      {
+        "time": "730am",
+        "name": "Bluegrass Runners Long Runs",
+        "notes": "6-20 miles",
         "location": "Check Facebook or their meetup page",
-        "mapUrl": "https://goo.gl/maps/RoKdLKQvQ4ZiDCwS8",
         "websiteUrl": "https://www.facebook.com/groups/bluegrassrunners/"
       },
       {
         "time": "8am",
         "name": "West Sixth Training Team",
+        "location": "West Sixth Brewing, 501 W 6th St # 100, Lexington, KY 40508",
+        "mapUrl": "https://goo.gl/maps/xiTPu7jsYhMw1Nix9"
+      },
+      {
+        "time": "7:00am & 8:00 am",
+        "name": "frontrunners lexington",
         "location": "Third St Stuff, 257 N Limestone, Lexington, KY 40508",
-        "mapUrl": "https://goo.gl/maps/xiTPu7jsYhMw1Nix9",
         "websiteUrl": "http://frontrunnerslex.com/routes/"
       }
     ],
