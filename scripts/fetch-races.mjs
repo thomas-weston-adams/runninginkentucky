@@ -315,15 +315,30 @@ async function main() {
     console.warn('FindARace fetch failed:', e.message);
   }
 
-  // Merge: manual entries take precedence; skip exact name+date duplicates
+  // Merge strategy:
+  // 1. Non-UltraSignup manual entries take top priority
+  // 2. Fetched UltraSignup entries come next (they have real event IDs / registration links)
+  // 3. Manual UltraSignup entries are used as fallbacks when fetch fails
+  // 4. Other fetched sources (FrontRunners, FindARace) fill in the rest
+  const manualNonUS = manualRaces.filter(r => r.source !== 'UltraSignup');
+  const manualUS    = manualRaces.filter(r => r.source === 'UltraSignup');
+
   const seen = new Set();
   const merged = [];
 
-  for (const r of manualRaces) {
+  for (const r of manualNonUS) {
     const k = normKey(r.name, r.date);
     if (!seen.has(k)) { seen.add(k); merged.push(r); }
   }
-  for (const r of [...ultraRaces, ...frRaces, ...farRaces]) {
+  for (const r of ultraRaces) {
+    const k = normKey(r.name, r.date);
+    if (!seen.has(k)) { seen.add(k); merged.push(r); }
+  }
+  for (const r of manualUS) {
+    const k = normKey(r.name, r.date);
+    if (!seen.has(k)) { seen.add(k); merged.push(r); }
+  }
+  for (const r of [...frRaces, ...farRaces]) {
     const k = normKey(r.name, r.date);
     if (!seen.has(k)) { seen.add(k); merged.push(r); }
   }
