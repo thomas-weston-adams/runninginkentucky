@@ -1,7 +1,7 @@
 {
   "lastUpdated": "2026-03-07",
   "totals": {
-    "weeklyEvents": 19,
+    "weeklyEvents": 20,
     "groups": 13,
     "dailyMeetups": 4
   },
@@ -50,7 +50,7 @@
       {
         "time": "6:00 pm",
         "name": "A Running Start",
-        "notes": "also Thursday",
+        "notes": "also Thursday and Friday",
         "location": "YMCA legacy trail start point"
       },
       {
@@ -91,7 +91,15 @@
       {
         "time": "6:00 pm",
         "name": "A Running Start",
-        "notes": "also Tuesday",
+        "notes": "also Tuesday and Friday",
+        "location": "YMCA legacy trail start point"
+      }
+    ],
+    "Friday": [
+      {
+        "time": "6:00 pm",
+        "name": "A Running Start",
+        "notes": "also Tuesday and Thursday",
         "location": "YMCA legacy trail start point"
       }
     ],
