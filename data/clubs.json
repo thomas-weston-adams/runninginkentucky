@@ -137,7 +137,7 @@
   "groups": [
     {
       "name": "Abettor Brewing",
-      "org": "Abettor Run Walk Wag -",
+      "org": "Abettor Run Walk Wag",
       "url": "https://www.facebook.com/groups/973605293137812"
     },
     {
@@ -154,7 +154,8 @@
     },
     {
       "name": "Frontrunners Lexington",
-      "url": "https://www.facebook.com/groups/347973312546846   |   frontrunnerslex.com"
+      "url": "https://www.facebook.com/groups/347973312546846",
+      "url2": "https://frontrunnerslex.com"
     },
     {
       "name": "Horse’s Ass Hash House Harriers",
@@ -175,12 +176,12 @@
     },
     {
       "name": "Mirror Twin",
-      "org": "MTB Run Club - (might not be meeting) -",
+      "org": "MTB Run Club",
       "url": "https://www.facebook.com/Mirrortwinbrewingco"
     },
     {
       "name": "Pivot Brewing",
-      "org": "Pivot Run Club -",
+      "org": "Pivot Run Club",
       "url": "https://www.facebook.com/groups/427914337784733"
     },
     {
@@ -189,7 +190,9 @@
     },
     {
       "name": "West Sixth Brewing",
-      "org": "West Sixth Run/Walk Club, Training Team - https://www.facebook.com/WestSixthRunningClub & https://www.facebook.com/groups/575129559180392"
+      "org": "West Sixth Run/Walk Club, Training Team",
+      "url": "https://www.facebook.com/WestSixthRunningClub",
+      "url2": "https://www.facebook.com/groups/575129559180392"
     }
   ],
   "dailyMeetups": [
