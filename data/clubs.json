@@ -1,276 +1,210 @@
 {
-  "lastUpdated": "2026-03-06",
+  "lastUpdated": "2026-03-07",
   "totals": {
-    "weeklyEvents": 21,
+    "weeklyEvents": 17,
     "groups": 13,
     "dailyMeetups": 4
   },
   "weeklySchedule": {
     "Monday": [
       {
-        "name": "Track Night — Todds Road Stumblers & Abettor Run Club",
         "time": "6:00pm",
-        "location": "Robert D. Campbell Middle School Track",
-        "address": "620 Boone Ave, Winchester, KY 40391",
-        "mapUrl": "https://goo.gl/maps/LgvfJqLxD9e4VT2UA",
-        "notes": "Winchester, KY"
+        "name": "Track night in Winchester, KY, with the Todds Road Stumblers & Abettor Run Club",
+        "location": "Robert D. Campbell Middle School Track, 620 Boone Ave, Winchester, KY 40391",
+        "mapUrl": "https://goo.gl/maps/LgvfJqLxD9e4VT2UA"
       },
       {
+        "time": "6:00-7",
         "name": "Mirror Twin Run Club",
-        "time": "6:00–7:00pm",
-        "location": "Mirror Twin Brewing",
-        "address": "725 National Ave, Lexington, KY 40502",
+        "location": "Mirror Twin Brewing, 725 National Ave, Lexington, KY 40502",
         "mapUrl": "https://goo.gl/maps/SkKsJVcAg6X7mnZJ8"
       },
       {
-        "name": "Kentucky Horse Park Run/Walk Club",
-        "time": "4:30–7:00pm",
-        "location": "Kentucky Horse Park — Visitor Center Parking Lot",
-        "address": "Kentucky Horse Park, Lexington, KY",
-        "notes": "At least through September"
+        "time": "4:30-7",
+        "name": "Kentucky Horse Park KHP Run/Walk Club",
+        "notes": "at least through September",
+        "location": "Kentucky Horse Park, Visitor Center Parking Lot"
       },
       {
-        "name": "John's Striders — Palomar",
-        "time": "6:00pm",
-        "location": "John's Run/Walk Shop (Palomar)",
-        "address": "3735 Palomar Centre Dr Unit 140, Lexington, KY 40513",
+        "time": "6:00 pm",
+        "name": "John's Striders - John's Run Walk Club PALOMAR",
+        "location": "John's Run/Walk Shop, 3735 Palomar Centre Dr UNIT 140, Lexington, KY 40513",
         "mapUrl": "https://maps.app.goo.gl/QPzjc2zgaLujiR4CA"
       }
     ],
     "Tuesday": [
       {
+        "time": "5:30-7",
         "name": "West Sixth Run/Walk Club",
-        "time": "5:30–7:00pm",
-        "location": "West Sixth Brewing",
-        "address": "501 W 6th St #100, Lexington, KY 40508",
+        "location": "West Sixth Brewing, 501 W 6th St # 100, Lexington, KY 40508",
         "mapUrl": "https://goo.gl/maps/xiTPu7jsYhMw1Nix9"
       },
       {
-        "name": "John's Striders — Ashland Ave",
-        "time": "6:00pm",
-        "location": "John's Run/Walk Shop (Chevy Chase)",
-        "address": "317 S Ashland Ave, Lexington, KY 40502",
-        "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA",
-        "notes": "Also meets Thursdays"
+        "time": "6:00 pm",
+        "name": "John's Striders - John's Run Walk Club",
+        "notes": "Tuesday and Thursday",
+        "location": "John's Run/Walk Shop, 317 S Ashland Ave, Lexington, KY 40502",
+        "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA"
       },
       {
+        "time": "6:00 pm",
         "name": "Bluegrass Runners Track Night",
-        "time": "6:00pm",
-        "location": "Southern Middle School",
-        "address": "400 Wilson Downing Rd, Lexington, KY 40517",
-        "mapUrl": "https://goo.gl/maps/JQrCfWAqLHasuCnB8",
-        "notes": "April through October"
+        "notes": "from April through October",
+        "location": "YMCA legacy trail start point",
+        "mapUrl": "https://goo.gl/maps/JQrCfWAqLHasuCnB8"
       },
       {
-        "name": "A Running Start",
-        "time": "6:00pm",
-        "location": "YMCA Legacy Trail Start Point",
-        "notes": "Also meets Thursdays & Fridays"
-      },
-      {
-        "name": "FrontRunners 10-Week Track Program",
         "time": "7:00pm",
+        "name": "FrontRunners 10 week track program",
         "location": "Bryan Station High School Track"
       }
     ],
     "Wednesday": [
       {
-        "name": "Abettor Run Walk Wag Club",
         "time": "6:00pm",
-        "location": "Abettor Brewing Company",
-        "address": "301 W Lexington Ave, Winchester, KY 40391",
-        "mapUrl": "https://g.page/abettorbrewingcompany?share",
-        "notes": "Winchester, KY"
+        "name": "Abettor Run Walk Wag Club",
+        "location": "Abettor Brewing Company, 301 W Lexington Ave, Winchester, KY 40391",
+        "mapUrl": "https://g.page/abettorbrewingcompany?share"
       },
       {
-        "name": "Fleet Feet Run Club",
         "time": "6:00pm",
-        "location": "Fleet Feet Lexington",
-        "address": "4084 Finn Way Suite 140, Lexington, KY 40517",
+        "name": "Fleet Feet Run Club",
+        "location": "Fleet Feet Lexington, 4084 Finn Way Suite 140, Lexington, KY 40517",
         "mapUrl": "https://goo.gl/maps/gJ6GHZWryJu5QXPE9"
       },
       {
-        "name": "Frontrunners Lexington",
-        "time": "7:00pm",
-        "location": "Ecton Park",
-        "address": "956 Turkey Foot Rd, Lexington, KY 40502",
-        "mapUrl": "https://goo.gl/maps/1eXnntncDs969mkQA",
-        "websiteUrl": "http://frontrunnerslex.com/routes/"
+        "time": "7:00 pm",
+        "name": "frontrunners lexington",
+        "location": "Ecton Park, 956 Turkey Foot Rd, Lexington, KY 40502",
+        "mapUrl": "http://frontrunnerslex.com/routes/",
+        "websiteUrl": "https://goo.gl/maps/1eXnntncDs969mkQA"
       }
     ],
     "Thursday": [
       {
-        "name": "Pivot Run Club",
         "time": "6:00pm",
-        "location": "Pivot Brewing",
-        "address": "1400 Delaware Ave, Lexington, KY 40505",
+        "name": "Pivot Run Club",
+        "location": "Pivot Brewing, 1400 Delaware Ave, Lexington, KY 40505",
         "mapUrl": "https://g.page/pivotbrewing?share"
       },
       {
-        "name": "John's Striders — Ashland Ave",
-        "time": "6:00pm",
-        "location": "John's Run/Walk Shop (Chevy Chase)",
-        "address": "317 S Ashland Ave, Lexington, KY 40502",
-        "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA",
-        "notes": "Also meets Tuesdays"
-      },
-      {
-        "name": "A Running Start",
-        "time": "6:00pm",
-        "location": "YMCA Legacy Trail Start Point",
-        "notes": "Also meets Tuesdays & Fridays"
-      }
-    ],
-    "Friday": [
-      {
-        "name": "A Running Start",
-        "time": "6:00pm",
-        "location": "YMCA Legacy Trail Start Point",
-        "notes": "Also meets Tuesdays & Thursdays"
+        "time": "6:00 pm",
+        "name": "John's Striders - John's Run Walk Club",
+        "notes": "Tuesday and Thursday",
+        "location": "YMCA legacy trail start point",
+        "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA"
       }
     ],
     "Saturday": [
       {
+        "time": "7am",
         "name": "Todds Road Stumblers",
-        "time": "7:00am",
-        "location": "Stumblers Clubhouse",
-        "address": "Intersection of Todd's Road (1927) & Comb's Ferry Road (1923)",
-        "mapUrl": "https://goo.gl/maps/RoKdLKQvQ4ZiDCwS8"
-      },
-      {
-        "name": "Bluegrass Runners Long Runs",
-        "time": "7:30am",
-        "location": "Check Facebook for location",
-        "notes": "6–20 miles",
+        "location": "Check Facebook or their meetup page",
+        "mapUrl": "https://goo.gl/maps/RoKdLKQvQ4ZiDCwS8",
         "websiteUrl": "https://www.facebook.com/groups/bluegrassrunners/"
       },
       {
+        "time": "8am",
         "name": "West Sixth Training Team",
-        "time": "8:00am",
-        "location": "West Sixth Brewing",
-        "address": "501 W 6th St #100, Lexington, KY 40508",
-        "mapUrl": "https://goo.gl/maps/xiTPu7jsYhMw1Nix9"
-      },
-      {
-        "name": "Frontrunners Lexington",
-        "time": "7:00am & 8:00am",
-        "location": "Third St Stuff",
-        "address": "257 N Limestone, Lexington, KY 40508",
+        "location": "Third St Stuff, 257 N Limestone, Lexington, KY 40508",
+        "mapUrl": "https://goo.gl/maps/xiTPu7jsYhMw1Nix9",
         "websiteUrl": "http://frontrunnerslex.com/routes/"
       }
     ],
     "Sunday": [
       {
-        "name": "Montgomery County Runners",
         "time": "7:00am",
-        "location": "Downtown Athletic Club",
-        "address": "108 E Main St, Mt Sterling, KY 40353",
-        "mapUrl": "https://goo.gl/maps/wGdpPD23Xn4ihYF37",
-        "notes": "Mt. Sterling, KY"
+        "name": "Montgomery County Runners",
+        "location": "Downtown Athletic Club, 108 E Main St, Mt Sterling, KY 40353",
+        "mapUrl": "https://goo.gl/maps/wGdpPD23Xn4ihYF37"
       },
       {
-        "name": "Bluegrass Runner Sunday Evening Runs",
-        "time": "4:00–6:00pm",
-        "location": "John's Run/Walk Shop or Commonwealth Stadium",
-        "notes": "Seasonal — check Facebook for details",
-        "websiteUrl": "https://www.facebook.com/groups/bluegrassrunners/"
+        "time": "4:00-6pm",
+        "name": "Bluegrass Runner Sunday evening runs",
+        "notes": "seasonal changes",
+        "location": "John's Run/Walk Shop or Commonwealth Stadium, see facebook page"
       }
     ]
   },
   "groups": [
     {
-      "name": "Abettor Run Walk Wag",
-      "org": "Abettor Brewing",
-      "url": "https://www.facebook.com/groups/973605293137812",
-      "area": "Winchester, KY"
+      "name": "Abettor Brewing",
+      "org": "Abettor Run Walk Wag -",
+      "url": "https://www.facebook.com/groups/973605293137812"
     },
     {
       "name": "Bluegrass Runners",
-      "url": "https://www.facebook.com/groups/bluegrassrunners/",
-      "area": "Lexington, KY"
+      "url": "https://www.facebook.com/groups/bluegrassrunners/"
     },
     {
       "name": "Bluegrass Trail Runners",
-      "url": "https://www.facebook.com/groups/457990910919741",
-      "area": "Lexington, KY"
+      "url": "https://www.facebook.com/groups/457990910919741"
     },
     {
       "name": "Fleet Feet Lexington Run Club",
-      "url": "https://www.facebook.com/fleetfeetlexington/",
-      "area": "Lexington, KY"
+      "url": "https://www.facebook.com/fleetfeetlexington/"
     },
     {
       "name": "Frontrunners Lexington",
-      "url": "https://www.facebook.com/groups/347973312546846",
-      "websiteUrl": "http://frontrunnerslex.com",
-      "area": "Lexington, KY"
+      "url": "https://www.facebook.com/groups/347973312546846   |   frontrunnerslex.com"
     },
     {
       "name": "Horse's Ass Hash House Harriers",
-      "url": "https://www.facebook.com/lexingtonhah3",
-      "area": "Lexington, KY"
+      "url": "https://www.facebook.com/lexingtonhah3"
     },
     {
       "name": "John's Striders / John's Run Walk",
-      "url": "https://www.facebook.com/groups/292617445444/",
-      "area": "Lexington, KY"
+      "url": "https://www.facebook.com/groups/292617445444/"
     },
     {
-      "name": "Kentucky Horse Park Run/Walk Club",
-      "url": "https://www.khpfoundation.org/khp-runwalk-club",
-      "area": "Lexington, KY"
-    },
-    {
-      "name": "Mirror Twin Run Club",
-      "org": "Mirror Twin Brewing",
-      "url": "https://www.facebook.com/Mirrortwinbrewingco",
-      "area": "Lexington, KY",
-      "notes": "Might not be currently meeting"
+      "name": "Kentucky Horse Park Run Walk Club",
+      "url": "https://www.khpfoundation.org/khp-runwalk-club"
     },
     {
       "name": "Montgomery County Runners & Cyclists",
-      "url": "https://www.facebook.com/groups/1397801726981663",
-      "area": "Mt. Sterling, KY"
+      "url": "https://www.facebook.com/groups/1397801726981663"
     },
     {
-      "name": "Pivot Run Club",
-      "org": "Pivot Brewing",
-      "url": "https://www.facebook.com/groups/427914337784733",
-      "area": "Lexington, KY"
+      "name": "Mirror Twin",
+      "org": "MTB Run Club - (might not be meeting) -",
+      "url": "https://www.facebook.com/Mirrortwinbrewingco"
+    },
+    {
+      "name": "Pivot Brewing",
+      "org": "Pivot Run Club -",
+      "url": "https://www.facebook.com/groups/427914337784733"
     },
     {
       "name": "Todds Road Stumblers",
-      "url": "https://www.facebook.com/groups/39995368953",
-      "area": "Winchester, KY"
+      "url": "https://www.facebook.com/groups/39995368953"
     },
     {
-      "name": "West Sixth Run/Walk Club & Training Team",
-      "org": "West Sixth Brewing",
+      "name": "West Sixth Brewing",
+      "org": "West Sixth Run/Walk Club, Training Team -",
       "url": "https://www.facebook.com/WestSixthRunningClub",
-      "url2": "https://www.facebook.com/groups/575129559180392",
-      "area": "Lexington, KY"
+      "url2": "https://www.facebook.com/groups/575129559180392"
     }
   ],
   "dailyMeetups": [
     {
-      "who": "John's Run Walk Shop",
-      "when": "Weekday mornings",
-      "where": "Chevy Chase Starbucks"
+      "who": "John's Run Walk Shop weekday meetups",
+      "when": "See details",
+      "where": "the Chevy Chase Starbucks"
     },
     {
       "who": "MoCo Runners",
-      "when": "Early mornings",
-      "where": "Mt. Sterling area"
+      "when": "See details",
+      "where": "early mornings"
     },
     {
       "who": "Ben Cichanowicz",
-      "when": "Every day at lunch",
-      "where": "Lexington area"
+      "when": "See details",
+      "where": "every day"
     },
     {
       "who": "Tommy Adams",
-      "when": "Every day, no set time",
-      "where": "Lexington area"
+      "when": "See details",
+      "where": "every day"
     }
   ]
 }

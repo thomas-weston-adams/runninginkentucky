@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-03-06",
+  "lastUpdated": "2026-03-07",
   "sources": [
     {
       "key": "Johns",
@@ -10,6 +10,11 @@
       "key": "RaceRise",
       "name": "RaceRise",
       "url": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "key": "UltraSignup",
+      "name": "UltraSignup",
+      "url": "https://ultrasignup.com/events/search.aspx"
     }
   ],
   "races": [
