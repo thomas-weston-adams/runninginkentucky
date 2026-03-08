@@ -5,8 +5,9 @@ const RACES_URL = './races.json';
 const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const TODAY = new Date();
+const state = { filter: 'all', dist: 'all', query: '' };
 
-// ── helpers ──────────────────────────────────────────────────────────────────
+// ── helpers ───────────────────────────────────────────────────────────────────
 function todayDayName() {
   return DAYS[TODAY.getDay() === 0 ? 6 : TODAY.getDay() - 1];
 }
@@ -16,17 +17,63 @@ function parseDate(str) {
   return new Date(y, m - 1, d);
 }
 
-function formatDate(str) {
-  const d = parseDate(str);
-  return `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
-}
-
 function esc(str) {
   return String(str ?? '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+// Safe: escapes each piece individually before wrapping in <mark>
+function highlightText(text, query) {
+  if (!query || !text) return esc(String(text ?? ''));
+  const parts = [];
+  let src = String(text);
+  const lq = query.toLowerCase();
+  while (src.length > 0) {
+    const idx = src.toLowerCase().indexOf(lq);
+    if (idx === -1) { parts.push(esc(src)); break; }
+    if (idx > 0) parts.push(esc(src.slice(0, idx)));
+    parts.push(`<mark class="highlight">${esc(src.slice(idx, idx + query.length))}</mark>`);
+    src = src.slice(idx + query.length);
+  }
+  return parts.join('');
+}
+
+function daysUntil(dateStr) {
+  const today = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
+  return Math.round((parseDate(dateStr) - today) / 86400000);
+}
+
+function countdownLabel(days) {
+  if (days === 0) return '<span class="race-countdown countdown-today">Today!</span>';
+  if (days === 1) return '<span class="race-countdown countdown-soon">Tomorrow</span>';
+  if (days <= 7) return `<span class="race-countdown countdown-soon">In ${days} days</span>`;
+  if (days <= 14) return `<span class="race-countdown countdown-near">In ${days} days</span>`;
+  return '';
+}
+
+function googleCalUrl(race) {
+  const d = parseDate(race.date);
+  const pad = n => String(n).padStart(2, '0');
+  const ymd = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+  const next = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+  const ymdNext = `${next.getFullYear()}${pad(next.getMonth()+1)}${pad(next.getDate())}`;
+  const details = [race.notes, race.sourceUrl].filter(Boolean).join('\n');
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(race.name)}&dates=${ymd}/${ymdNext}&location=${encodeURIComponent(race.location)}&details=${encodeURIComponent(details)}`;
+}
+
+function parseDistances(notes) {
+  if (!notes) return [];
+  const t = notes.toLowerCase();
+  const out = [];
+  if (/\b5k\b/.test(t)) out.push('5K');
+  if (/\b10k\b/.test(t)) out.push('10K');
+  if (/half.?marathon|13\.1|\bhalf\b/.test(t)) out.push('Half');
+  if (/\bmarathon\b|26\.2/.test(t) && !/(ultra|50k|100k|50m|100m)/.test(t)) out.push('Marathon');
+  if (/\b(50k|100k|100m|50m|ultra|backyard|endurance)\b/.test(t)) out.push('Ultra');
+  return out;
 }
 
 // ── render weekly calendar ────────────────────────────────────────────────────
@@ -42,7 +89,6 @@ function renderCalendar(schedule) {
     const col = document.createElement('div');
     col.className = 'day-column';
     col.dataset.day = day;
-
     col.innerHTML = `<div class="day-header ${isToday ? 'today' : ''}">${day}${isToday ? ' ★' : ''}</div>`;
 
     if (events.length === 0) {
@@ -104,34 +150,76 @@ function renderGroups(groups) {
 // ── render daily meetups ──────────────────────────────────────────────────────
 function renderDaily(meetups) {
   const list = document.getElementById('daily-meetups');
-  const cards = meetups.map(m => `
+  list.innerHTML = meetups.map(m => `
     <div class="daily-card">
       <div class="daily-who">${esc(m.who)}</div>
       <div class="daily-when">🕐 ${esc(m.when)}</div>
       <div class="daily-where">📍 ${esc(m.where)}</div>
     </div>
-  `).join('');
-
-  list.innerHTML = cards + `
+  `).join('') + `
     <div class="daily-footer" style="grid-column:1/-1">
       Want to be listed here? <a href="https://github.com/thomas-weston-adams/runninginkentucky/issues/new?title=Add+Daily+Meetup&labels=new-club" target="_blank" rel="noopener">Open a quick request</a> and we'll add you!
     </div>
   `;
 }
 
+// ── weekend callout ───────────────────────────────────────────────────────────
+function renderWeekendCallout(races) {
+  const el = document.getElementById('weekend-callout');
+  if (!el) return;
+
+  const soon = races
+    .map(r => ({ ...r, days: daysUntil(r.date) }))
+    .filter(r => r.days >= 0 && r.days <= 7)
+    .sort((a, b) => a.days - b.days);
+
+  if (soon.length === 0) { el.hidden = true; return; }
+
+  const items = soon.map(r => {
+    const d = parseDate(r.date);
+    const label = r.days === 0 ? 'Today' : r.days === 1 ? 'Tomorrow' : `${MONTHS[d.getMonth()]} ${d.getDate()}`;
+    return `<a href="${esc(r.sourceUrl)}" class="weekend-item" target="_blank" rel="noopener">
+      <span class="weekend-item-when">${label}</span>
+      <span class="weekend-item-name">${esc(r.name)}</span>
+      <span class="weekend-item-loc">📍 ${esc(r.location)}</span>
+    </a>`;
+  }).join('');
+
+  el.hidden = false;
+  el.innerHTML = `
+    <div class="weekend-header">
+      <span>📅</span>
+      <strong>Happening this week</strong>
+      <span class="weekend-count">${soon.length} race${soon.length !== 1 ? 's' : ''}</span>
+    </div>
+    <div class="weekend-items">${items}</div>
+  `;
+}
+
 // ── render races ──────────────────────────────────────────────────────────────
-function renderRaces(races, filter = 'all') {
+function renderRaces(races) {
   const list = document.getElementById('races-list');
   const today = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
+  const q = state.query;
 
   let filtered = races.filter(r => parseDate(r.date) >= today);
 
-  if (filter === 'lexington') {
+  if (state.filter === 'lexington') {
     filtered = filtered.filter(r => r.location.toLowerCase().includes('lexington'));
-  } else if (filter === 'johns') {
+  } else if (state.filter === 'johns') {
     filtered = filtered.filter(r => r.source === 'Johns');
-  } else if (filter === 'ultrasignup') {
+  } else if (state.filter === 'ultrasignup') {
     filtered = filtered.filter(r => r.source === 'UltraSignup');
+  }
+
+  if (state.dist !== 'all') {
+    filtered = filtered.filter(r => parseDistances(r.notes).includes(state.dist));
+  }
+
+  if (q) {
+    filtered = filtered.filter(r =>
+      [r.name, r.location, r.source, r.notes].filter(Boolean).join(' ').toLowerCase().includes(q)
+    );
   }
 
   if (filtered.length === 0) {
@@ -143,85 +231,234 @@ function renderRaces(races, filter = 'all') {
 
   list.innerHTML = filtered.map(r => {
     const d = parseDate(r.date);
-    const month = MONTHS[d.getMonth()];
-    const day = d.getDate();
+    const days = daysUntil(r.date);
+    const calUrl = googleCalUrl(r);
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.location)}`;
+    const distances = parseDistances(r.notes);
+    const distBadges = distances.map(dist => `<span class="dist-badge">${dist}</span>`).join('');
+    const badgeLabel = r.source === 'Johns' ? "John's" : r.source;
+    const knownSource = ['Johns', 'RaceRise', 'UltraSignup'].includes(r.source);
+    const sourceBadge = `<span class="race-badge ${knownSource ? esc(r.source) : 'Other'}">${esc(badgeLabel)}</span>`;
 
     return `
-      <div class="race-card" data-source="${esc(r.source)}" data-location="${esc(r.location)}">
+      <div class="race-card" data-source="${esc(r.source)}" data-location="${esc(r.location)}" data-name="${esc(r.name)}">
         <div class="race-date-block">
-          <div class="race-date-month">${month}</div>
-          <div class="race-date-day">${day}</div>
+          <div class="race-date-month">${MONTHS[d.getMonth()]}</div>
+          <div class="race-date-day">${d.getDate()}</div>
         </div>
         <div class="race-info">
-          <div class="race-name">${esc(r.name)}</div>
+          <div class="race-name">${highlightText(r.name, q)}</div>
           <div class="race-meta">
-            <span class="race-location">📍 ${esc(r.location)}</span>
+            <a href="${mapsUrl}" class="race-location" target="_blank" rel="noopener" title="Open in Google Maps">📍 ${highlightText(r.location, q)}</a>
+            ${sourceBadge}
+            ${distBadges}
+            ${countdownLabel(days)}
           </div>
-          ${r.notes ? `<div class="race-notes">${esc(r.notes)}</div>` : ''}
+          ${r.notes ? `<div class="race-notes">${highlightText(r.notes, q)}</div>` : ''}
         </div>
         <div class="race-actions">
           <a href="${esc(r.sourceUrl)}" class="btn btn-map" target="_blank" rel="noopener">Details →</a>
+          <a href="${calUrl}" class="btn btn-icon" target="_blank" rel="noopener" title="Add to Google Calendar" aria-label="Add to Google Calendar">📅</a>
+          <button class="btn btn-icon btn-share" data-name="${esc(r.name)}" title="Copy link to this race" aria-label="Copy link to this race">🔗</button>
         </div>
       </div>
     `;
   }).join('');
+
+  // Share button handlers
+  list.querySelectorAll('.btn-share').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const base = window.location.href.split('?')[0];
+      const shareUrl = `${base}?race=${encodeURIComponent(btn.dataset.name)}`;
+      const copy = () => navigator.clipboard.writeText(shareUrl).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = '✓';
+        setTimeout(() => { btn.textContent = orig; }, 1500);
+      }).catch(() => prompt('Copy this link:', shareUrl));
+
+      if (navigator.share) {
+        navigator.share({ title: btn.dataset.name, url: shareUrl }).catch(copy);
+      } else {
+        copy();
+      }
+    });
+  });
+
+  // Deep link: scroll to and highlight a specific race
+  const target = new URLSearchParams(window.location.search).get('race');
+  if (target) {
+    const card = list.querySelector(`[data-name="${esc(target)}"]`);
+    if (card) {
+      card.classList.add('race-card--linked');
+      setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+    }
+  }
 }
 
-// ── search ────────────────────────────────────────────────────────────────────
-function setupSearch() {
+// ── ICS export ────────────────────────────────────────────────────────────────
+function exportICS(races) {
+  const today = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
+  const pad = n => String(n).padStart(2, '0');
+  const ymd = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Running in Kentucky//Race Calendar//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:Running in Kentucky Races',
+    'X-WR-TIMEZONE:America/New_York',
+  ];
+
+  races
+    .filter(r => parseDate(r.date) >= today)
+    .sort((a, b) => parseDate(a.date) - parseDate(b.date))
+    .forEach(r => {
+      const d = parseDate(r.date);
+      const next = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+      const desc = [r.notes, r.sourceUrl].filter(Boolean).join('\\n');
+      lines.push(
+        'BEGIN:VEVENT',
+        `UID:${r.date}-${r.name.replace(/\W+/g, '-')}@runninginkentucky`,
+        `DTSTART;VALUE=DATE:${ymd(d)}`,
+        `DTEND;VALUE=DATE:${ymd(next)}`,
+        `SUMMARY:${r.name}`,
+        `LOCATION:${r.location}`,
+        ...(desc ? [`DESCRIPTION:${desc}`] : []),
+        `URL:${r.sourceUrl}`,
+        'END:VEVENT',
+      );
+    });
+
+  lines.push('END:VCALENDAR');
+
+  const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'running-in-kentucky-races.ics';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ── filter & search ───────────────────────────────────────────────────────────
+function applyFilters(races) {
+  const q = state.query;
+
+  document.querySelectorAll('.event-card, .group-card').forEach(card => {
+    card.classList.toggle('hidden', q.length > 0 && !card.dataset.search.includes(q));
+  });
+
+  renderRaces(races);
+}
+
+function setupSearch(races) {
   const input = document.getElementById('search-input');
 
+  document.addEventListener('keydown', e => {
+    const tag = document.activeElement.tagName;
+    if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
+      e.preventDefault();
+      input.focus();
+      input.select();
+    }
+    if (e.key === 'Escape' && document.activeElement === input) {
+      input.value = '';
+      state.query = '';
+      applyFilters(races);
+      input.blur();
+    }
+  });
+
   input.addEventListener('input', () => {
-    const q = input.value.trim().toLowerCase();
-
-    // events
-    document.querySelectorAll('.event-card').forEach(card => {
-      const match = !q || card.dataset.search.includes(q);
-      card.classList.toggle('hidden', !match);
-    });
-
-    // groups
-    document.querySelectorAll('.group-card').forEach(card => {
-      const match = !q || card.dataset.search.includes(q);
-      card.classList.toggle('hidden', !match);
-    });
-
-    // races — re-render is heavier, just filter DOM
-    document.querySelectorAll('.race-card').forEach(card => {
-      const text = (card.dataset.source + ' ' + card.dataset.location + ' ' + card.querySelector('.race-name').textContent).toLowerCase();
-      const match = !q || text.includes(q);
-      card.classList.toggle('hidden', !match);
-    });
+    state.query = input.value.trim().toLowerCase();
+    applyFilters(races);
   });
 }
 
-// ── race filters ──────────────────────────────────────────────────────────────
 function setupRaceFilters(races) {
-  document.querySelectorAll('.filter-btn').forEach(btn => {
+  document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      renderRaces(races, btn.dataset.filter);
+      state.filter = btn.dataset.filter;
+      renderRaces(races);
     });
+  });
+
+  document.querySelectorAll('.filter-btn[data-dist]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const already = state.dist === btn.dataset.dist;
+      document.querySelectorAll('.filter-btn[data-dist]').forEach(b => b.classList.remove('active'));
+      state.dist = already ? 'all' : btn.dataset.dist;
+      if (!already) btn.classList.add('active');
+      renderRaces(races);
+    });
+  });
+
+  const exportBtn = document.getElementById('export-ics');
+  if (exportBtn) exportBtn.addEventListener('click', () => exportICS(races));
+}
+
+// ── theme switcher ────────────────────────────────────────────────────────────
+const THEMES = [
+  { id: '',        icon: '🌿', label: 'Kentucky'      },
+  { id: 'dark',    icon: '🌙', label: 'Kentucky Dark' },
+  { id: 'strava',  icon: '🟠', label: 'Strava'        },
+  { id: 'garmin',  icon: '🔵', label: 'Garmin'        },
+];
+
+function setupDarkMode() {
+  const btn = document.getElementById('dark-mode-toggle');
+  if (!btn) return;
+
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const defaultTheme = prefersDark ? 'dark' : '';
+  const saved = localStorage.getItem('rik-theme') ?? defaultTheme;
+  let idx = THEMES.findIndex(t => t.id === saved);
+  if (idx === -1) idx = 0;
+
+  const apply = i => {
+    const theme = THEMES[i];
+    if (theme.id) {
+      document.documentElement.dataset.theme = theme.id;
+    } else {
+      delete document.documentElement.dataset.theme;
+    }
+    btn.textContent = theme.icon;
+    btn.setAttribute('title', `Theme: ${theme.label} — click to cycle`);
+    btn.setAttribute('aria-label', `Current theme: ${theme.label}`);
+    localStorage.setItem('rik-theme', theme.id);
+  };
+
+  apply(idx);
+
+  btn.addEventListener('click', () => {
+    idx = (idx + 1) % THEMES.length;
+    apply(idx);
   });
 }
 
 // ── init ──────────────────────────────────────────────────────────────────────
 async function init() {
+  setupDarkMode();
+
   try {
-    const [clubsRes, racesRes] = await Promise.all([
-      fetch(CLUBS_URL),
-      fetch(RACES_URL)
-    ]);
+    const [clubsRes, racesRes] = await Promise.all([fetch(CLUBS_URL), fetch(RACES_URL)]);
     const clubs = await clubsRes.json();
     const racesData = await racesRes.json();
+    const races = racesData.races;
 
     renderCalendar(clubs.weeklySchedule);
     renderGroups(clubs.groups);
     renderDaily(clubs.dailyMeetups);
-    renderRaces(racesData.races);
-    setupSearch();
-    setupRaceFilters(racesData.races);
+    renderWeekendCallout(races);
+    renderRaces(races);
+    setupSearch(races);
+    setupRaceFilters(races);
 
     const updated = document.getElementById('last-updated');
     if (updated && clubs.lastUpdated) updated.textContent = clubs.lastUpdated;
