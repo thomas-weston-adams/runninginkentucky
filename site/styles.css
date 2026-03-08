@@ -18,6 +18,51 @@
   --radius-sm: 6px;
 }
 
+/* ---- DARK MODE ---- */
+[data-theme="dark"] {
+  --green-dark: #0D2318;
+  --green-mid: #1A4530;
+  --green-light: #2E8B57;
+  --brown: #3A1E10;
+  --brown-light: #C47840;
+  --gold: #B8900F;
+  --gold-light: #D4A830;
+  --cream: #0E1611;
+  --cream-dark: #141C15;
+  --white: #192118;
+  --text: #DDD8C8;
+  --text-muted: #7A8E82;
+  --border: #253028;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --card-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .hero {
+  background: linear-gradient(135deg, #060E09 0%, #0D2318 60%, #122A1C 100%);
+}
+[data-theme="dark"] .cta-section {
+  background: linear-gradient(135deg, #1A0A04 0%, #060E09 100%);
+}
+[data-theme="dark"] .search-input {
+  background: rgba(20, 28, 21, 0.97);
+  color: var(--text);
+  border-color: rgba(255,255,255,0.12);
+}
+[data-theme="dark"] .search-input::placeholder { color: var(--text-muted); }
+[data-theme="dark"] .filter-btn.active {
+  background: var(--green-light);
+  border-color: var(--green-light);
+  color: #fff;
+}
+[data-theme="dark"] .race-badge.Johns { background: #2A220A; color: #C4A050; border-color: #3A3010; }
+[data-theme="dark"] .race-badge.RaceRise { background: #0A1E22; color: #50A0B0; border-color: #102830; }
+[data-theme="dark"] .race-badge.UltraSignup { background: #1E0E2A; color: #A070D0; border-color: #2A1240; }
+[data-theme="dark"] .race-badge.Other { background: #1A1A1A; color: #909090; border-color: #333; }
+[data-theme="dark"] .dist-badge { background: #142014; color: var(--green-light); border-color: #1E3020; }
+[data-theme="dark"] .weekend-callout { background: #0E1E14; border-color: var(--green-light); }
+[data-theme="dark"] .weekend-item:hover { background: #152015; }
+[data-theme="dark"] .race-card--linked { box-shadow: 0 0 0 3px var(--green-light), var(--card-shadow-hover); }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
@@ -28,6 +73,7 @@ body {
   color: var(--text);
   line-height: 1.6;
   font-size: 15px;
+  transition: background 0.2s, color 0.2s;
 }
 
 a { color: var(--green-mid); text-decoration: none; }
@@ -54,6 +100,11 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   justify-content: space-between;
   gap: 16px;
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .logo {
   display: flex;
   align-items: center;
@@ -65,7 +116,25 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   letter-spacing: 0.02em;
 }
 .logo-icon { font-size: 1.4rem; }
-.logo-text { color: var(--white); }
+.logo-text { color: #fff; }
+
+/* ---- DARK MODE TOGGLE ---- */
+.btn-dark-toggle {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-size: 1.1rem;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  padding: 0;
+}
+.btn-dark-toggle:hover { background: rgba(255,255,255,0.2); }
 
 /* ---- BUTTONS ---- */
 .btn {
@@ -119,6 +188,22 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   font-weight: 600;
 }
 .btn-link:hover { background: var(--cream-dark); color: var(--green-dark); }
+
+/* Icon-only action buttons (calendar, share) */
+.btn-icon {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  line-height: 1;
+  font-family: inherit;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+.btn-icon:hover { background: var(--cream-dark); color: var(--text); transform: translateY(-1px); }
 
 /* ---- HERO ---- */
 .hero {
@@ -372,11 +457,34 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .daily-footer a { color: var(--green-mid); font-weight: 600; }
 
 /* ---- RACES ---- */
+.races-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.races-section-header .section-subtitle { margin-bottom: 0; }
+
 .races-filter {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin: 24px 0 16px;
+  margin: 24px 0 0;
+}
+.races-filter--dist {
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 16px;
+}
+.filter-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-right: 2px;
 }
 .filter-btn {
   padding: 6px 16px;
@@ -393,6 +501,72 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .filter-btn:hover { border-color: var(--green-mid); color: var(--green-dark); }
 .filter-btn.active { background: var(--green-dark); border-color: var(--green-dark); color: var(--white); }
 
+/* ---- WEEKEND CALLOUT ---- */
+.weekend-callout {
+  background: #EBF5EE;
+  border: 1px solid var(--green-light);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+}
+.weekend-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.88rem;
+  color: var(--green-dark);
+}
+.weekend-count {
+  margin-left: auto;
+  background: var(--green-dark);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 50px;
+}
+.weekend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.weekend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: box-shadow 0.15s, transform 0.15s;
+  flex-wrap: wrap;
+}
+.weekend-item:hover { text-decoration: none; box-shadow: var(--card-shadow-hover); transform: translateY(-1px); }
+.weekend-item-when {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--green-mid);
+  white-space: nowrap;
+}
+.weekend-item-name {
+  font-weight: 600;
+  color: var(--text);
+}
+.weekend-item-loc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ---- RACES LIST ---- */
 .races-list {
   display: flex;
   flex-direction: column;
@@ -411,6 +585,14 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 }
 .race-card:hover { box-shadow: var(--card-shadow-hover); }
 .race-card.hidden { display: none; }
+.race-card--linked {
+  box-shadow: 0 0 0 3px var(--green-light), var(--card-shadow-hover);
+  animation: pulse-linked 1.2s ease-out;
+}
+@keyframes pulse-linked {
+  0% { box-shadow: 0 0 0 0px rgba(82,183,136,0.6), var(--card-shadow-hover); }
+  100% { box-shadow: 0 0 0 3px var(--green-light), var(--card-shadow-hover); }
+}
 
 .race-date-block {
   min-width: 54px;
@@ -446,13 +628,17 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .race-meta {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
-.race-location {
+a.race-location {
   font-size: 0.78rem;
   color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
 }
+a.race-location:hover { color: var(--green-mid); text-decoration: underline; }
+
 .race-badge {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
@@ -462,21 +648,48 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   padding: 2px 8px;
   border-radius: 50px;
 }
-.race-badge.Johns {
+.race-badge.Johns  { background: #FFF3CD; color: #856404; border: 1px solid #FFEAA7; }
+.race-badge.RaceRise { background: #D1ECF1; color: #0C5460; border: 1px solid #BEE5EB; }
+.race-badge.UltraSignup { background: #E8D5F5; color: #5A2D82; border: 1px solid #D4B8EC; }
+.race-badge.Other { background: #F0F0F0; color: #555; border: 1px solid #DDD; }
+
+.dist-badge {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 50px;
+  background: #E8F5EE;
+  color: var(--green-mid);
+  border: 1px solid #C8E8D8;
+}
+
+/* Countdown badges */
+.race-countdown {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 50px;
+}
+.countdown-today {
+  background: var(--gold);
+  color: var(--green-dark);
+}
+.countdown-soon {
   background: #FFF3CD;
   color: #856404;
   border: 1px solid #FFEAA7;
 }
-.race-badge.RaceRise {
-  background: #D1ECF1;
-  color: #0C5460;
-  border: 1px solid #BEE5EB;
+.countdown-near {
+  background: #EBF5EE;
+  color: var(--green-mid);
+  border: 1px solid #C8E8D8;
 }
-.race-badge.UltraSignup {
-  background: #E8D5F5;
-  color: #5A2D82;
-  border: 1px solid #D4B8EC;
-}
+
 .race-notes {
   font-size: 0.72rem;
   color: var(--brown-light);
@@ -489,6 +702,7 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 @media (max-width: 600px) {
   .race-card { grid-template-columns: auto 1fr; }
   .race-actions { grid-column: 1 / -1; }
+  .races-section-header { align-items: flex-start; }
 }
 
 /* ---- CTA SECTION ---- */
@@ -545,8 +759,9 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 }
 
 /* ---- SEARCH HIGHLIGHT ---- */
-.highlight {
-  background: rgba(212, 160, 23, 0.3);
+mark.highlight {
+  background: rgba(212, 160, 23, 0.35);
   border-radius: 2px;
   padding: 0 2px;
+  color: inherit;
 }

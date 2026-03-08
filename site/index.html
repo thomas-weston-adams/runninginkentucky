@@ -8,6 +8,10 @@
   <meta property="og:title" content="Running in Kentucky — Lexington Area Run Clubs" />
   <meta property="og:description" content="Weekly running schedule, local clubs, and upcoming races for the Lexington KY area." />
   <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Running in Kentucky — Lexington Area Run Clubs" />
+  <meta name="twitter:description" content="Weekly running schedule, local clubs, and upcoming races for the Lexington KY area." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏃</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -23,10 +27,13 @@
           <span class="logo-icon">🏃</span>
           <span class="logo-text">Running in Kentucky</span>
         </div>
-        <a href="https://github.com/thomas-weston-adams/runninginkentucky/issues/new?title=Add+Club+or+Event&labels=new-club"
-           class="btn btn-primary" target="_blank" rel="noopener">
-          + Add Your Club
-        </a>
+        <div class="header-actions">
+          <button id="dark-mode-toggle" class="btn-dark-toggle" aria-label="Switch to dark mode" title="Toggle dark mode">🌙</button>
+          <a href="https://github.com/thomas-weston-adams/runninginkentucky/issues/new?title=Add+Club+or+Event&labels=new-club"
+             class="btn btn-primary" target="_blank" rel="noopener">
+            + Add Your Club
+          </a>
+        </div>
       </div>
     </div>
   </header>
@@ -39,7 +46,7 @@
 
       <div class="search-wrapper">
         <input type="search" id="search-input"
-               placeholder="Search clubs, locations, days..."
+               placeholder="Search clubs, locations, days… (press / to focus)"
                class="search-input"
                aria-label="Search clubs and events" />
         <span class="search-icon" aria-hidden="true">🔍</span>
@@ -98,8 +105,15 @@
   <!-- ── UPCOMING RACES ── -->
   <section class="section section--alt" id="races-section">
     <div class="container">
-      <h2 class="section-title">Upcoming Races</h2>
-      <p class="section-subtitle">Kentucky &amp; surrounding area — sourced from John's Run Walk Shop, RaceRise &amp; UltraSignup</p>
+      <div class="races-section-header">
+        <div>
+          <h2 class="section-title">Upcoming Races</h2>
+          <p class="section-subtitle">Kentucky &amp; surrounding area — sourced from John's Run Walk Shop, RaceRise &amp; UltraSignup</p>
+        </div>
+        <button id="export-ics" class="btn btn-secondary btn-sm" title="Download all upcoming races as a calendar file">
+          ⬇ Export .ics
+        </button>
+      </div>
 
       <div class="races-filter">
         <button class="filter-btn active" data-filter="all">All Upcoming</button>
@@ -107,6 +121,17 @@
         <button class="filter-btn" data-filter="johns">John's Featured</button>
         <button class="filter-btn" data-filter="ultrasignup">UltraSignup</button>
       </div>
+
+      <div class="races-filter races-filter--dist">
+        <span class="filter-label">Distance:</span>
+        <button class="filter-btn" data-dist="5K">5K</button>
+        <button class="filter-btn" data-dist="10K">10K</button>
+        <button class="filter-btn" data-dist="Half">Half</button>
+        <button class="filter-btn" data-dist="Marathon">Marathon</button>
+        <button class="filter-btn" data-dist="Ultra">Ultra</button>
+      </div>
+
+      <div id="weekend-callout" class="weekend-callout" hidden></div>
 
       <div id="races-list" class="races-list">
         <div style="padding:20px;color:#5C6B73">Loading races…</div>
