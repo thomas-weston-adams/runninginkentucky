@@ -405,20 +405,19 @@ function setupRaceFilters(races) {
 
 // ── theme switcher ────────────────────────────────────────────────────────────
 const THEMES = [
-  { id: '',        icon: '🌿', label: 'Kentucky'      },
-  { id: 'dark',    icon: '🌙', label: 'Kentucky Dark' },
-  { id: 'strava',  icon: '🟠', label: 'Strava'        },
-  { id: 'garmin',  icon: '🔵', label: 'Garmin'        },
+  { id: '',       icon: '🌿', label: 'Kentucky' },
+  { id: 'strava', icon: '🟠', label: 'Strava'   },
+  { id: 'garmin', icon: '🔵', label: 'Garmin'   },
 ];
 
 function setupDarkMode() {
   const btn = document.getElementById('dark-mode-toggle');
   if (!btn) return;
 
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const defaultTheme = prefersDark ? 'dark' : '';
-  const saved = localStorage.getItem('rik-theme') ?? defaultTheme;
-  let idx = THEMES.findIndex(t => t.id === saved);
+  // If they had saved 'dark' or 'kentucky-dark', fall back to default Kentucky
+  const saved = localStorage.getItem('rik-theme') ?? '';
+  const validIds = THEMES.map(t => t.id);
+  let idx = validIds.includes(saved) ? THEMES.findIndex(t => t.id === saved) : 0;
   if (idx === -1) idx = 0;
 
   const apply = i => {

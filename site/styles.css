@@ -68,9 +68,11 @@
   --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
   --card-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.6);
 }
+[data-theme="strava"] .site-header { background: #FC4C02; box-shadow: 0 2px 12px rgba(252,76,2,0.5); }
 [data-theme="strava"] .hero { background: linear-gradient(135deg, #0F0F0F 0%, #1B1B1B 60%, #222 100%); }
 [data-theme="strava"] .cta-section { background: linear-gradient(135deg, #CC3000 0%, #111 100%); }
-[data-theme="strava"] .day-header.today { background: #FC4C02; color: #fff; }
+[data-theme="strava"] .day-header { background: #1A1A1A; border-bottom: 2px solid #FC4C02; }
+[data-theme="strava"] .day-header.today { background: #FC4C02; color: #fff; border-bottom-color: #E04000; }
 [data-theme="strava"] .filter-btn.active { background: #FC4C02; border-color: #FC4C02; color: #fff; }
 [data-theme="strava"] .search-input { background: #2D2D2D; color: #F7F7F7; border-color: #444; }
 [data-theme="strava"] .search-input::placeholder { color: #777; }
