@@ -18,7 +18,11 @@
   --radius-sm: 6px;
 }
 
-/* ---- DARK MODE ---- */
+/* ===================================================================
+   THEMES
+   =================================================================== */
+
+/* ---- Kentucky Dark ---- */
 [data-theme="dark"] {
   --green-dark: #0D2318;
   --green-mid: #1A4530;
@@ -36,24 +40,8 @@
   --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   --card-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.6);
 }
-
-[data-theme="dark"] .hero {
-  background: linear-gradient(135deg, #060E09 0%, #0D2318 60%, #122A1C 100%);
-}
-[data-theme="dark"] .cta-section {
-  background: linear-gradient(135deg, #1A0A04 0%, #060E09 100%);
-}
-[data-theme="dark"] .search-input {
-  background: rgba(20, 28, 21, 0.97);
-  color: var(--text);
-  border-color: rgba(255,255,255,0.12);
-}
-[data-theme="dark"] .search-input::placeholder { color: var(--text-muted); }
-[data-theme="dark"] .filter-btn.active {
-  background: var(--green-light);
-  border-color: var(--green-light);
-  color: #fff;
-}
+[data-theme="dark"] .hero { background: linear-gradient(135deg, #060E09 0%, #0D2318 60%, #122A1C 100%); }
+[data-theme="dark"] .cta-section { background: linear-gradient(135deg, #1A0A04 0%, #060E09 100%); }
 [data-theme="dark"] .race-badge.Johns { background: #2A220A; color: #C4A050; border-color: #3A3010; }
 [data-theme="dark"] .race-badge.RaceRise { background: #0A1E22; color: #50A0B0; border-color: #102830; }
 [data-theme="dark"] .race-badge.UltraSignup { background: #1E0E2A; color: #A070D0; border-color: #2A1240; }
@@ -61,7 +49,94 @@
 [data-theme="dark"] .dist-badge { background: #142014; color: var(--green-light); border-color: #1E3020; }
 [data-theme="dark"] .weekend-callout { background: #0E1E14; border-color: var(--green-light); }
 [data-theme="dark"] .weekend-item:hover { background: #152015; }
-[data-theme="dark"] .race-card--linked { box-shadow: 0 0 0 3px var(--green-light), var(--card-shadow-hover); }
+
+/* ---- Strava Dark ---- */
+[data-theme="strava"] {
+  --green-dark: #1A1A1A;
+  --green-mid: #CC3800;
+  --green-light: #FC4C02;
+  --brown: #E04000;
+  --brown-light: #FF7A50;
+  --gold: #FC4C02;
+  --gold-light: #FF6B35;
+  --cream: #1B1B1B;
+  --cream-dark: #242424;
+  --white: #2D2D2D;
+  --text: #F7F7F7;
+  --text-muted: #9E9E9E;
+  --border: #3D3D3D;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --card-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+[data-theme="strava"] .hero { background: linear-gradient(135deg, #0F0F0F 0%, #1B1B1B 60%, #222 100%); }
+[data-theme="strava"] .cta-section { background: linear-gradient(135deg, #CC3000 0%, #111 100%); }
+[data-theme="strava"] .day-header.today { background: #FC4C02; color: #fff; }
+[data-theme="strava"] .filter-btn.active { background: #FC4C02; border-color: #FC4C02; color: #fff; }
+[data-theme="strava"] .search-input { background: #2D2D2D; color: #F7F7F7; border-color: #444; }
+[data-theme="strava"] .search-input::placeholder { color: #777; }
+[data-theme="strava"] .search-input:focus { border-color: #FC4C02; box-shadow: 0 0 0 3px rgba(252,76,2,0.25); }
+[data-theme="strava"] .race-badge.Johns { background: #2A1A0A; color: #D4882A; border-color: #3A280A; }
+[data-theme="strava"] .race-badge.RaceRise { background: #0A1A20; color: #40A0B8; border-color: #102030; }
+[data-theme="strava"] .race-badge.UltraSignup { background: #1E0E28; color: #A868D0; border-color: #280E38; }
+[data-theme="strava"] .race-badge.Other { background: #222; color: #888; border-color: #333; }
+[data-theme="strava"] .dist-badge { background: #2A1A10; color: #FC4C02; border-color: #3A2810; }
+[data-theme="strava"] .countdown-today { background: #FC4C02; color: #fff; }
+[data-theme="strava"] .countdown-soon { background: #2A1A0A; color: #D4882A; border-color: #3A280A; }
+[data-theme="strava"] .countdown-near { background: #222; color: #888; border-color: #333; }
+[data-theme="strava"] .weekend-callout { background: #222; border-color: #FC4C02; }
+[data-theme="strava"] .weekend-item { background: #2D2D2D; border-color: #3D3D3D; }
+[data-theme="strava"] .weekend-item:hover { background: #363636; }
+[data-theme="strava"] .weekend-item-when { color: #FC4C02; }
+[data-theme="strava"] .btn-dark-toggle { background: rgba(252,76,2,0.15); border-color: rgba(252,76,2,0.3); }
+[data-theme="strava"] .race-card--linked { box-shadow: 0 0 0 3px #FC4C02, var(--card-shadow-hover); }
+[data-theme="strava"] mark.highlight { background: rgba(252, 76, 2, 0.3); }
+
+/* ---- Garmin ---- */
+[data-theme="garmin"] {
+  --green-dark: #0A1520;
+  --green-mid: #005EB8;
+  --green-light: #00A0D2;
+  --brown: #003087;
+  --brown-light: #5A9AC0;
+  --gold: #00C4D4;
+  --gold-light: #40D8E8;
+  --cream: #0D1B28;
+  --cream-dark: #142030;
+  --white: #192E40;
+  --text: #E0EAF4;
+  --text-muted: #7A94AC;
+  --border: #243A50;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --card-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.65);
+}
+[data-theme="garmin"] .hero { background: linear-gradient(135deg, #060C14 0%, #0A1824 60%, #0E2030 100%); }
+[data-theme="garmin"] .cta-section { background: linear-gradient(135deg, #003087 0%, #060C14 100%); }
+[data-theme="garmin"] .day-header { background: #0A1520; }
+[data-theme="garmin"] .day-header.today { background: #00A0D2; color: #fff; }
+[data-theme="garmin"] .filter-btn.active { background: #00A0D2; border-color: #00A0D2; color: #fff; }
+[data-theme="garmin"] .search-input { background: #192E40; color: #E0EAF4; border-color: #243A50; }
+[data-theme="garmin"] .search-input::placeholder { color: #7A94AC; }
+[data-theme="garmin"] .search-input:focus { border-color: #00A0D2; box-shadow: 0 0 0 3px rgba(0,160,210,0.25); }
+[data-theme="garmin"] .race-badge.Johns { background: #1E1800; color: #C4A050; border-color: #2A2400; }
+[data-theme="garmin"] .race-badge.RaceRise { background: #002030; color: #50C0D8; border-color: #003040; }
+[data-theme="garmin"] .race-badge.UltraSignup { background: #180A28; color: #A060D0; border-color: #240E3C; }
+[data-theme="garmin"] .race-badge.Other { background: #1A2A38; color: #7A94AC; border-color: #243040; }
+[data-theme="garmin"] .dist-badge { background: #0A2030; color: #00A0D2; border-color: #143040; }
+[data-theme="garmin"] .countdown-today { background: #00C4D4; color: #0A1520; }
+[data-theme="garmin"] .countdown-soon { background: #1A2A38; color: #5AB8D8; border-color: #243A50; }
+[data-theme="garmin"] .countdown-near { background: #142030; color: #7A94AC; border-color: #1E3040; }
+[data-theme="garmin"] .weekend-callout { background: #0E1E2E; border-color: #00A0D2; }
+[data-theme="garmin"] .weekend-item { background: #192E40; border-color: #243A50; }
+[data-theme="garmin"] .weekend-item:hover { background: #1E3648; }
+[data-theme="garmin"] .weekend-item-when { color: #00A0D2; }
+[data-theme="garmin"] .btn-dark-toggle { background: rgba(0,160,210,0.15); border-color: rgba(0,160,210,0.3); }
+[data-theme="garmin"] .race-card--linked { box-shadow: 0 0 0 3px #00A0D2, var(--card-shadow-hover); }
+[data-theme="garmin"] mark.highlight { background: rgba(0, 160, 210, 0.3); }
+
+/* Shared dark-input styles for dark themes */
+[data-theme="dark"] .search-input,
+[data-theme="strava"] .search-input,
+[data-theme="garmin"] .search-input { background: var(--white); color: var(--text); }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

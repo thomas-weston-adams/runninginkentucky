@@ -403,25 +403,42 @@ function setupRaceFilters(races) {
   if (exportBtn) exportBtn.addEventListener('click', () => exportICS(races));
 }
 
-// ── dark mode ─────────────────────────────────────────────────────────────────
+// ── theme switcher ────────────────────────────────────────────────────────────
+const THEMES = [
+  { id: '',        icon: '🌿', label: 'Kentucky'      },
+  { id: 'dark',    icon: '🌙', label: 'Kentucky Dark' },
+  { id: 'strava',  icon: '🟠', label: 'Strava'        },
+  { id: 'garmin',  icon: '🔵', label: 'Garmin'        },
+];
+
 function setupDarkMode() {
   const btn = document.getElementById('dark-mode-toggle');
   if (!btn) return;
 
-  const apply = dark => {
-    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-    btn.textContent = dark ? '☀️' : '🌙';
-    btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const defaultTheme = prefersDark ? 'dark' : '';
+  const saved = localStorage.getItem('rik-theme') ?? defaultTheme;
+  let idx = THEMES.findIndex(t => t.id === saved);
+  if (idx === -1) idx = 0;
+
+  const apply = i => {
+    const theme = THEMES[i];
+    if (theme.id) {
+      document.documentElement.dataset.theme = theme.id;
+    } else {
+      delete document.documentElement.dataset.theme;
+    }
+    btn.textContent = theme.icon;
+    btn.setAttribute('title', `Theme: ${theme.label} — click to cycle`);
+    btn.setAttribute('aria-label', `Current theme: ${theme.label}`);
+    localStorage.setItem('rik-theme', theme.id);
   };
 
-  const saved = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  apply(saved ? saved === 'dark' : prefersDark);
+  apply(idx);
 
   btn.addEventListener('click', () => {
-    const isDark = document.documentElement.dataset.theme === 'dark';
-    localStorage.setItem('theme', isDark ? 'light' : 'dark');
-    apply(!isDark);
+    idx = (idx + 1) % THEMES.length;
+    apply(idx);
   });
 }
 
