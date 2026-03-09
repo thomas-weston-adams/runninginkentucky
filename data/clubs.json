@@ -1,7 +1,7 @@
 {
   "lastUpdated": "2026-03-09",
   "totals": {
-    "weeklyEvents": 20,
+    "weeklyEvents": 23,
     "groups": 13,
     "dailyMeetups": 4
   },
@@ -78,6 +78,13 @@
         "location": "Ecton Park, 956 Turkey Foot Rd, Lexington, KY 40502",
         "websiteUrl": "http://frontrunnerslex.com/routes/",
         "mapUrl": "https://goo.gl/maps/1eXnntncDs969mkQA"
+      },
+      {
+        "time": "6:00 pm",
+        "name": "John's Striders - John's Run Walk Club HAMBURG",
+        "notes": "3-5 miles",
+        "location": "John's Run/Walk Shop, 3090 Helmsdale Pl, Lexington, KY 40509",
+        "mapUrl": "https://maps.google.com/?q=3090+Helmsdale+Pl,+Lexington,+KY+40509"
       }
     ],
     "Thursday": [
@@ -109,6 +116,20 @@
         "name": "Todds Road Stumblers",
         "location": "3421 Combs Ferry Rd, Winchester, KY 40391",
         "mapUrl": "https://goo.gl/maps/RoKdLKQvQ4ZiDCwS8"
+      },
+      {
+        "time": "7:30am",
+        "name": "John's Striders - John's Run Walk Club (Chevy Chase)",
+        "notes": "Various distances — many use this for long runs of 6+ miles",
+        "location": "John's Run/Walk Shop, 317 S Ashland Ave, Lexington, KY 40502",
+        "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA"
+      },
+      {
+        "time": "7:30am",
+        "name": "John's Striders - John's Run Walk Club HAMBURG",
+        "notes": "3 miles",
+        "location": "John's Run/Walk Shop, 3090 Helmsdale Pl, Lexington, KY 40509",
+        "mapUrl": "https://maps.google.com/?q=3090+Helmsdale+Pl,+Lexington,+KY+40509"
       },
       {
         "time": "730am",
