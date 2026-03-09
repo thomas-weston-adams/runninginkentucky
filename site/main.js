@@ -54,14 +54,133 @@ function countdownLabel(days) {
   return '';
 }
 
-function googleCalUrl(race) {
-  const d = parseDate(race.date);
-  const pad = n => String(n).padStart(2, '0');
-  const ymd = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+// ── calendar helpers ──────────────────────────────────────────────────────────
+const calPad = n => String(n).padStart(2, '0');
+
+function raceCalData(r) {
+  const d    = parseDate(r.date);
   const next = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
-  const ymdNext = `${next.getFullYear()}${pad(next.getMonth()+1)}${pad(next.getDate())}`;
-  const details = [race.notes, race.sourceUrl].filter(Boolean).join('\n');
-  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(race.name)}&dates=${ymd}/${ymdNext}&location=${encodeURIComponent(race.location)}&details=${encodeURIComponent(details)}`;
+  const fmt  = d2 => `${d2.getFullYear()}${calPad(d2.getMonth()+1)}${calPad(d2.getDate())}`;
+  return {
+    name: r.name, location: r.location, allDay: true,
+    dateStart: fmt(d), dateEnd: fmt(next),
+    notes: r.notes || '', url: r.sourceUrl || '',
+  };
+}
+
+function clubCalData(dayName, ev) {
+  const dayIdx   = DAYS.indexOf(dayName);
+  const todayIdx = TODAY.getDay() === 0 ? 6 : TODAY.getDay() - 1;
+  let daysAhead  = ((dayIdx - todayIdx) + 7) % 7;
+  const { h, m } = parseClubTime(ev.time);
+  if (daysAhead === 0) {
+    const runTime = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate(), h, m);
+    if (runTime <= new Date()) daysAhead = 7;
+  }
+  const base = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + daysAhead);
+  const dt   = (hh, mm) => `${base.getFullYear()}${calPad(base.getMonth()+1)}${calPad(base.getDate())}T${calPad(hh)}${calPad(mm)}00`;
+  const notes = [ev.time, ev.location, ev.address, ev.notes,
+    ev.mapUrl ? `Map: ${ev.mapUrl}` : '',
+    'Check with the club for last-minute changes.']
+    .filter(Boolean).join('\n');
+  return {
+    name: ev.name, location: ev.location || '', allDay: false,
+    dateStart: dt(h, m), dateEnd: dt(h + 1, m),
+    notes, url: ev.websiteUrl || '',
+  };
+}
+
+function buildCalUrls({ name, dateStart, dateEnd, location, notes, url, allDay }) {
+  const bodyText = [notes, url].filter(Boolean).join('\n');
+  const toIso = s => allDay
+    ? `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`
+    : `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}T${s.slice(9,11)}:${s.slice(11,13)}:00`;
+
+  const gcal = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+    + `&text=${encodeURIComponent(name)}&dates=${dateStart}/${dateEnd}`
+    + `&location=${encodeURIComponent(location)}&details=${encodeURIComponent(bodyText)}`;
+
+  const outlook = 'https://outlook.live.com/calendar/0/deeplink/compose'
+    + `?subject=${encodeURIComponent(name)}`
+    + `&startdt=${toIso(dateStart)}&enddt=${toIso(dateEnd)}`
+    + `&location=${encodeURIComponent(location)}&body=${encodeURIComponent(bodyText)}`
+    + '&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent';
+
+  const uid = `${dateStart}-${name.replace(/\W+/g,'-')}@runninginkentucky`;
+  const ics = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0',
+    'PRODID:-//Running in Kentucky//Calendar//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+    'BEGIN:VEVENT', `UID:${uid}`,
+    allDay ? `DTSTART;VALUE=DATE:${dateStart}` : `DTSTART:${dateStart}`,
+    allDay ? `DTEND;VALUE=DATE:${dateEnd}`   : `DTEND:${dateEnd}`,
+    `SUMMARY:${name}`,
+    ...(location ? [`LOCATION:${location}`] : []),
+    ...(bodyText ? [`DESCRIPTION:${bodyText.replace(/\n/g,'\\n')}`] : []),
+    ...(url ? [`URL:${url}`] : []),
+    'END:VEVENT', 'END:VCALENDAR',
+  ].join('\r\n');
+
+  return { gcal, outlook, ics };
+}
+
+let _calPickerEl = null;
+
+function closeCalPicker() {
+  if (_calPickerEl) { _calPickerEl.remove(); _calPickerEl = null; }
+}
+
+function calTriggerAttrs(data) {
+  return `class="btn btn-icon cal-trigger" data-name="${esc(data.name)}" `
+    + `data-date-start="${esc(data.dateStart)}" data-date-end="${esc(data.dateEnd)}" `
+    + `data-location="${esc(data.location)}" data-notes="${esc(data.notes)}" `
+    + `data-url="${esc(data.url)}" data-allday="${data.allDay}" `
+    + `title="Add to calendar" aria-label="Add to calendar"`;
+}
+
+function setupCalPickers(container) {
+  if (!document._calPickerReady) {
+    document.addEventListener('click', closeCalPicker);
+    document._calPickerReady = true;
+  }
+  container.querySelectorAll('.cal-trigger').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      closeCalPicker();
+      const { gcal, outlook, ics } = buildCalUrls({
+        name:      btn.dataset.name      || '',
+        dateStart: btn.dataset.dateStart || '',
+        dateEnd:   btn.dataset.dateEnd   || '',
+        location:  btn.dataset.location  || '',
+        notes:     btn.dataset.notes     || '',
+        url:       btn.dataset.url       || '',
+        allDay:    btn.dataset.allday    === 'true',
+      });
+      const drop = document.createElement('div');
+      drop.className = 'cal-drop';
+      drop.innerHTML = `
+        <a class="cal-opt" href="${esc(gcal)}"    target="_blank" rel="noopener">Google Calendar</a>
+        <button class="cal-opt cal-ics-btn" type="button">Apple Calendar</button>
+        <a class="cal-opt" href="${esc(outlook)}" target="_blank" rel="noopener">Outlook</a>`;
+      drop.querySelector('.cal-ics-btn').addEventListener('click', () => {
+        const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+        const a    = Object.assign(document.createElement('a'), {
+          href:     URL.createObjectURL(blob),
+          download: (btn.dataset.name||'event').replace(/[^\w\s-]/g,'').replace(/\s+/g,'-').toLowerCase()+'.ics',
+        });
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+        closeCalPicker();
+      });
+      document.body.appendChild(drop);
+      _calPickerEl = drop;
+      const rect = btn.getBoundingClientRect();
+      const dropW = 195;
+      let left = rect.left + window.scrollX;
+      if (left + dropW > window.innerWidth - 8) left = window.innerWidth - dropW - 8;
+      drop.style.top  = `${rect.bottom + window.scrollY + 4}px`;
+      drop.style.left = `${Math.max(8, left)}px`;
+    });
+  });
 }
 
 function parseClubTime(timeStr) {
@@ -86,34 +205,7 @@ function parseClubTime(timeStr) {
   return { h: h || 7, m: m || 0 };
 }
 
-function gcalClubUrl(dayName, ev) {
-  const pad = n => String(n).padStart(2, '0');
-  const dayIdx = DAYS.indexOf(dayName);
-  const todayIdx = TODAY.getDay() === 0 ? 6 : TODAY.getDay() - 1;
-  let daysAhead = ((dayIdx - todayIdx) + 7) % 7;
-  const { h, m } = parseClubTime(ev.time);
-  // If today is that day, check if the run has already passed; if so, next week
-  if (daysAhead === 0) {
-    const runTime = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate(), h, m);
-    if (runTime <= new Date()) daysAhead = 7;
-  }
-  const base = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + daysAhead);
-  const fmt = (hh, mm) =>
-    `${base.getFullYear()}${pad(base.getMonth()+1)}${pad(base.getDate())}T${pad(hh)}${pad(mm)}00`;
-  const start = fmt(h, m);
-  const end   = fmt(h + 1, m); // 1-hour block
-  const details = [
-    ev.notes,
-    ev.mapUrl ? `Map: ${ev.mapUrl}` : '',
-    'Check with the club for last-minute changes or weather cancellations.'
-  ].filter(Boolean).join('\n');
-  return `https://calendar.google.com/calendar/render?action=TEMPLATE`
-    + `&text=${encodeURIComponent(ev.name)}`
-    + `&dates=${start}/${end}`
-    + `&location=${encodeURIComponent(ev.location || '')}`
-    + `&details=${encodeURIComponent(details)}`
-    + `&recur=RRULE:FREQ%3DWEEKLY`;
-}
+// gcalClubUrl replaced by clubCalData + buildCalUrls + calTriggerAttrs
 
 function parseDistances(notes) {
   if (!notes) return [];
@@ -143,7 +235,7 @@ function renderTodaysBanner(schedule) {
     const links = [];
     if (ev.mapUrl) links.push(`<a href="${esc(ev.mapUrl)}" class="btn btn-map" target="_blank" rel="noopener">Map</a>`);
     if (ev.websiteUrl) links.push(`<a href="${esc(ev.websiteUrl)}" class="btn btn-link" target="_blank" rel="noopener">Website</a>`);
-    links.push(`<a href="${esc(gcalClubUrl(todayName, ev))}" class="btn btn-icon promo-cal-btn" target="_blank" rel="noopener" title="Add weekly reminder to Google Calendar">📅</a>`);
+    links.push(`<button ${calTriggerAttrs(clubCalData(todayName, ev))}>📅</button>`);
     return `
       <div class="promo-card">
         <div class="promo-card-time">${esc(ev.time)}</div>
@@ -164,6 +256,7 @@ function renderTodaysBanner(schedule) {
       <div class="promo-cards">${cards}</div>
     </div>`;
   banner.hidden = false;
+  setupCalPickers(banner);
 }
 
 // ── render weekly calendar ────────────────────────────────────────────────────
@@ -191,7 +284,7 @@ function renderCalendar(schedule) {
         const links = [];
         if (ev.mapUrl) links.push(`<a href="${esc(ev.mapUrl)}" class="btn btn-map" target="_blank" rel="noopener">Map</a>`);
         if (ev.websiteUrl) links.push(`<a href="${esc(ev.websiteUrl)}" class="btn btn-link" target="_blank" rel="noopener">Website</a>`);
-        links.push(`<a href="${esc(gcalClubUrl(day, ev))}" class="btn btn-icon" target="_blank" rel="noopener" title="Add weekly reminder to Google Calendar">📅</a>`);
+        links.push(`<button ${calTriggerAttrs(clubCalData(day, ev))}>📅</button>`);
 
         const card = document.createElement('div');
         card.className = 'event-card';
@@ -211,6 +304,8 @@ function renderCalendar(schedule) {
 
     grid.appendChild(col);
   });
+
+  setupCalPickers(grid);
 }
 
 // ── render groups ─────────────────────────────────────────────────────────────
@@ -300,7 +395,7 @@ function renderWeekendCallout(races) {
 function raceCardHTML(r, q) {
   const d = parseDate(r.date);
   const days = daysUntil(r.date);
-  const calUrl = googleCalUrl(r);
+  const cal = raceCalData(r);
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.location)}`;
   const distances = parseDistances(r.notes);
   const distBadges = distances.map(dist => `<span class="dist-badge">${dist}</span>`).join('');
@@ -321,7 +416,7 @@ function raceCardHTML(r, q) {
       </div>
       <div class="race-actions">
         <a href="${esc(r.sourceUrl)}" class="btn btn-map" target="_blank" rel="noopener">Details →</a>
-        <a href="${calUrl}" class="btn btn-icon" target="_blank" rel="noopener" title="Add to Google Calendar" aria-label="Add to Google Calendar">📅</a>
+        <button ${calTriggerAttrs(cal)}>📅</button>
         <button class="btn btn-icon btn-share" data-name="${esc(r.name)}" title="Copy link to this race" aria-label="Copy link to this race">🔗</button>
       </div>
     </div>
@@ -396,11 +491,13 @@ function renderRaces(races) {
       btn.remove();
       list.insertAdjacentHTML('beforeend', hidden.map(r => raceCardHTML(r, q)).join(''));
       setupShareBtns(list);
+      setupCalPickers(list);
     });
     list.appendChild(btn);
   }
 
   setupShareBtns(list);
+  setupCalPickers(list);
 
   // Deep link: scroll to and highlight a specific race
   const target = new URLSearchParams(window.location.search).get('race');

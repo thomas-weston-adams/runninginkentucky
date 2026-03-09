@@ -1666,3 +1666,34 @@ details[open] .prof-lb-summary::before { content: '▼ '; }
 }
 .prof-save-map-btn { white-space: nowrap; }
 .prof-save-map-btn:disabled { opacity: .6; cursor: wait; }
+
+/* ── Calendar picker dropdown ── */
+.cal-drop {
+  position: absolute;
+  z-index: 300;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 6px 20px rgba(0,0,0,.18);
+  display: flex;
+  flex-direction: column;
+  min-width: 190px;
+  overflow: hidden;
+}
+.cal-opt {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .12s;
+}
+.cal-opt:last-child { border-bottom: none; }
+.cal-opt:hover { background: var(--cream-dark); color: var(--green-dark); }
