@@ -11,7 +11,7 @@
 
   // ── Admin email for contribution submissions ───────────────────────────────────
   // Change this to the address where you want to receive county map submissions.
-  const ADMIN_EMAIL = 'tommy@runninginkentucky.com';
+  const ADMIN_EMAIL = 'thomaswestonadams@gmail.com';
 
   // ── City → Kentucky county name lookup ───────────────────────────────────────
   // Keys: lowercase city name as it appears before ", KY" in race location strings
