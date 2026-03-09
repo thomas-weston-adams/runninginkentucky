@@ -213,8 +213,11 @@ function parseDistances(notes) {
   const out = [];
   if (/\b5k\b/.test(t)) out.push('5K');
   if (/\b10k\b/.test(t)) out.push('10K');
-  if (/half.?marathon|13\.1|\bhalf\b/.test(t)) out.push('Half');
-  if (/\bmarathon\b|26\.2/.test(t) && !/(ultra|50k|100k|50m|100m)/.test(t)) out.push('Marathon');
+  // Match "Half Marathon", "1/2 Marathon", "13.1", or standalone "Half"
+  if (/half.?marathon|1\/2.?\s*marathon|13\.1|\bhalf\b/.test(t)) out.push('Half');
+  // Match full marathon: strip half-marathon phrases first so "1/2 Marathon" doesn't count
+  const noHalf = t.replace(/(?:half|1\/2).?\s*marathon/g, '');
+  if (/\bmarathon\b|26\.2/.test(noHalf) && !/\b(ultra|50k|100k|50m|100m)\b/.test(noHalf)) out.push('Marathon');
   if (/\b(50k|100k|100m|50m|ultra|backyard|endurance)\b/.test(t)) out.push('Ultra');
   return out;
 }

@@ -289,6 +289,123 @@ async function fetchFrontRunners() {
   return races;
 }
 
+// ── John's Run Walk Shop ───────────────────────────────────────────────────────
+const JOHNS_URL = 'https://www.johnsrunwalkshop.com/races';
+
+async function fetchJohns() {
+  console.log(`Fetching John's Run Walk Shop: ${JOHNS_URL}`);
+  const res = await fetch(JOHNS_URL, {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+        '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      Accept: 'text/html,application/xhtml+xml,*/*;q=0.8',
+      'Accept-Language': 'en-US,en;q=0.9',
+    },
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status} from John's`);
+  const html = await res.text();
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const races = [];
+
+  const stripTags = s => s.replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&')
+    .replace(/&nbsp;/g, ' ').replace(/&#?\w+;/g, '').replace(/\s+/g, ' ').trim();
+  const hrefRe = /href="([^"]+)"/i;
+
+  // Strategy 1: JSON-LD
+  const jsonLdRe = /<script[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi;
+  let m;
+  while ((m = jsonLdRe.exec(html)) !== null) {
+    try {
+      const obj = JSON.parse(m[1]);
+      const items = Array.isArray(obj) ? obj : obj['@graph'] ? obj['@graph'] : [obj];
+      for (const item of items) {
+        if (!['SportsEvent', 'Event'].includes(item['@type'])) continue;
+        const rawDate = item.startDate;
+        if (!rawDate) continue;
+        const date = new Date(rawDate);
+        if (isNaN(date.getTime()) || date < today) continue;
+        const name = item.name;
+        if (!name) continue;
+        const loc = item.location?.address?.addressLocality || item.location?.name || '';
+        const state = item.location?.address?.addressRegion || '';
+        const location = [loc, state].filter(Boolean).join(', ') || 'Kentucky';
+        races.push({ name, date: toISODate(date), location, source: 'Johns', sourceUrl: item.url || JOHNS_URL });
+      }
+    } catch { /* skip */ }
+  }
+
+  // Strategy 2: table rows
+  if (races.length === 0) {
+    const tableBodyRe = /<tbody[^>]*>([\s\S]*?)<\/tbody>/gi;
+    const rowRe = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+    const cellRe = /<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi;
+    const dateRe = /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|\d{4}-\d{2}-\d{2}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s*\d{4})/i;
+    let tableMatch;
+    while ((tableMatch = tableBodyRe.exec(html)) !== null) {
+      let rowMatch;
+      while ((rowMatch = rowRe.exec(tableMatch[1])) !== null) {
+        const cells = [];
+        let cellMatch;
+        const cr = new RegExp(cellRe.source, 'gi');
+        while ((cellMatch = cr.exec(rowMatch[1])) !== null) cells.push(stripTags(cellMatch[1]));
+        if (cells.length < 2) continue;
+        let dateStr = null, dateIdx = -1;
+        for (let i = 0; i < cells.length; i++) {
+          const dm = cells[i].match(dateRe);
+          if (dm) { dateStr = dm[1]; dateIdx = i; break; }
+        }
+        if (!dateStr) continue;
+        const parsed = new Date(dateStr);
+        if (isNaN(parsed.getTime()) || parsed < today) continue;
+        let name = '';
+        for (let i = 0; i < cells.length; i++) {
+          if (i === dateIdx) continue;
+          if (cells[i].length > 3 && !/^\d/.test(cells[i])) { name = cells[i]; break; }
+        }
+        if (!name) continue;
+        let location = '';
+        for (let i = 0; i < cells.length; i++) {
+          if (i === dateIdx) continue;
+          if (/,\s*[A-Z]{2}/.test(cells[i]) && cells[i] !== name) { location = cells[i]; break; }
+        }
+        const linkMatch = rowMatch[1].match(hrefRe);
+        races.push({
+          name, date: toISODate(parsed), location: location || 'Kentucky',
+          source: 'Johns',
+          sourceUrl: linkMatch ? new URL(linkMatch[1], JOHNS_URL).href : JOHNS_URL,
+        });
+      }
+    }
+  }
+
+  // Strategy 3: list/card elements
+  if (races.length === 0) {
+    const dateRe = /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s*\d{4})/i;
+    const cardRe = /<(?:li|article|div)[^>]*class="[^"]*(?:race|event|card)[^"]*"[^>]*>([\s\S]*?)<\/(?:li|article|div)>/gi;
+    while ((m = cardRe.exec(html)) !== null) {
+      const text = stripTags(m[1]);
+      const dm = text.match(dateRe);
+      if (!dm) continue;
+      const parsed = new Date(dm[1]);
+      if (isNaN(parsed.getTime()) || parsed < today) continue;
+      const name = text.replace(dm[0], '').replace(/^[\s\-–|:,]+|[\s\-–|:,]+$/g, '').trim();
+      if (name.length < 3) continue;
+      const linkMatch = m[1].match(hrefRe);
+      races.push({
+        name, date: toISODate(parsed), location: 'Kentucky',
+        source: 'Johns',
+        sourceUrl: linkMatch ? new URL(linkMatch[1], JOHNS_URL).href : JOHNS_URL,
+      });
+    }
+  }
+
+  console.log(`Parsed ${races.length} upcoming races from John's Run Walk Shop`);
+  return races;
+}
+
 // ── RaceRise ───────────────────────────────────────────────────────────────────
 const RACERISE_URL = 'https://www.racerise.com/upcoming-races';
 
@@ -438,6 +555,13 @@ async function fetchRaceRise() {
     farRaces = await fetchFindARace();
   } catch (e) {
     console.warn('FindARace fetch failed:', e.message);
+  }
+
+  let johnsRaces = [];
+  try {
+    johnsRaces = await fetchJohns();
+  } catch (e) {
+    console.warn("John's fetch failed:", e.message);
   }
 
   let rrRaces = [];

@@ -366,8 +366,7 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 }
 .hero-quote {
   margin: 0 0 24px;
-  padding: 0 0 0 14px;
-  border-left: 3px solid rgba(255,255,255,0.35);
+  padding: 0;
   position: relative;
 }
 .hero-quote p {
@@ -429,7 +428,7 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .sources-note::before { content: '·'; }
 
 /* ---- SECTIONS ---- */
-.section { padding: 56px 0; }
+.section { padding: 56px 0; border-top: 2px solid var(--border); }
 .section--alt { background: var(--white); }
 
 .section-title {
@@ -1697,3 +1696,24 @@ details[open] .prof-lb-summary::before { content: '▼ '; }
 }
 .cal-opt:last-child { border-bottom: none; }
 .cal-opt:hover { background: var(--cream-dark); color: var(--green-dark); }
+
+/* ── Race section source badges ── */
+.race-sources {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 16px;
+}
+.race-sources-label {
+  font-size: 0.75rem; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .04em; margin-right: 2px;
+}
+.race-source-badge {
+  display: inline-block; padding: 3px 10px;
+  font-size: 0.75rem; font-weight: 600;
+  background: var(--cream-dark); border: 1px solid var(--border);
+  border-radius: 20px; color: var(--text-muted); text-decoration: none;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.race-source-badge:hover {
+  background: var(--green-mid); border-color: var(--green-mid);
+  color: #fff;
+}
