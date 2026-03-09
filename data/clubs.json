@@ -1,7 +1,7 @@
 {
   "lastUpdated": "2026-03-09",
   "totals": {
-    "weeklyEvents": 24,
+    "weeklyEvents": 23,
     "groups": 13,
     "dailyMeetups": 3
   },
@@ -152,13 +152,6 @@
         "name": "frontrunners lexington",
         "location": "Third St Stuff, 257 N Limestone, Lexington, KY 40508",
         "websiteUrl": "http://frontrunnerslex.com/routes/"
-      },
-      {
-        "time": "9:00am",
-        "name": "Joe Creason parkrun",
-        "notes": "Louisville — free, timed 5K, all paces welcome",
-        "location": "Joe Creason Park, Louisville, KY 40207",
-        "websiteUrl": "https://www.parkrun.us/joecreason/"
       }
     ],
     "Sunday": [
