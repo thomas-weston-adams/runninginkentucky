@@ -1168,3 +1168,237 @@ mark.highlight {
   padding: 0 2px;
   color: inherit;
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   COUNTY CHALLENGE MAP
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Layout ── */
+.county-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  align-items: start;
+  margin-bottom: 20px;
+}
+@media (min-width: 900px) {
+  .county-layout {
+    grid-template-columns: 1fr 340px;
+    gap: 20px;
+  }
+}
+
+/* ── Map wrap ── */
+.county-map-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  line-height: 0;
+}
+
+/* ── County SVG paths ── */
+.c-path {
+  fill: #dde4df;
+  stroke: var(--white);
+  stroke-width: 0.5;
+  cursor: pointer;
+  transition: fill 0.12s;
+}
+.c-path:hover           { fill: #a8c5b0; }
+.c-path.c-has-races     { fill: #a8d4bc; }
+.c-path.c-has-races:hover { fill: #7bbf9a; }
+.c-path.c-done          { fill: var(--green-mid); }
+.c-path.c-done:hover    { fill: var(--green-dark); }
+.c-path.c-selected      { fill: var(--gold) !important; stroke: var(--green-dark); stroke-width: 1.5; }
+.c-borders { fill: none; stroke: rgba(255,255,255,0.6); stroke-width: 0.4; }
+
+/* Strava / Garmin theme overrides */
+:is([data-theme="strava"],[data-theme="garmin"]) .c-path           { fill: #c8d6cc; }
+:is([data-theme="strava"],[data-theme="garmin"]) .c-path:hover      { fill: #9ab8a3; }
+:is([data-theme="strava"],[data-theme="garmin"]) .c-path.c-has-races { fill: #9abfaa; }
+:is([data-theme="strava"],[data-theme="garmin"]) .c-path.c-done     { fill: var(--green-mid); }
+
+/* ── Floating hover tooltip ── */
+.county-tooltip {
+  position: fixed;
+  z-index: 9999;
+  background: var(--green-dark);
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  font-family: 'Open Sans', sans-serif;
+  pointer-events: none;
+  max-width: 260px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  line-height: 1.4;
+}
+.ct-name  { font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; }
+.ct-check { color: var(--gold); }
+.ct-none  { color: rgba(255,255,255,0.65); font-style: italic; margin-bottom: 4px; }
+.ct-count { color: var(--gold); font-weight: 600; font-size: 0.78rem; margin-bottom: 3px; }
+.ct-race-row { font-size: 0.75rem; color: rgba(255,255,255,0.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ct-more  { font-size: 0.73rem; color: rgba(255,255,255,0.55); margin-top: 2px; }
+.ct-hint  { margin-top: 6px; font-size: 0.72rem; color: rgba(255,255,255,0.5); border-top: 1px solid rgba(255,255,255,0.15); padding-top: 5px; }
+
+/* ── County panel (sidebar / inline) ── */
+.county-panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  max-height: 520px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 899px) {
+  .county-panel { max-height: none; margin-top: 12px; }
+}
+.cp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--green-dark);
+  color: var(--white);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.cp-title { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin: 0; }
+.cp-close {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: var(--white);
+  border-radius: 50%;
+  width: 26px; height: 26px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.cp-close:hover { background: rgba(255,255,255,0.15); }
+.cp-body { padding: 14px 16px; }
+.cp-done-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.cp-done-row:hover { background: var(--cream-dark); }
+.cp-checkbox { accent-color: var(--green-mid); width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; }
+.cp-done-label { font-size: 0.84rem; font-weight: 600; color: var(--text); }
+.cp-done-badge {
+  margin-left: auto;
+  background: var(--green-mid);
+  color: var(--white);
+  border-radius: 20px;
+  padding: 2px 9px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.cp-races-heading { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 10px; }
+.cp-past-label    { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin: 14px 0 8px; opacity: 0.7; }
+.cp-race {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: var(--cream);
+}
+.cp-race-date  { font-size: 0.72rem; font-weight: 700; color: var(--green-mid); text-transform: uppercase; letter-spacing: 0.03em; }
+.cp-race-name  { font-weight: 700; font-size: 0.88rem; margin: 2px 0; }
+.cp-race-loc   { font-size: 0.76rem; color: var(--text-muted); }
+.cp-race-notes { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; font-style: italic; }
+.cp-race-links { display: flex; gap: 5px; margin-top: 8px; }
+.cp-empty { font-size: 0.84rem; color: var(--text-muted); font-style: italic; line-height: 1.6; }
+
+/* ── Stats bar ── */
+.county-stats { margin-bottom: 24px; }
+.cs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.cs-item {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  text-align: center;
+}
+.cs-highlight {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+  color: var(--white);
+}
+.cs-val { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; font-weight: 800; line-height: 1; }
+.cs-highlight .cs-val { color: var(--gold); }
+.cs-denom { font-size: 1rem; font-weight: 500; opacity: 0.7; }
+.cs-lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; line-height: 1.3; }
+.cs-highlight .cs-lbl { color: rgba(255,255,255,0.7); }
+.cs-bar-wrap { display: flex; align-items: center; gap: 10px; }
+.cs-bar  { flex: 1; height: 8px; background: var(--cream-dark); border-radius: 4px; overflow: hidden; }
+.cs-fill { height: 100%; background: var(--green-mid); border-radius: 4px; transition: width 0.6s; }
+.cs-pct  { font-size: 0.8rem; font-weight: 700; color: var(--green-mid); min-width: 36px; text-align: right; }
+
+/* ── County grid ── */
+.county-grid-details { margin-top: 8px; }
+.county-grid-summary {
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--green-mid);
+  padding: 8px 4px;
+  user-select: none;
+  list-style: none;
+}
+.county-grid-summary::-webkit-details-marker { display: none; }
+.county-grid-summary::before { content: '▶ '; font-size: 0.7em; }
+details[open] .county-grid-summary::before { content: '▼ '; }
+.county-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 12px;
+}
+.cg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--cream);
+  color: var(--text);
+  font-size: 0.72rem;
+  font-family: 'Open Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.cg-btn:hover    { background: var(--cream-dark); border-color: var(--green-mid); }
+.cg-btn.cg-has   { border-color: var(--green-light); color: var(--green-dark); background: #eaf5ee; }
+.cg-btn.cg-done  { background: var(--green-mid); border-color: var(--green-mid); color: var(--white); }
+.cg-btn.cg-done:hover { background: var(--green-dark); border-color: var(--green-dark); }
+.cg-name  { }
+.cg-count { background: rgba(0,0,0,0.12); border-radius: 10px; padding: 0 5px; font-size: 0.65rem; font-weight: 700; }
+.cg-done  .cg-count { background: rgba(255,255,255,0.25); }
+.cg-check { font-size: 0.72rem; }
+
+/* Strava / Garmin overrides for county section */
+:is([data-theme="strava"],[data-theme="garmin"]) .cs-item    { background: var(--cream); border-color: var(--border); }
+:is([data-theme="strava"],[data-theme="garmin"]) .cs-highlight { background: var(--green-dark); }
+:is([data-theme="strava"],[data-theme="garmin"]) .cp-race    { background: var(--cream); border-color: var(--border); }
+:is([data-theme="strava"],[data-theme="garmin"]) .cp-done-row { background: var(--cream); border-color: var(--border); }
+:is([data-theme="strava"],[data-theme="garmin"]) .cg-btn.cg-has { background: var(--cream-dark); }

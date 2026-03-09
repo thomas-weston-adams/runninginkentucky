@@ -118,6 +118,31 @@
     </div>
   </section>
 
+  <!-- ── COUNTY CHALLENGE ── -->
+  <section class="section" id="county-section">
+    <div class="container">
+      <h2 class="section-title">Kentucky County Race Challenge</h2>
+      <p class="section-subtitle">
+        Run a race in all 120 Kentucky counties — one of the rarest achievements in Kentucky running.
+        Hover a county to preview races. Click to see the full list and track your progress.
+      </p>
+
+      <div class="county-layout">
+        <div id="county-map-wrap" class="county-map-wrap">
+          <svg id="county-map" aria-label="Kentucky county map"></svg>
+        </div>
+        <div id="county-panel" class="county-panel" hidden></div>
+      </div>
+
+      <div id="county-stats" class="county-stats"></div>
+
+      <details class="county-grid-details">
+        <summary class="county-grid-summary">Browse all 120 counties</summary>
+        <div id="county-grid" class="county-grid"></div>
+      </details>
+    </div>
+  </section>
+
   <!-- ── UPCOMING RACES ── -->
   <section class="section section--alt" id="races-section">
     <div class="container">
@@ -216,6 +241,9 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+  <script src="county-map.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

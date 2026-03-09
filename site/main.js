@@ -666,6 +666,7 @@ async function init() {
     renderRaces(races);
     setupSearch(races);
     setupRaceFilters(races);
+    if (typeof initCountyMap === 'function') initCountyMap(races);
 
     const updated = document.getElementById('last-updated');
     if (updated && clubs.lastUpdated) updated.textContent = clubs.lastUpdated;
