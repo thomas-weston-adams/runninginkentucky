@@ -96,7 +96,7 @@ function renderTodaysBanner(schedule) {
       <div class="promo-card">
         <div class="promo-card-time">${esc(ev.time)}</div>
         <div class="promo-card-name">${esc(ev.name)}</div>
-        <div class="promo-card-location">${esc(ev.location)}</div>
+        <div class="promo-card-location">${ev.mapUrl ? `<a href="${esc(ev.mapUrl)}" class="promo-location-link" target="_blank" rel="noopener">${esc(ev.location)}</a>` : esc(ev.location)}</div>
         ${ev.notes ? `<div class="promo-card-notes">${esc(ev.notes)}</div>` : ''}
         ${links.length ? `<div class="promo-card-links">${links.join('')}</div>` : ''}
       </div>`;
@@ -146,7 +146,7 @@ function renderCalendar(schedule) {
         card.innerHTML = `
           <div class="event-time">${esc(ev.time)}</div>
           <div class="event-name">${esc(ev.name)}</div>
-          <div class="event-location">${esc(ev.location)}${ev.address ? ` · ${esc(ev.address)}` : ''}</div>
+          <div class="event-location">${ev.mapUrl ? `<a href="${esc(ev.mapUrl)}" class="location-link" target="_blank" rel="noopener">${esc(ev.location)}${ev.address ? ` · ${esc(ev.address)}` : ''}</a>` : `${esc(ev.location)}${ev.address ? ` · ${esc(ev.address)}` : ''}`}</div>
           ${ev.notes ? `<div class="event-notes">${esc(ev.notes)}</div>` : ''}
           ${links.length ? `<div class="event-links">${links.join('')}</div>` : ''}
         `;
