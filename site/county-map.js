@@ -217,20 +217,41 @@
     const wrap = document.getElementById('county-map-wrap');
     if (!wrap) return;
 
+    // Check dependencies loaded
+    if (typeof d3 === 'undefined' || typeof topojson === 'undefined') {
+      wrap.innerHTML = '<p style="padding:20px;color:#c00">Map libraries failed to load. Try refreshing the page.</p>';
+      return;
+    }
+
+    // Show loading state
+    const loadingEl = document.createElement('p');
+    loadingEl.id = 'county-map-loading';
+    loadingEl.style.cssText = 'padding:40px;text-align:center;color:#5C6B73;font-style:italic';
+    loadingEl.textContent = 'Loading Kentucky county map…';
+    wrap.appendChild(loadingEl);
+
     let topoData;
     try {
       topoData = await fetch(TOPO_URL).then(r => r.json());
     } catch (e) {
-      wrap.innerHTML = '<p style="padding:20px;color:#c00">Could not load map data. Check your connection.</p>';
+      wrap.innerHTML = '<p style="padding:20px;color:#c00">Could not load map data. Check your connection and try refreshing.</p>';
       return;
     }
 
-    const kyFeatures = topojson.feature(topoData, topoData.objects.counties).features
-      .filter(f => Math.floor(+f.id / 1000) === KY_FIPS);
+    try {
+      const kyFeatures = topojson.feature(topoData, topoData.objects.counties).features
+        .filter(f => Math.floor(+f.id / 1000) === KY_FIPS);
 
-    renderMap(kyFeatures, topoData);
-    renderStats();
-    renderCountyGrid();
+      const loading = document.getElementById('county-map-loading');
+      if (loading) loading.remove();
+
+      renderMap(kyFeatures, topoData);
+      renderStats();
+      renderCountyGrid();
+    } catch (e) {
+      wrap.innerHTML = `<p style="padding:20px;color:#c00">Map render error: ${e.message}. Try refreshing.</p>`;
+      console.error('County map error:', e);
+    }
   }
 
   // ── SVG map ───────────────────────────────────────────────────────────────────
