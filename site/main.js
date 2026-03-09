@@ -340,9 +340,6 @@ function renderRaces(races) {
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.location)}`;
     const distances = parseDistances(r.notes);
     const distBadges = distances.map(dist => `<span class="dist-badge">${dist}</span>`).join('');
-    const badgeLabel = r.source === 'Johns' ? "John's" : r.source;
-    const knownSource = ['Johns', 'RaceRise', 'UltraSignup'].includes(r.source);
-    const sourceBadge = `<span class="race-badge ${knownSource ? esc(r.source) : 'Other'}">${esc(badgeLabel)}</span>`;
 
     return `
       <div class="race-card" data-source="${esc(r.source)}" data-location="${esc(r.location)}" data-name="${esc(r.name)}">
@@ -354,7 +351,6 @@ function renderRaces(races) {
           <div class="race-name">${highlightText(r.name, q)}</div>
           <div class="race-meta">
             <a href="${mapsUrl}" class="race-location" target="_blank" rel="noopener" title="Open in Google Maps">📍 ${highlightText(r.location, q)}</a>
-            ${sourceBadge}
             ${distBadges}
             ${countdownLabel(days)}
           </div>
