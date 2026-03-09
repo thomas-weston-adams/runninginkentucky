@@ -568,6 +568,24 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .group-links { margin-top: 4px; display: flex; gap: 6px; flex-wrap: wrap; }
 
 /* ---- DAILY MEETUPS ---- */
+.section-quote {
+  margin: 16px 0 0;
+  padding: 12px 18px;
+  border-left: 3px solid var(--green-light);
+  background: var(--cream-dark);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  display: inline-block;
+}
+.section-quote p {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+.section-quote footer {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
 .daily-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
