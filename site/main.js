@@ -705,3 +705,17 @@ async function init() {
 }
 
 init();
+
+// ── site miles counter ────────────────────────────────────────────────────────
+(async function () {
+  const el = document.getElementById('site-miles-count');
+  if (!el) return;
+  try {
+    const res  = await fetch('https://api.counterapi.dev/v1/runninginkentucky/miles/up');
+    const data = await res.json();
+    const count = data?.count ?? data?.value;
+    if (typeof count === 'number') {
+      el.textContent = count.toLocaleString('en-US');
+    }
+  } catch (e) { /* silently ignore — counter is cosmetic */ }
+})();

@@ -1065,6 +1065,8 @@ a.race-location:hover { color: var(--green-mid); text-decoration: underline; }
 .site-footer p + p { margin-top: 6px; }
 .site-footer a { color: var(--gold-light); }
 .site-footer a:hover { color: var(--white); }
+.site-footer-miles { font-size: 1rem; font-weight: 700; color: rgba(255,255,255,.85); margin: 10px 0 4px !important; }
+#site-miles-count  { color: var(--gold-light); font-family: 'Montserrat', sans-serif; font-size: 1.15rem; }
 
 /* ---- MUSIC PLAYER ---- */
 .music-player {
