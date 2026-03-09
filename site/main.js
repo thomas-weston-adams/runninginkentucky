@@ -150,13 +150,27 @@ function renderGroups(groups) {
 // ── render daily meetups ──────────────────────────────────────────────────────
 function renderDaily(meetups) {
   const list = document.getElementById('daily-meetups');
-  list.innerHTML = meetups.map(m => `
+  // Separate Tommy's entry so it gets a personal note treatment
+  const others = meetups.filter(m => !m.who.toLowerCase().includes('tommy adams'));
+  const tommy  = meetups.find(m => m.who.toLowerCase().includes('tommy adams'));
+
+  const cards = others.map(m => `
     <div class="daily-card">
       <div class="daily-who">${esc(m.who)}</div>
       <div class="daily-when">🕐 ${esc(m.when)}</div>
       <div class="daily-where">📍 ${esc(m.where)}</div>
     </div>
-  `).join('') + `
+  `).join('');
+
+  const tommyNote = tommy ? `
+    <div class="daily-personal-note" style="grid-column:1/-1">
+      <p>I run every single day, and I know that it's almost always better with company.</p>
+      <p>Want to go for a run? I would love to run with you.</p>
+      <p class="daily-personal-contact">— <a href="https://www.strava.com/athletes/tommyadams" target="_blank" rel="noopener">Tommy Adams</a></p>
+    </div>
+  ` : '';
+
+  list.innerHTML = cards + tommyNote + `
     <div class="daily-footer" style="grid-column:1/-1">
       Want to be listed here? <a href="https://github.com/thomas-weston-adams/runninginkentucky/issues/new?title=Add+Daily+Meetup&labels=new-club" target="_blank" rel="noopener">Open a quick request</a> and we'll add you!
     </div>
