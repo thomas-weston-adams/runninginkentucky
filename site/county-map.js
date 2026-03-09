@@ -166,10 +166,12 @@
   };
 
   // ── State ─────────────────────────────────────────────────────────────────────
-  let allRaces      = [];
-  let countyRaceMap = {};   // countyName → [race, ...]
-  let completed     = loadCompleted();
-  let pinned        = null; // currently clicked/pinned county name
+  let allRaces        = [];
+  let countyRaceMap   = {};   // countyName → [race, ...]
+  let completed       = loadCompleted();
+  let pinned          = null; // currently clicked/pinned county name
+  let compareCounties = null; // Set<string> — counties completed by compared user
+  let compareName     = null;
 
   function loadCompleted() {
     try { return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')); }
@@ -177,6 +179,7 @@
   }
   function saveCompleted() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...completed]));
+    if (window.onCountyToggle) window.onCountyToggle(completed);
   }
 
   // ── City → county resolution ──────────────────────────────────────────────────
@@ -248,6 +251,7 @@
       renderMap(kyFeatures, topoData);
       renderStats();
       renderCountyGrid();
+      if (window.initCountyProfiles) window.initCountyProfiles();
     } catch (e) {
       wrap.innerHTML = `<p style="padding:20px;color:#c00">Map render error: ${e.message}. Try refreshing.</p>`;
       console.error('County map error:', e);
@@ -283,9 +287,11 @@
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', pathGen(feature));
       path.dataset.county = name;
+      const cmp = compareCounties && compareCounties.has(name);
       path.setAttribute('class', 'c-path' +
-        (races.length > 0 ? ' c-has-races' : '') +
-        (done            ? ' c-done'       : ''));
+        (races.length > 0 ? ' c-has-races'    : '') +
+        (done            ? ' c-done'          : '') +
+        (cmp             ? ' c-compare-done'  : ''));
 
       path.addEventListener('mouseenter', e => onHover(e, name));
       path.addEventListener('mousemove',  moveTooltip);
@@ -335,6 +341,12 @@
         html += `<div class="ct-race-row">${lbl} · ${r.name}</div>`;
       });
       if (upcoming.length > 3) html += `<div class="ct-more">+${upcoming.length - 3} more</div>`;
+    }
+    if (compareCounties) {
+      const cmpDone = compareCounties.has(name);
+      html += `<div class="ct-compare">${cmpDone
+        ? `<span class="ct-cmp-yes">✓ ${compareName || 'Compared runner'} ran here</span>`
+        : `<span class="ct-cmp-no">— ${compareName || 'Compared runner'} hasn't run here</span>`}</div>`;
     }
     html += `<div class="ct-hint">Click to ${races.length ? 'see all & track' : 'track'}</div>`;
 
@@ -459,6 +471,16 @@
     const done      = completed.size;
     const pct       = Math.round((done / TOTAL) * 100);
 
+    const cmpBar = compareCounties ? (() => {
+      const cPct = Math.round((compareCounties.size / TOTAL) * 100);
+      return `
+      <div class="cs-compare-row">
+        <span class="cs-compare-lbl">${compareName || 'Compared runner'}:</span>
+        <div class="cs-bar"><div class="cs-fill cs-fill--compare" style="width:${cPct}%"></div></div>
+        <span class="cs-pct cs-pct--compare">${compareCounties.size}/120</span>
+      </div>`;
+    })() : '';
+
     el.innerHTML = `
       <div class="cs-grid">
         <div class="cs-item">
@@ -477,7 +499,8 @@
       <div class="cs-bar-wrap">
         <div class="cs-bar"><div class="cs-fill" style="width:${pct}%"></div></div>
         <div class="cs-pct">${pct}%</div>
-      </div>`;
+      </div>
+      ${cmpBar}`;
   }
 
   // ── County grid (all 120) ─────────────────────────────────────────────────────
@@ -576,6 +599,25 @@
     });
   }
 
+  // ── Compare mode ──────────────────────────────────────────────────────────────
+  function setCompare(name, countiesSet) {
+    compareName     = name;
+    compareCounties = countiesSet;
+    document.querySelectorAll('.c-path').forEach(path => {
+      path.classList.toggle('c-compare-done', compareCounties.has(path.dataset.county));
+    });
+    renderStats();
+  }
+
+  function clearCompare() {
+    compareName     = null;
+    compareCounties = null;
+    document.querySelectorAll('.c-path.c-compare-done')
+      .forEach(p => p.classList.remove('c-compare-done'));
+    renderStats();
+  }
+
   // ── Public API ────────────────────────────────────────────────────────────────
-  window.initCountyMap = initCountyMap;
+  window.initCountyMap  = initCountyMap;
+  window.countyMapAPI   = { setCompare, clearCompare, refresh: renderStats };
 })();
