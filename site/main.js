@@ -464,6 +464,7 @@ const PLAYLIST = [
   { src: "Dont Stop Me Now.mp3",                      title: "Don't Stop Me Now",    artist: 'Queen' },
   { src: 'King Charles - Bam Bam.mp3',                title: 'Bam Bam',              artist: 'King Charles' },
   { src: 'Bleachers - Rollercoaster.mp3',             title: 'Rollercoaster',        artist: 'Bleachers' },
+  { src: 'Bob Seger - Against The Wind.mp3',          title: 'Against the Wind',     artist: 'Bob Seger & The Silver Bullet Band' },
 ];
 
 // Fisher-Yates shuffle
