@@ -1495,3 +1495,41 @@ details[open] .county-contribute-summary::before { content: '▼'; }
 }
 .cc-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 4px; }
 .cc-note    { font-size: 0.76rem; color: var(--text-muted); font-style: italic; margin: 0; }
+
+/* ── Jump nav ── */
+.jump-nav {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+.jump-nav-inner {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 12px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.jump-nav-inner::-webkit-scrollbar { display: none; }
+.jump-link {
+  flex-shrink: 0;
+  display: inline-block;
+  padding: 10px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+  white-space: nowrap;
+}
+.jump-link:hover {
+  color: var(--green-mid);
+  border-bottom-color: var(--green-mid);
+}
