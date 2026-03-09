@@ -460,8 +460,10 @@ const PLAYLIST = [
   { src: 'Matt Nathanson - Long Distance Runner.mp3', title: 'Long Distance Runner', artist: 'Matt Nathanson' },
   { src: 'OneRepublic - Run.mp3',                     title: 'Run',                  artist: 'OneRepublic' },
   { src: 'Song for Walking.mp3',                      title: 'Song for Walking',     artist: 'Tophouse' },
-  { src: 'Winterbourne - Long Distance Runner.mp3',   title: 'Long Distance Runner', artist: 'Winterbourne' },
   { src: 'WALK THE MOON - One Foot.mp3',              title: 'One Foot',             artist: 'Walk the Moon' },
+  { src: "Dont Stop Me Now.mp3",                      title: "Don't Stop Me Now",    artist: 'Queen' },
+  { src: 'King Charles - Bam Bam.mp3',                title: 'Bam Bam',              artist: 'King Charles' },
+  { src: 'Bleachers - Rollercoaster.mp3',             title: 'Rollercoaster',        artist: 'Bleachers' },
 ];
 
 // Fisher-Yates shuffle
@@ -515,7 +517,7 @@ function setupMusicPlayer() {
   }
 
   audio.volume = parseFloat(vol.value);
-  loadTrack(0, false);
+  loadTrack(0, true);
 
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
