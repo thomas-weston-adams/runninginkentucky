@@ -35,8 +35,8 @@
       },
       {
         "time": "6:00 pm",
-        "name": "John's Striders - John's Run Walk Club",
-        "notes": "Tuesday and Thursday",
+        "name": "John's Run Walk Club",
+        "notes": "Chevy Chase, Tuesday and Thursday",
         "location": "John’s Run/Walk Shop, 317 S Ashland Ave, Lexington, KY 40502",
         "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA"
       },
@@ -74,10 +74,9 @@
         "mapUrl": "https://goo.gl/maps/gJ6GHZWryJu5QXPE9"
       },
       {
-        "time": "6:00 pm",
-        "name": "John's Striders - John's Run Walk Club HAMBURG",
-        "notes": "3-5 miles",
-        "location": "John's Run/Walk Shop, 3090 Helmsdale Pl Suite 340, Lexington, KY 40509",
+        "time": "6:00pm",
+        "name": "John’s Run Walk Club",
+        "notes": "Hamburg",
         "mapUrl": "https://maps.app.goo.gl/5hfmaLRZJeS1W38Y6"
       },
       {
@@ -91,8 +90,8 @@
     "Thursday": [
       {
         "time": "6:00 pm",
-        "name": "John's Striders - John's Run Walk Club",
-        "notes": "Tuesday and Thursday",
+        "name": "John's Run Walk Club",
+        "notes": "Chevy Chase, Tuesday and Thursday",
         "location": "John’s Run/Walk Shop, 317 S Ashland Ave, Lexington, KY 40502",
         "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA"
       },
@@ -100,7 +99,7 @@
         "time": "6:00 pm",
         "name": "A Running Start",
         "notes": "also Tuesday and Friday",
-        "location": "YMCA legacy trail start point",
+        "location": "YMCA legacy trail start poin",
         "mapUrl": "https://maps.app.goo.gl/VH1a73mfdjADMEYL9"
       }
     ],
@@ -122,17 +121,15 @@
       },
       {
         "time": "7:30am",
-        "name": "John's Striders - John's Run Walk Club (Chevy Chase)",
-        "notes": "Various distances — many use this for long runs of 6+ miles",
-        "location": "John's Run/Walk Shop, 317 S Ashland Ave, Lexington, KY 40502",
-        "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA"
+        "name": "John’s RunWalk Club",
+        "notes": "Hamburg",
+        "mapUrl": "https://maps.app.goo.gl/5hfmaLRZJeS1W38Y6"
       },
       {
         "time": "7:30am",
-        "name": "John's Striders - John's Run Walk Club HAMBURG",
-        "notes": "3 miles",
-        "location": "John's Run/Walk Shop, 3090 Helmsdale Pl Suite 340, Lexington, KY 40509",
-        "mapUrl": "https://maps.app.goo.gl/5hfmaLRZJeS1W38Y6"
+        "name": "John’s Run Walk Club",
+        "notes": "Chevy Chase",
+        "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA"
       },
       {
         "time": "730am",
@@ -232,14 +229,17 @@
   "dailyMeetups": [
     {
       "who": "John’s Run Walk Shop weekday meetups",
+      "when": "See details",
       "where": "the Chevy Chase Starbucks"
     },
     {
       "who": "MoCo Runners",
+      "when": "See details",
       "where": "early mornings"
     },
     {
       "who": "Tommy Adams",
+      "when": "See details",
       "where": "every day"
     }
   ]
