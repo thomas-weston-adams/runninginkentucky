@@ -1402,3 +1402,93 @@ details[open] .county-grid-summary::before { content: '▼ '; }
 :is([data-theme="strava"],[data-theme="garmin"]) .cp-race    { background: var(--cream); border-color: var(--border); }
 :is([data-theme="strava"],[data-theme="garmin"]) .cp-done-row { background: var(--cream); border-color: var(--border); }
 :is([data-theme="strava"],[data-theme="garmin"]) .cg-btn.cg-has { background: var(--cream-dark); }
+
+/* ── BETA badge ── */
+.beta-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--green-dark);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.52rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-left: 10px;
+  position: relative;
+  top: -3px;
+}
+
+/* ── Contribution interface ── */
+.county-contribute-details {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.county-contribute-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 13px 18px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--cream);
+  user-select: none;
+  list-style: none;
+}
+.county-contribute-summary::-webkit-details-marker { display: none; }
+.county-contribute-summary::before { content: '▶'; font-size: 0.65em; color: var(--green-mid); }
+details[open] .county-contribute-summary::before { content: '▼'; }
+.cc-summary-note {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.county-contribute {
+  padding: 20px 24px 24px;
+  border-top: 1px solid var(--border);
+  background: var(--white);
+}
+.cc-intro {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.cc-form { display: flex; flex-direction: column; gap: 12px; }
+.cc-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .cc-row { grid-template-columns: 1fr; } }
+.cc-label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.cc-label--wide { grid-column: 1 / -1; }
+.cc-opt { font-weight: 400; color: var(--text-muted); }
+.cc-input {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-family: 'Open Sans', sans-serif;
+  color: var(--text);
+  background: var(--cream);
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.cc-input:focus {
+  outline: none;
+  border-color: var(--green-mid);
+  background: var(--white);
+}
+.cc-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 4px; }
+.cc-note    { font-size: 0.76rem; color: var(--text-muted); font-style: italic; margin: 0; }

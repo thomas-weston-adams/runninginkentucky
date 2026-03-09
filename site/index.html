@@ -118,31 +118,6 @@
     </div>
   </section>
 
-  <!-- ── COUNTY CHALLENGE ── -->
-  <section class="section" id="county-section">
-    <div class="container">
-      <h2 class="section-title">Kentucky County Race Challenge</h2>
-      <p class="section-subtitle">
-        Run a race in all 120 Kentucky counties — one of the rarest achievements in Kentucky running.
-        Hover a county to preview races. Click to see the full list and track your progress.
-      </p>
-
-      <div class="county-layout">
-        <div id="county-map-wrap" class="county-map-wrap">
-          <svg id="county-map" aria-label="Kentucky county map"></svg>
-        </div>
-        <div id="county-panel" class="county-panel" hidden></div>
-      </div>
-
-      <div id="county-stats" class="county-stats"></div>
-
-      <details class="county-grid-details">
-        <summary class="county-grid-summary">Browse all 120 counties</summary>
-        <div id="county-grid" class="county-grid"></div>
-      </details>
-    </div>
-  </section>
-
   <!-- ── UPCOMING RACES ── -->
   <section class="section section--alt" id="races-section">
     <div class="container">
@@ -177,6 +152,95 @@
       <div id="races-list" class="races-list">
         <div style="padding:20px;color:#5C6B73">Loading races…</div>
       </div>
+    </div>
+  </section>
+
+  <!-- ── COUNTY CHALLENGE ── -->
+  <section class="section" id="county-section">
+    <div class="container">
+      <h2 class="section-title">
+        Kentucky County Race Challenge
+        <span class="beta-badge">BETA</span>
+      </h2>
+      <p class="section-subtitle">
+        Run a race in all 120 Kentucky counties — one of the rarest achievements in Kentucky running.
+        Hover a county to preview races. Click to see the full list and track your progress.
+      </p>
+
+      <div class="county-layout">
+        <div id="county-map-wrap" class="county-map-wrap">
+          <svg id="county-map" aria-label="Kentucky county map"></svg>
+        </div>
+        <div id="county-panel" class="county-panel" hidden></div>
+      </div>
+
+      <div id="county-stats" class="county-stats"></div>
+
+      <details class="county-grid-details">
+        <summary class="county-grid-summary">Browse all 120 counties</summary>
+        <div id="county-grid" class="county-grid"></div>
+      </details>
+
+      <!-- ── Contribution interface ── -->
+      <details class="county-contribute-details" id="county-contribute-details">
+        <summary class="county-contribute-summary">
+          Help build this map
+          <span class="cc-summary-note">Missing a race or city? Let us know.</span>
+        </summary>
+        <div class="county-contribute">
+          <p class="cc-intro">
+            This map is a community work-in-progress. Many counties still lack race listings,
+            and some cities or towns may not yet be linked to the right county.
+            Use this form to suggest a race, flag a missing city, or report anything that looks off —
+            submissions come to us directly and we'll add verified entries to the data.
+          </p>
+          <form class="cc-form" id="county-contribute-form" novalidate>
+            <div class="cc-row">
+              <label class="cc-label">
+                County
+                <select id="cc-county" class="cc-input">
+                  <option value="">Select a county…</option>
+                </select>
+              </label>
+              <label class="cc-label">
+                What are you submitting?
+                <select id="cc-type" class="cc-input">
+                  <option value="race">A race event</option>
+                  <option value="city">Missing city / town mapping</option>
+                  <option value="correction">Correction to existing data</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+            </div>
+            <div class="cc-row">
+              <label class="cc-label cc-label--wide">
+                Name / Details
+                <input type="text" id="cc-detail" class="cc-input" placeholder="Race name, city name, or description of the issue…" required>
+              </label>
+            </div>
+            <div class="cc-row">
+              <label class="cc-label">
+                Date <span class="cc-opt">(if applicable)</span>
+                <input type="date" id="cc-date" class="cc-input">
+              </label>
+              <label class="cc-label">
+                Link <span class="cc-opt">(optional)</span>
+                <input type="url" id="cc-link" class="cc-input" placeholder="https://…">
+              </label>
+            </div>
+            <div class="cc-row">
+              <label class="cc-label cc-label--wide">
+                Additional notes
+                <input type="text" id="cc-notes" class="cc-input" placeholder="Anything else we should know…">
+              </label>
+            </div>
+            <div class="cc-actions">
+              <button type="submit" class="btn btn-primary">Send via Email →</button>
+              <p class="cc-note">Opens your email app with this info pre-filled. Nothing is sent automatically.</p>
+            </div>
+          </form>
+        </div>
+      </details>
     </div>
   </section>
 

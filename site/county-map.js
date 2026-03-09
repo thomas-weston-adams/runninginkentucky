@@ -9,6 +9,10 @@
   const TOTAL       = 120;         // Kentucky has exactly 120 counties
   const STORAGE_KEY = 'ky_county_challenge_v1';
 
+  // ── Admin email for contribution submissions ───────────────────────────────────
+  // Change this to the address where you want to receive county map submissions.
+  const ADMIN_EMAIL = 'tommy@runninginkentucky.com';
+
   // ── City → Kentucky county name lookup ───────────────────────────────────────
   // Keys: lowercase city name as it appears before ", KY" in race location strings
   // Values: county name exactly as it appears in the us-atlas TopoJSON (no "County")
@@ -482,6 +486,72 @@
         document.getElementById('county-panel')
           ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
+    });
+
+    // Wire up contribute form once county names are available
+    initContributeForm(names);
+  }
+
+  // ── Contribution form ─────────────────────────────────────────────────────────
+  function initContributeForm(countyNames) {
+    const select = document.getElementById('cc-county');
+    const form   = document.getElementById('county-contribute-form');
+    if (!select || !form) return;
+
+    // Populate county dropdown from the 120 counties on the map
+    countyNames.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name + ' County';
+      select.appendChild(opt);
+    });
+
+    // If a county is already selected on the map, pre-fill it
+    if (pinned) select.value = pinned;
+
+    // Sync map selection → dropdown
+    document.getElementById('county-section')?.addEventListener('county-selected', e => {
+      select.value = e.detail || '';
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const county  = select.value;
+      const type    = document.getElementById('cc-type').value;
+      const detail  = document.getElementById('cc-detail').value.trim();
+      const date    = document.getElementById('cc-date').value;
+      const link    = document.getElementById('cc-link').value.trim();
+      const notes   = document.getElementById('cc-notes').value.trim();
+
+      if (!detail) {
+        document.getElementById('cc-detail').focus();
+        return;
+      }
+
+      const typeLabels = {
+        race:       'Race event',
+        city:       'Missing city/town mapping',
+        correction: 'Data correction',
+        other:      'Other',
+      };
+
+      const subject = `[KY County Map] ${typeLabels[type] || type}${county ? ' — ' + county + ' County' : ''}`;
+      const body = [
+        `Submission type: ${typeLabels[type] || type}`,
+        county  ? `County: ${county} County` : '',
+        `Details: ${detail}`,
+        date    ? `Date: ${date}` : '',
+        link    ? `Link: ${link}` : '',
+        notes   ? `Notes: ${notes}` : '',
+        '',
+        '— Submitted via runninginkentucky.com county map',
+      ].filter(Boolean).join('\n');
+
+      window.open(
+        `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+        '_blank'
+      );
     });
   }
 
