@@ -495,6 +495,9 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .promo-cards::-webkit-scrollbar { height: 4px; }
 .promo-cards::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 2px; }
 .promo-cards::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+/* Calendar button inside promo banner — inverts icon-btn colours for dark bg */
+.promo-cal-btn { color: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.25); background: transparent; }
+.promo-cal-btn:hover { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.5); }
 .promo-card {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.15);
@@ -607,6 +610,22 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   line-height: 1.3;
   margin-bottom: 4px;
 }
+.location-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 2px;
+}
+.location-link:hover { color: var(--green-mid); text-decoration-color: var(--green-mid); }
+
+.promo-location-link {
+  color: rgba(255,255,255,0.65);
+  text-decoration: underline;
+  text-decoration-color: rgba(255,255,255,0.3);
+  text-underline-offset: 2px;
+}
+.promo-location-link:hover { color: #fff; text-decoration-color: rgba(255,255,255,0.7); }
+
 .event-location {
   font-size: 0.75rem;
   color: var(--text-muted);
@@ -620,6 +639,18 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   margin-bottom: 6px;
 }
 .event-links { display: flex; gap: 5px; flex-wrap: wrap; }
+
+.schedule-disclaimer {
+  margin-top: 18px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.6;
+  padding: 12px 16px;
+  background: var(--cream);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+}
 
 /* ---- GROUPS ---- */
 .groups-grid {

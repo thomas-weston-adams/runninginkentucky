@@ -1,7 +1,7 @@
 {
   "lastUpdated": "2026-03-09",
   "totals": {
-    "weeklyEvents": 20,
+    "weeklyEvents": 23,
     "groups": 13,
     "dailyMeetups": 4
   },
@@ -51,7 +51,8 @@
         "time": "6:00 pm",
         "name": "A Running Start",
         "notes": "also Thursday and Friday",
-        "location": "YMCA legacy trail start point"
+        "location": "YMCA legacy trail start point",
+        "mapUrl": "https://maps.app.goo.gl/VH1a73mfdjADMEYL9"
       },
       {
         "time": "7:00pm",
@@ -64,13 +65,20 @@
         "time": "6:00pm",
         "name": "Winchester Runners Wednesdays",
         "location": "Abettor Brewing Company, 128 N Highland St, Winchester, KY 40391",
-        "mapUrl": "https://g.page/abettorbrewingcompany?share"
+        "mapUrl": "https://maps.app.goo.gl/BLYPzpcEEamZemiS6"
       },
       {
         "time": "6:00pm",
         "name": "Fleet Feet Run Club",
         "location": "Fleet Feet Lexington, 4084 Finn Way Suite 140, Lexington, KY 40517",
         "mapUrl": "https://goo.gl/maps/gJ6GHZWryJu5QXPE9"
+      },
+      {
+        "time": "6:00 pm",
+        "name": "John's Striders - John's Run Walk Club HAMBURG",
+        "notes": "3-5 miles",
+        "location": "John's Run/Walk Shop, 3090 Helmsdale Pl Suite 340, Lexington, KY 40509",
+        "mapUrl": "https://maps.app.goo.gl/5hfmaLRZJeS1W38Y6"
       },
       {
         "time": "7:00 pm",
@@ -92,7 +100,8 @@
         "time": "6:00 pm",
         "name": "A Running Start",
         "notes": "also Tuesday and Friday",
-        "location": "YMCA legacy trail start point"
+        "location": "YMCA legacy trail start point",
+        "mapUrl": "https://maps.app.goo.gl/VH1a73mfdjADMEYL9"
       }
     ],
     "Friday": [
@@ -100,15 +109,30 @@
         "time": "6:00 pm",
         "name": "A Running Start",
         "notes": "also Tuesday and Thursday",
-        "location": "YMCA legacy trail start point"
+        "location": "YMCA legacy trail start point",
+        "mapUrl": "https://maps.app.goo.gl/VH1a73mfdjADMEYL9"
       }
     ],
     "Saturday": [
       {
         "time": "7am",
         "name": "Todds Road Stumblers",
-        "location": "Clubhouse at the intersection of Todd's Road (1927) and Comb's Ferry Road (1923)",
-        "mapUrl": "https://goo.gl/maps/RoKdLKQvQ4ZiDCwS8"
+        "location": "3421 Combs Ferry Rd, Winchester, KY 40391",
+        "mapUrl": "https://maps.app.goo.gl/ENiHmJwiu7S5aFXj8"
+      },
+      {
+        "time": "7:30am",
+        "name": "John's Striders - John's Run Walk Club (Chevy Chase)",
+        "notes": "Various distances — many use this for long runs of 6+ miles",
+        "location": "John's Run/Walk Shop, 317 S Ashland Ave, Lexington, KY 40502",
+        "mapUrl": "https://maps.app.goo.gl/yTgLJQhiXg7Uxs1SA"
+      },
+      {
+        "time": "7:30am",
+        "name": "John's Striders - John's Run Walk Club HAMBURG",
+        "notes": "3 miles",
+        "location": "John's Run/Walk Shop, 3090 Helmsdale Pl Suite 340, Lexington, KY 40509",
+        "mapUrl": "https://maps.app.goo.gl/5hfmaLRZJeS1W38Y6"
       },
       {
         "time": "730am",
