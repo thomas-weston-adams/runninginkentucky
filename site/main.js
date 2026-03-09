@@ -76,6 +76,44 @@ function parseDistances(notes) {
   return out;
 }
 
+// ── today's promo banner ──────────────────────────────────────────────────────
+function renderTodaysBanner(schedule) {
+  const banner = document.getElementById('todays-promo');
+  if (!banner) return;
+  const todayName = todayDayName();
+  const events = schedule[todayName] || [];
+
+  if (events.length === 0) {
+    banner.hidden = true;
+    return;
+  }
+
+  const cards = events.map(ev => {
+    const links = [];
+    if (ev.mapUrl) links.push(`<a href="${esc(ev.mapUrl)}" class="btn btn-map" target="_blank" rel="noopener">Map</a>`);
+    if (ev.websiteUrl) links.push(`<a href="${esc(ev.websiteUrl)}" class="btn btn-link" target="_blank" rel="noopener">Website</a>`);
+    return `
+      <div class="promo-card">
+        <div class="promo-card-time">${esc(ev.time)}</div>
+        <div class="promo-card-name">${esc(ev.name)}</div>
+        <div class="promo-card-location">${esc(ev.location)}</div>
+        ${ev.notes ? `<div class="promo-card-notes">${esc(ev.notes)}</div>` : ''}
+        ${links.length ? `<div class="promo-card-links">${links.join('')}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  banner.innerHTML = `
+    <div class="promo-inner">
+      <div class="promo-header">
+        <div class="promo-tag">${esc(todayName)}</div>
+        <h3 class="promo-headline">Want to run with a club today?</h3>
+        <p class="promo-sub">${events.length} club run${events.length !== 1 ? 's' : ''} happening today</p>
+      </div>
+      <div class="promo-cards">${cards}</div>
+    </div>`;
+  banner.hidden = false;
+}
+
 // ── render weekly calendar ────────────────────────────────────────────────────
 function renderCalendar(schedule) {
   const grid = document.getElementById('weekly-calendar');
@@ -576,6 +614,7 @@ async function init() {
     const racesData = await racesRes.json();
     const races = racesData.races;
 
+    renderTodaysBanner(clubs.weeklySchedule);
     renderCalendar(clubs.weeklySchedule);
     renderGroups(clubs.groups);
     renderDaily(clubs.dailyMeetups);
