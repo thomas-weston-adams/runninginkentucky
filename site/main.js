@@ -55,8 +55,15 @@ function countdownLabel(days) {
 }
 
 // ── weekly schedule overrides ─────────────────────────────────────────────────
-const REPORT_EMAIL   = 'thomaswestonadams@gmail.com';
-const OVERRIDES_KEY  = 'ky_schedule_overrides_v1';
+// Changes are stored in a shared JSONBin so ALL visitors see them — not just
+// the person who submitted. Setup:
+//   1. Create a free account at https://jsonbin.io
+//   2. Create a new bin with initial content: {}  (make it PUBLIC)
+//   3. Copy your Bin ID and API key (Master Key) into the constants below
+const REPORT_EMAIL      = 'thomaswestonadams@gmail.com';
+const OVERRIDES_KEY     = 'ky_schedule_overrides_v1';
+const JSONBIN_BIN_ID    = '';   // e.g. '6612abc123def456789'
+const JSONBIN_API_KEY   = '';   // your $2a$10$... Master Key from jsonbin.io
 
 function weekOf(date = new Date()) {
   const d = new Date(date);
@@ -66,24 +73,65 @@ function weekOf(date = new Date()) {
   return d.toISOString().slice(0, 10);
 }
 
+function pruneOld(obj) {
+  const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 14);
+  const cutoffStr = cutoff.toISOString().slice(0, 10);
+  Object.keys(obj).forEach(k => { if (obj[k]?.weekOf < cutoffStr) delete obj[k]; });
+  return obj;
+}
+
 function loadOverrides() {
-  try {
-    const all = JSON.parse(localStorage.getItem(OVERRIDES_KEY) || '{}');
-    const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 14);
-    const cutoffStr = cutoff.toISOString().slice(0, 10);
-    let changed = false;
-    Object.keys(all).forEach(k => { if (all[k].weekOf < cutoffStr) { delete all[k]; changed = true; } });
-    if (changed) localStorage.setItem(OVERRIDES_KEY, JSON.stringify(all));
-    return all;
-  } catch { return {}; }
+  try { return pruneOld(JSON.parse(localStorage.getItem(OVERRIDES_KEY) || '{}')); }
+  catch { return {}; }
+}
+
+function saveToLocal(overrides) {
+  try { localStorage.setItem(OVERRIDES_KEY, JSON.stringify(overrides)); } catch { /* ignore */ }
 }
 
 function saveOverride(override) {
+  const all = loadOverrides();
+  all[`${override.day}::${override.name}::${override.weekOf}`] = override;
+  saveToLocal(all);
+}
+
+// Fetch shared overrides from JSONBin (visible to all visitors)
+async function fetchRemoteOverrides() {
+  if (!JSONBIN_BIN_ID) return null;
   try {
-    const all = loadOverrides();
-    all[`${override.day}::${override.name}::${override.weekOf}`] = override;
-    localStorage.setItem(OVERRIDES_KEY, JSON.stringify(all));
-  } catch { /* ignore */ }
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_API_KEY },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.record ?? null;
+  } catch { return null; }
+}
+
+// Push merged overrides back to JSONBin
+async function pushRemoteOverride(override) {
+  if (!JSONBIN_BIN_ID) return;
+  try {
+    const remote = (await fetchRemoteOverrides()) || {};
+    remote[`${override.day}::${override.name}::${override.weekOf}`] = override;
+    pruneOld(remote);
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY },
+      body: JSON.stringify(remote),
+    });
+  } catch { /* ignore — local copy already saved */ }
+}
+
+// Merge remote overrides into localStorage then re-render badges
+async function syncRemoteOverrides(grid) {
+  const remote = await fetchRemoteOverrides();
+  if (!remote) return;
+  const local = loadOverrides();
+  const merged = { ...local, ...remote };
+  pruneOld(merged);
+  saveToLocal(merged);
+  applyOverrides(grid);
 }
 
 function checkUrlOverride() {
@@ -110,6 +158,7 @@ function applyOverrides(grid) {
         col.querySelectorAll('.event-card').forEach(card => {
           if (card.dataset.eventName !== override.name) return;
           card.querySelectorAll('.override-badge').forEach(b => b.remove());
+          card.classList.remove('event-card--cancelled');
           const badge = document.createElement('div');
           badge.className = `override-badge override-badge--${override.type}`;
           const typeLabel = {
@@ -143,6 +192,7 @@ function openReportModal(day, name, time) {
 function setupOverrideModal(grid) {
   checkUrlOverride();
   applyOverrides(grid);
+  syncRemoteOverrides(grid); // async — merges shared changes visible to all
 
   const modal = document.getElementById('override-modal');
   if (!modal) return;
@@ -171,16 +221,11 @@ function setupOverrideModal(grid) {
       ...(newTime && { newTime }), ...(newLocation && { newLocation }), ...(notes && { notes }),
     };
 
-    saveOverride(override);
-    applyOverrides(grid);
+    saveOverride(override);   // local — immediate
+    applyOverrides(grid);     // show badge now
+    pushRemoteOverride(override); // async — share with all visitors
     modal.hidden = true;
 
-    // Build shareable URL + email
-    const shareUrl = (() => {
-      const u = new URL(location.href);
-      u.searchParams.set('wc', btoa(JSON.stringify(override)));
-      return u.toString();
-    })();
     const changeDesc = type === 'cancelled' ? 'Cancelled this week'
       : type === 'time'     ? `Time changed to ${newTime}`
       : type === 'location' ? `Location changed to ${newLocation}`
@@ -188,14 +233,14 @@ function setupOverrideModal(grid) {
     const body = [
       `A one-time schedule change was reported on Running in Kentucky:`,
       ``,
-      `Club: ${_overrideTarget.name}`,
-      `Day:  ${_overrideTarget.day}`,
-      `Week: ${override.weekOf}`,
+      `Club:   ${_overrideTarget.name}`,
+      `Day:    ${_overrideTarget.day}`,
+      `Week:   ${override.weekOf}`,
       `Change: ${changeDesc}`,
-      notes ? `Notes: ${notes}` : '',
+      notes ? `Notes:  ${notes}` : '',
       ``,
-      `Shareable link (anyone who visits this URL will see the change):`,
-      shareUrl,
+      `This change is now visible to all visitors of the site automatically.`,
+      `It will expire after the week ends.`,
     ].filter(l => l !== undefined).join('\n');
     const subject = `[Running in KY] Change reported: ${_overrideTarget.name} — ${_overrideTarget.day}`;
     window.location.href = `mailto:${REPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
