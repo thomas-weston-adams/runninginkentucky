@@ -283,9 +283,9 @@
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', pathGen(feature));
       path.dataset.county = name;
-      path.className = 'c-path' +
+      path.setAttribute('class', 'c-path' +
         (races.length > 0 ? ' c-has-races' : '') +
-        (done            ? ' c-done'       : '');
+        (done            ? ' c-done'       : ''));
 
       path.addEventListener('mouseenter', e => onHover(e, name));
       path.addEventListener('mousemove',  moveTooltip);
@@ -301,7 +301,7 @@
                 Math.floor(+b.id / 1000) === KY_FIPS);
     const borders = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     borders.setAttribute('d', pathGen(mesh));
-    borders.className = 'c-borders';
+    borders.setAttribute('class', 'c-borders');
     borders.style.pointerEvents = 'none';
     svg.appendChild(borders);
   }
