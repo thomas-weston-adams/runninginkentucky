@@ -458,7 +458,21 @@ function setupDarkMode() {
 const PLAYLIST = [
   { src: 'The Distance.mp3',                          title: 'The Distance',        artist: 'Cake' },
   { src: 'Matt Nathanson - Long Distance Runner.mp3', title: 'Long Distance Runner', artist: 'Matt Nathanson' },
+  { src: 'OneRepublic - Run.mp3',                     title: 'Run',                  artist: 'OneRepublic' },
+  { src: 'Song for Walking.mp3',                      title: 'Song for Walking',     artist: 'Tophouse' },
+  { src: 'Winterbourne - Long Distance Runner.mp3',   title: 'Long Distance Runner', artist: 'Winterbourne' },
+  { src: 'WALK THE MOON - One Foot.mp3',              title: 'One Foot',             artist: 'Walk the Moon' },
 ];
+
+// Fisher-Yates shuffle
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 function setupMusicPlayer() {
   const audio    = document.getElementById('site-audio');
@@ -470,13 +484,15 @@ function setupMusicPlayer() {
   const artistEl = document.getElementById('music-artist');
   if (!audio || !playBtn) return;
 
+  // shuffle on every page load
+  const queue = shuffleArray(PLAYLIST);
   let trackIndex = 0;
   let wasPlaying = false;
 
   function loadTrack(index, autoplay) {
-    const t = PLAYLIST[index];
+    const t = queue[index];
     audio.src = t.src;
-    audio.loop = PLAYLIST.length === 1;
+    audio.loop = queue.length === 1;
     if (titleEl)  titleEl.textContent  = t.title;
     if (artistEl) artistEl.textContent = t.artist;
     playBtn.setAttribute('aria-label', `Play ${t.title} by ${t.artist}`);
@@ -492,7 +508,7 @@ function setupMusicPlayer() {
       if (icon) icon.textContent = '⏸';
     } else {
       playBtn.classList.remove('playing');
-      const t = PLAYLIST[trackIndex];
+      const t = queue[trackIndex];
       playBtn.setAttribute('aria-label', `Play ${t.title} by ${t.artist}`);
       if (icon) icon.textContent = '▶';
     }
@@ -512,19 +528,19 @@ function setupMusicPlayer() {
 
   prevBtn?.addEventListener('click', () => {
     wasPlaying = !audio.paused;
-    trackIndex = (trackIndex - 1 + PLAYLIST.length) % PLAYLIST.length;
+    trackIndex = (trackIndex - 1 + queue.length) % queue.length;
     loadTrack(trackIndex, wasPlaying);
   });
 
   nextBtn?.addEventListener('click', () => {
     wasPlaying = !audio.paused;
-    trackIndex = (trackIndex + 1) % PLAYLIST.length;
+    trackIndex = (trackIndex + 1) % queue.length;
     loadTrack(trackIndex, wasPlaying);
   });
 
-  // auto-advance to next track when one ends (only matters if not looping single)
+  // auto-advance to next track when one ends
   audio.addEventListener('ended', () => {
-    trackIndex = (trackIndex + 1) % PLAYLIST.length;
+    trackIndex = (trackIndex + 1) % queue.length;
     loadTrack(trackIndex, true);
   });
 
