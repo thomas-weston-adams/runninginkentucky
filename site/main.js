@@ -427,7 +427,7 @@ function setupDarkMode() {
     } else {
       delete document.documentElement.dataset.theme;
     }
-    btn.textContent = theme.icon;
+    btn.innerHTML = `${theme.icon} <span class="theme-btn-label">${theme.label}</span>`;
     btn.setAttribute('title', `Theme: ${theme.label} — click to cycle`);
     btn.setAttribute('aria-label', `Current theme: ${theme.label}`);
     localStorage.setItem('rik-theme', theme.id);
@@ -439,6 +439,19 @@ function setupDarkMode() {
     idx = (idx + 1) % THEMES.length;
     apply(idx);
   });
+
+  // Theme hint banner — show once, dismiss permanently
+  const hint = document.getElementById('theme-hint');
+  const hintClose = document.getElementById('theme-hint-close');
+  if (hint) {
+    if (localStorage.getItem('rik-hint-dismissed')) {
+      hint.classList.add('hidden');
+    }
+    hintClose?.addEventListener('click', () => {
+      hint.classList.add('hidden');
+      localStorage.setItem('rik-hint-dismissed', '1');
+    });
+  }
 }
 
 // ── init ──────────────────────────────────────────────────────────────────────

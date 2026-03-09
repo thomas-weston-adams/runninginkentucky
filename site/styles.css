@@ -92,6 +92,8 @@
 [data-theme="strava"] .btn-dark-toggle { background: rgba(252,76,2,0.15); border-color: rgba(252,76,2,0.3); }
 [data-theme="strava"] .race-card--linked { box-shadow: 0 0 0 3px #FC4C02, var(--card-shadow-hover); }
 [data-theme="strava"] mark.highlight { background: rgba(252, 76, 2, 0.3); }
+[data-theme="strava"] .race-date-block { background: #FC4C02; color: #fff; }
+[data-theme="strava"] .theme-hint { background: #222; border-color: #3D3D3D; }
 
 /* ---- Garmin ---- */
 [data-theme="garmin"] {
@@ -134,6 +136,8 @@
 [data-theme="garmin"] .btn-dark-toggle { background: rgba(0,160,210,0.15); border-color: rgba(0,160,210,0.3); }
 [data-theme="garmin"] .race-card--linked { box-shadow: 0 0 0 3px #00A0D2, var(--card-shadow-hover); }
 [data-theme="garmin"] mark.highlight { background: rgba(0, 160, 210, 0.3); }
+[data-theme="garmin"] .race-date-block { background: #00A0D2; color: #fff; }
+[data-theme="garmin"] .theme-hint { background: #142030; border-color: #243A50; }
 
 /* Shared dark-input styles for dark themes */
 [data-theme="dark"] .search-input,
@@ -216,22 +220,50 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .logo-icon { font-size: 1.4rem; }
 .logo-text { color: #fff; }
 
+/* ---- THEME HINT BANNER ---- */
+.theme-hint {
+  background: var(--cream-dark);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 0.83rem;
+  color: var(--text-muted);
+}
+.theme-hint strong { color: var(--text); }
+.theme-hint.hidden { display: none; }
+.theme-hint-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.theme-hint-close:hover { color: var(--text); background: var(--border); }
+
 /* ---- DARK MODE TOGGLE ---- */
 .btn-dark-toggle {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: var(--radius-sm);
   color: #fff;
-  font-size: 1.1rem;
-  width: 36px;
+  font-size: 1rem;
   height: 36px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
   transition: background 0.2s;
-  padding: 0;
+  padding: 0 10px;
+  white-space: nowrap;
 }
+.theme-btn-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.03em; }
 .btn-dark-toggle:hover { background: rgba(255,255,255,0.2); }
 
 /* ---- BUTTONS ---- */
