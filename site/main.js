@@ -297,6 +297,56 @@ function renderWeekendCallout(races) {
 }
 
 // ── render races ──────────────────────────────────────────────────────────────
+function raceCardHTML(r, q) {
+  const d = parseDate(r.date);
+  const days = daysUntil(r.date);
+  const calUrl = googleCalUrl(r);
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.location)}`;
+  const distances = parseDistances(r.notes);
+  const distBadges = distances.map(dist => `<span class="dist-badge">${dist}</span>`).join('');
+  return `
+    <div class="race-card" data-source="${esc(r.source)}" data-location="${esc(r.location)}" data-name="${esc(r.name)}">
+      <div class="race-date-block">
+        <div class="race-date-month">${MONTHS[d.getMonth()]}</div>
+        <div class="race-date-day">${d.getDate()}</div>
+      </div>
+      <div class="race-info">
+        <div class="race-name">${highlightText(r.name, q)}</div>
+        <div class="race-meta">
+          <a href="${mapsUrl}" class="race-location" target="_blank" rel="noopener" title="Open in Google Maps">📍 ${highlightText(r.location, q)}</a>
+          ${distBadges}
+          ${countdownLabel(days)}
+        </div>
+        ${r.notes ? `<div class="race-notes">${highlightText(r.notes, q)}</div>` : ''}
+      </div>
+      <div class="race-actions">
+        <a href="${esc(r.sourceUrl)}" class="btn btn-map" target="_blank" rel="noopener">Details →</a>
+        <a href="${calUrl}" class="btn btn-icon" target="_blank" rel="noopener" title="Add to Google Calendar" aria-label="Add to Google Calendar">📅</a>
+        <button class="btn btn-icon btn-share" data-name="${esc(r.name)}" title="Copy link to this race" aria-label="Copy link to this race">🔗</button>
+      </div>
+    </div>
+  `;
+}
+
+function setupShareBtns(container) {
+  container.querySelectorAll('.btn-share').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const base = window.location.href.split('?')[0];
+      const shareUrl = `${base}?race=${encodeURIComponent(btn.dataset.name)}`;
+      const copy = () => navigator.clipboard.writeText(shareUrl).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = '✓';
+        setTimeout(() => { btn.textContent = orig; }, 1500);
+      }).catch(() => prompt('Copy this link:', shareUrl));
+      if (navigator.share) {
+        navigator.share({ title: btn.dataset.name, url: shareUrl }).catch(copy);
+      } else {
+        copy();
+      }
+    });
+  });
+}
+
 function renderRaces(races) {
   const list = document.getElementById('races-list');
   const today = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
@@ -329,56 +379,28 @@ function renderRaces(races) {
 
   filtered.sort((a, b) => parseDate(a.date) - parseDate(b.date));
 
-  list.innerHTML = filtered.map(r => {
-    const d = parseDate(r.date);
-    const days = daysUntil(r.date);
-    const calUrl = googleCalUrl(r);
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.location)}`;
-    const distances = parseDistances(r.notes);
-    const distBadges = distances.map(dist => `<span class="dist-badge">${dist}</span>`).join('');
+  // Show the next 3 months by default; reveal the rest on demand
+  const cutoff = new Date(today);
+  cutoff.setMonth(cutoff.getMonth() + 3);
+  const visible = filtered.filter(r => parseDate(r.date) <= cutoff);
+  const hidden  = filtered.filter(r => parseDate(r.date) >  cutoff);
 
-    return `
-      <div class="race-card" data-source="${esc(r.source)}" data-location="${esc(r.location)}" data-name="${esc(r.name)}">
-        <div class="race-date-block">
-          <div class="race-date-month">${MONTHS[d.getMonth()]}</div>
-          <div class="race-date-day">${d.getDate()}</div>
-        </div>
-        <div class="race-info">
-          <div class="race-name">${highlightText(r.name, q)}</div>
-          <div class="race-meta">
-            <a href="${mapsUrl}" class="race-location" target="_blank" rel="noopener" title="Open in Google Maps">📍 ${highlightText(r.location, q)}</a>
-            ${distBadges}
-            ${countdownLabel(days)}
-          </div>
-          ${r.notes ? `<div class="race-notes">${highlightText(r.notes, q)}</div>` : ''}
-        </div>
-        <div class="race-actions">
-          <a href="${esc(r.sourceUrl)}" class="btn btn-map" target="_blank" rel="noopener">Details →</a>
-          <a href="${calUrl}" class="btn btn-icon" target="_blank" rel="noopener" title="Add to Google Calendar" aria-label="Add to Google Calendar">📅</a>
-          <button class="btn btn-icon btn-share" data-name="${esc(r.name)}" title="Copy link to this race" aria-label="Copy link to this race">🔗</button>
-        </div>
-      </div>
-    `;
-  }).join('');
+  list.innerHTML = visible.map(r => raceCardHTML(r, q)).join('');
 
-  // Share button handlers
-  list.querySelectorAll('.btn-share').forEach(btn => {
+  if (hidden.length > 0) {
+    const cutoffLabel = cutoff.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-secondary races-show-more';
+    btn.textContent = `Show ${hidden.length} more race${hidden.length !== 1 ? 's' : ''} after ${cutoffLabel}`;
     btn.addEventListener('click', () => {
-      const base = window.location.href.split('?')[0];
-      const shareUrl = `${base}?race=${encodeURIComponent(btn.dataset.name)}`;
-      const copy = () => navigator.clipboard.writeText(shareUrl).then(() => {
-        const orig = btn.textContent;
-        btn.textContent = '✓';
-        setTimeout(() => { btn.textContent = orig; }, 1500);
-      }).catch(() => prompt('Copy this link:', shareUrl));
-
-      if (navigator.share) {
-        navigator.share({ title: btn.dataset.name, url: shareUrl }).catch(copy);
-      } else {
-        copy();
-      }
+      btn.remove();
+      list.insertAdjacentHTML('beforeend', hidden.map(r => raceCardHTML(r, q)).join(''));
+      setupShareBtns(list);
     });
-  });
+    list.appendChild(btn);
+  }
+
+  setupShareBtns(list);
 
   // Deep link: scroll to and highlight a specific race
   const target = new URLSearchParams(window.location.search).get('race');

@@ -1533,3 +1533,127 @@ details[open] .county-contribute-summary::before { content: '▼'; }
   color: var(--green-mid);
   border-bottom-color: var(--green-mid);
 }
+
+/* ── Compare mode map colors ── */
+.c-path.c-compare-done                { fill: #5B8DB8; }
+.c-path.c-compare-done:hover          { fill: #4a7ba3; }
+.c-path.c-done.c-compare-done         { fill: var(--green-mid); stroke: #4a7ba3; stroke-width: 1.5; }
+.c-path.c-done.c-compare-done:hover   { fill: var(--green-dark); }
+
+/* Compare bar under stats */
+.cs-compare-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 8px;
+}
+.cs-compare-lbl {
+  font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; min-width: 100px;
+}
+.cs-fill--compare { background: #5B8DB8; }
+.cs-pct--compare  { color: #5B8DB8; }
+
+/* Compare tooltip rows */
+.ct-compare { font-size: 0.74rem; margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,.15); }
+.ct-cmp-yes { color: #7ec8e3; }
+.ct-cmp-no  { color: rgba(255,255,255,.5); }
+
+/* ── Races show-more button ── */
+.races-show-more {
+  display: block; width: 100%; margin-top: 16px;
+  padding: 14px; text-align: center;
+  font-size: 0.88rem; font-weight: 600;
+}
+
+/* ── Shared profile banner ── */
+.prof-share-banner {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  background: #e8f0fa; border: 1px solid #b0c8e8; border-radius: var(--radius);
+  padding: 12px 16px; margin-bottom: 20px; font-size: 0.88rem; color: #1a3a5c;
+}
+[data-theme="dark"] .prof-share-banner,
+[data-theme="strava"] .prof-share-banner,
+[data-theme="garmin"] .prof-share-banner {
+  background: #192E40; border-color: #2a4a6a; color: #90c0e8;
+}
+.psb-actions { display: flex; gap: 8px; }
+
+/* ── County profile section ── */
+#county-profile-wrap { margin-bottom: 20px; }
+
+.prof-create {
+  background: var(--cream-dark); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 24px;
+}
+.prof-create-blurb { font-size: 0.88rem; color: var(--text-muted); margin: 0 0 14px; line-height: 1.5; }
+.prof-create-row   { display: flex; gap: 10px; flex-wrap: wrap; }
+.prof-name-input {
+  flex: 1; min-width: 180px; padding: 9px 14px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--white); color: var(--text); font-size: 0.9rem;
+}
+.prof-name-input:focus { outline: none; border-color: var(--green-mid); }
+
+/* Profile header */
+.prof-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  background: var(--cream-dark); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px;
+}
+.prof-mine { flex: 1; }
+.prof-mine-name {
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+  font-size: 1rem; display: block; margin-bottom: 8px;
+}
+.prof-mine-barrow { display: flex; align-items: center; gap: 10px; }
+.prof-mine-bar  { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; max-width: 200px; }
+.prof-mine-fill { height: 100%; background: var(--green-mid); border-radius: 4px; transition: width .6s; }
+.prof-mine-count { font-size: 0.82rem; font-weight: 700; color: var(--green-mid); white-space: nowrap; }
+
+.prof-compare-badge {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  font-size: 0.82rem; color: #5B8DB8; background: rgba(91,141,184,.1);
+  border: 1px solid rgba(91,141,184,.3); border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+
+/* Leaderboard */
+.prof-lb-details { margin-top: 0; }
+.prof-lb-summary {
+  font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .04em;
+  cursor: pointer; list-style: none; padding: 4px 0;
+}
+.prof-lb-summary::-webkit-details-marker { display: none; }
+.prof-lb-summary::before { content: '▶ '; font-size: 0.7em; }
+details[open] .prof-lb-summary::before { content: '▼ '; }
+
+.prof-leaderboard { display: flex; flex-direction: column; gap: 6px; padding-top: 10px; }
+
+.prof-lb-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--cream-dark); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 14px;
+}
+.prof-lb-row.prof-lb-me      { border-color: var(--green-mid); }
+.prof-lb-row.prof-lb-compare { border-color: #5B8DB8; background: rgba(91,141,184,.06); }
+
+.prof-lb-rank { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); min-width: 18px; }
+.prof-lb-info { flex: 1; min-width: 0; }
+.prof-lb-name { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 4px; }
+.prof-lb-you  {
+  display: inline-block; margin-left: 6px; font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; background: var(--green-mid); color: var(--white);
+  border-radius: 3px; padding: 1px 5px; vertical-align: middle;
+}
+.prof-lb-barwrap { display: flex; align-items: center; gap: 8px; }
+.prof-lb-bar { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prof-lb-bar--compare .prof-lb-fill { background: #5B8DB8; }
+.prof-lb-fill { height: 100%; background: var(--green-mid); border-radius: 3px; transition: width .6s; }
+.prof-lb-count { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+.prof-lb-action { flex-shrink: 0; }
+
+.prof-view-btn--active { background: rgba(91,141,184,.15); border-color: #5B8DB8 !important; color: #5B8DB8; }
+
+.prof-lb-hint {
+  font-size: 0.78rem; color: var(--text-muted); font-style: italic;
+  margin: 10px 0 0; line-height: 1.5;
+}
