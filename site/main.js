@@ -248,7 +248,6 @@ function renderDaily(meetups) {
   const cards = others.map(m => `
     <div class="daily-card">
       <div class="daily-who">${esc(m.who)}</div>
-      <div class="daily-when">🕐 ${esc(m.when)}</div>
       <div class="daily-where">📍 ${esc(m.where)}</div>
     </div>
   `).join('');

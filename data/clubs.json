@@ -3,7 +3,7 @@
   "totals": {
     "weeklyEvents": 23,
     "groups": 13,
-    "dailyMeetups": 4
+    "dailyMeetups": 3
   },
   "weeklySchedule": {
     "Monday": [
@@ -232,22 +232,14 @@
   "dailyMeetups": [
     {
       "who": "John’s Run Walk Shop weekday meetups",
-      "when": "See details",
       "where": "the Chevy Chase Starbucks"
     },
     {
       "who": "MoCo Runners",
-      "when": "See details",
       "where": "early mornings"
     },
     {
-      "who": "Ben Cichanowicz",
-      "when": "See details",
-      "where": "every day"
-    },
-    {
       "who": "Tommy Adams",
-      "when": "See details",
       "where": "every day"
     }
   ]
