@@ -454,9 +454,34 @@ function setupDarkMode() {
   }
 }
 
+// ── music player ──────────────────────────────────────────────────────────────
+function setupMusicPlayer() {
+  const audio  = document.getElementById('site-audio');
+  const btn    = document.getElementById('music-play-btn');
+  const vol    = document.getElementById('music-volume');
+  if (!audio || !btn || !vol) return;
+
+  audio.volume = parseFloat(vol.value);
+
+  btn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      btn.classList.add('playing');
+      btn.setAttribute('aria-label', 'Pause');
+    } else {
+      audio.pause();
+      btn.classList.remove('playing');
+      btn.setAttribute('aria-label', 'Play The Distance by Cake');
+    }
+  });
+
+  vol.addEventListener('input', () => { audio.volume = parseFloat(vol.value); });
+}
+
 // ── init ──────────────────────────────────────────────────────────────────────
 async function init() {
   setupDarkMode();
+  setupMusicPlayer();
 
   try {
     const [clubsRes, racesRes] = await Promise.all([fetch(CLUBS_URL), fetch(RACES_URL)]);

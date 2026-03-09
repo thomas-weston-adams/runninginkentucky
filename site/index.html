@@ -188,6 +188,26 @@
     </div>
   </footer>
 
+  <!-- ── MUSIC PLAYER ── -->
+  <div class="music-player" id="music-player">
+    <audio id="site-audio" src="The Distance.mp3" loop preload="none"></audio>
+    <div class="music-inner">
+      <button class="music-play-btn" id="music-play-btn" aria-label="Play The Distance by Cake">
+        <span class="music-play-icon">▶</span>
+      </button>
+      <div class="music-info">
+        <span class="music-title">The Distance</span>
+        <span class="music-sep">·</span>
+        <span class="music-artist">Cake</span>
+      </div>
+      <label class="music-vol-label" aria-label="Volume">
+        <span class="music-vol-icon">🔈</span>
+        <input type="range" class="music-volume" id="music-volume"
+               min="0" max="1" step="0.05" value="0.25" aria-label="Volume">
+      </label>
+    </div>
+  </div>
+
   <script src="main.js"></script>
 </body>
 </html>
