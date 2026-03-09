@@ -140,6 +140,27 @@
 [data-theme="strava"] .search-input,
 [data-theme="garmin"] .search-input { background: var(--white); color: var(--text); }
 
+/* ---- shared text fixes for Strava + Garmin dark themes ---- */
+/* Any element using var(--green-dark) as a text colour becomes invisible
+   on dark backgrounds. Override all of them to use var(--text). */
+:is([data-theme="strava"], [data-theme="garmin"]) .section-title,
+:is([data-theme="strava"], [data-theme="garmin"]) .group-name,
+:is([data-theme="strava"], [data-theme="garmin"]) .daily-who,
+:is([data-theme="strava"], [data-theme="garmin"]) .weekend-header,
+:is([data-theme="strava"], [data-theme="garmin"]) .race-name,
+:is([data-theme="strava"], [data-theme="garmin"]) .event-name { color: var(--text); }
+
+:is([data-theme="strava"], [data-theme="garmin"]) a:hover { color: var(--gold-light); }
+
+:is([data-theme="strava"], [data-theme="garmin"]) .btn-secondary { color: var(--text); border-color: var(--border); }
+:is([data-theme="strava"], [data-theme="garmin"]) .btn-secondary:hover { background: var(--cream-dark); color: var(--text); border-color: var(--border); }
+:is([data-theme="strava"], [data-theme="garmin"]) .btn-map:hover { background: var(--cream-dark); border-color: var(--border); color: var(--text); }
+:is([data-theme="strava"], [data-theme="garmin"]) .btn-link:hover { color: var(--text); }
+:is([data-theme="strava"], [data-theme="garmin"]) .filter-btn:hover { color: var(--text); border-color: var(--border); }
+:is([data-theme="strava"], [data-theme="garmin"]) .filter-btn.active { color: var(--cream); }
+
+:is([data-theme="strava"], [data-theme="garmin"]) .weekend-count { background: var(--gold); color: var(--cream); }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
