@@ -64,6 +64,57 @@ function googleCalUrl(race) {
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(race.name)}&dates=${ymd}/${ymdNext}&location=${encodeURIComponent(race.location)}&details=${encodeURIComponent(details)}`;
 }
 
+function parseClubTime(timeStr) {
+  // Returns { h, m } in 24-hour. Handles "6:00 pm", "730am", "5:30-7", "7:00am & 8:00am", etc.
+  if (!timeStr) return { h: 7, m: 0 };
+  const s = timeStr.toLowerCase();
+  const startPart = s.split(/\s*[-–]\s*/)[0].split(/\s*&\s*/)[0].trim();
+  const isPm = /pm/.test(startPart);
+  const isAm = /am/.test(startPart);
+  const digits = startPart.replace(/[^0-9:]/g, '');
+  let h, m;
+  if (digits.includes(':')) {
+    [h, m] = digits.split(':').map(Number);
+  } else if (digits.length <= 2) {
+    h = Number(digits); m = 0;
+  } else {
+    h = Number(digits.slice(0, -2)); m = Number(digits.slice(-2));
+  }
+  if (isPm && h < 12) h += 12;
+  else if (isAm && h === 12) h = 0;
+  else if (!isPm && !isAm && h < 9) h += 12; // e.g. "5:30-7" or "6:00-7" are evening runs
+  return { h: h || 7, m: m || 0 };
+}
+
+function gcalClubUrl(dayName, ev) {
+  const pad = n => String(n).padStart(2, '0');
+  const dayIdx = DAYS.indexOf(dayName);
+  const todayIdx = TODAY.getDay() === 0 ? 6 : TODAY.getDay() - 1;
+  let daysAhead = ((dayIdx - todayIdx) + 7) % 7;
+  const { h, m } = parseClubTime(ev.time);
+  // If today is that day, check if the run has already passed; if so, next week
+  if (daysAhead === 0) {
+    const runTime = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate(), h, m);
+    if (runTime <= new Date()) daysAhead = 7;
+  }
+  const base = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + daysAhead);
+  const fmt = (hh, mm) =>
+    `${base.getFullYear()}${pad(base.getMonth()+1)}${pad(base.getDate())}T${pad(hh)}${pad(mm)}00`;
+  const start = fmt(h, m);
+  const end   = fmt(h + 1, m); // 1-hour block
+  const details = [
+    ev.notes,
+    ev.mapUrl ? `Map: ${ev.mapUrl}` : '',
+    'Check with the club for last-minute changes or weather cancellations.'
+  ].filter(Boolean).join('\n');
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE`
+    + `&text=${encodeURIComponent(ev.name)}`
+    + `&dates=${start}/${end}`
+    + `&location=${encodeURIComponent(ev.location || '')}`
+    + `&details=${encodeURIComponent(details)}`
+    + `&recur=RRULE:FREQ%3DWEEKLY`;
+}
+
 function parseDistances(notes) {
   if (!notes) return [];
   const t = notes.toLowerCase();
@@ -92,6 +143,7 @@ function renderTodaysBanner(schedule) {
     const links = [];
     if (ev.mapUrl) links.push(`<a href="${esc(ev.mapUrl)}" class="btn btn-map" target="_blank" rel="noopener">Map</a>`);
     if (ev.websiteUrl) links.push(`<a href="${esc(ev.websiteUrl)}" class="btn btn-link" target="_blank" rel="noopener">Website</a>`);
+    links.push(`<a href="${esc(gcalClubUrl(todayName, ev))}" class="btn btn-icon promo-cal-btn" target="_blank" rel="noopener" title="Add weekly reminder to Google Calendar">📅</a>`);
     return `
       <div class="promo-card">
         <div class="promo-card-time">${esc(ev.time)}</div>
@@ -139,6 +191,7 @@ function renderCalendar(schedule) {
         const links = [];
         if (ev.mapUrl) links.push(`<a href="${esc(ev.mapUrl)}" class="btn btn-map" target="_blank" rel="noopener">Map</a>`);
         if (ev.websiteUrl) links.push(`<a href="${esc(ev.websiteUrl)}" class="btn btn-link" target="_blank" rel="noopener">Website</a>`);
+        links.push(`<a href="${esc(gcalClubUrl(day, ev))}" class="btn btn-icon" target="_blank" rel="noopener" title="Add weekly reminder to Google Calendar">📅</a>`);
 
         const card = document.createElement('div');
         card.className = 'event-card';
