@@ -29,10 +29,6 @@
         </div>
         <div class="header-actions">
           <button id="dark-mode-toggle" class="btn-dark-toggle" aria-label="Cycle theme" title="Cycle theme">🌿 <span class="theme-btn-label">Kentucky</span></button>
-          <a href="https://github.com/thomas-weston-adams/runninginkentucky/issues/new?title=Add+Club+or+Event&labels=new-club"
-             class="btn btn-primary" target="_blank" rel="noopener">
-            + Add Your Club
-          </a>
         </div>
       </div>
     </div>
@@ -159,6 +155,95 @@
     </div>
   </section>
 
+  <!-- ── COUNTY CHALLENGE ── -->
+  <section class="section" id="county-section">
+    <div class="container">
+      <h2 class="section-title">
+        Kentucky County Race Challenge
+        <span class="beta-badge">BETA</span>
+      </h2>
+      <p class="section-subtitle">
+        Run a race in all 120 Kentucky counties — one of the rarest achievements in Kentucky running.
+        Hover a county to preview races. Click to see the full list and track your progress.
+      </p>
+
+      <div class="county-layout">
+        <div id="county-map-wrap" class="county-map-wrap">
+          <svg id="county-map" aria-label="Kentucky county map"></svg>
+        </div>
+        <div id="county-panel" class="county-panel" hidden></div>
+      </div>
+
+      <div id="county-stats" class="county-stats"></div>
+
+      <details class="county-grid-details">
+        <summary class="county-grid-summary">Browse all 120 counties</summary>
+        <div id="county-grid" class="county-grid"></div>
+      </details>
+
+      <!-- ── Contribution interface ── -->
+      <details class="county-contribute-details" id="county-contribute-details">
+        <summary class="county-contribute-summary">
+          Help build this map
+          <span class="cc-summary-note">Missing a race or city? Let us know.</span>
+        </summary>
+        <div class="county-contribute">
+          <p class="cc-intro">
+            This map is a community work-in-progress. Many counties still lack race listings,
+            and some cities or towns may not yet be linked to the right county.
+            Use this form to suggest a race, flag a missing city, or report anything that looks off —
+            submissions come to us directly and we'll add verified entries to the data.
+          </p>
+          <form class="cc-form" id="county-contribute-form" novalidate>
+            <div class="cc-row">
+              <label class="cc-label">
+                County
+                <select id="cc-county" class="cc-input">
+                  <option value="">Select a county…</option>
+                </select>
+              </label>
+              <label class="cc-label">
+                What are you submitting?
+                <select id="cc-type" class="cc-input">
+                  <option value="race">A race event</option>
+                  <option value="city">Missing city / town mapping</option>
+                  <option value="correction">Correction to existing data</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+            </div>
+            <div class="cc-row">
+              <label class="cc-label cc-label--wide">
+                Name / Details
+                <input type="text" id="cc-detail" class="cc-input" placeholder="Race name, city name, or description of the issue…" required>
+              </label>
+            </div>
+            <div class="cc-row">
+              <label class="cc-label">
+                Date <span class="cc-opt">(if applicable)</span>
+                <input type="date" id="cc-date" class="cc-input">
+              </label>
+              <label class="cc-label">
+                Link <span class="cc-opt">(optional)</span>
+                <input type="url" id="cc-link" class="cc-input" placeholder="https://…">
+              </label>
+            </div>
+            <div class="cc-row">
+              <label class="cc-label cc-label--wide">
+                Additional notes
+                <input type="text" id="cc-notes" class="cc-input" placeholder="Anything else we should know…">
+              </label>
+            </div>
+            <div class="cc-actions">
+              <button type="submit" class="btn btn-primary">Send via Email →</button>
+              <p class="cc-note">Opens your email app with this info pre-filled. Nothing is sent automatically.</p>
+            </div>
+          </form>
+        </div>
+      </details>
+    </div>
+  </section>
+
   <!-- ── CTA ── -->
   <section class="cta-section">
     <div class="container">
@@ -169,16 +254,12 @@
         <strong>John's Run Walk Shop race calendar</strong>,
         <strong>RaceRise upcoming races</strong>, and
         <strong>UltraSignup events near Winchester, KY</strong>.
-        To add or update your club or event, edit the shared document or open a quick GitHub request:
+        To add or update your club or event, edit the shared document:
       </p>
       <div class="cta-buttons">
         <a href="https://docs.google.com/document/d/1beFCZMKbfp2xjZYN6fv-25TWa-3m3gjnWRTy1oo2LdQ/edit"
            class="btn btn-primary btn-lg" target="_blank" rel="noopener">
           Edit the Run Club Doc
-        </a>
-        <a href="https://github.com/thomas-weston-adams/runninginkentucky/issues/new?title=Add+Club+or+Event&labels=new-club"
-           class="btn btn-secondary btn-lg" target="_blank" rel="noopener">
-          Open a GitHub Request
         </a>
       </div>
       <p class="cta-note">Data updates automatically every 6 hours from our 4 sources.</p>
@@ -224,6 +305,9 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+  <script src="county-map.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

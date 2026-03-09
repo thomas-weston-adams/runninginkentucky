@@ -260,11 +260,7 @@ function renderDaily(meetups) {
     </div>
   ` : '';
 
-  list.innerHTML = cards + tommyNote + `
-    <div class="daily-footer" style="grid-column:1/-1">
-      Want to be listed here? <a href="https://github.com/thomas-weston-adams/runninginkentucky/issues/new?title=Add+Daily+Meetup&labels=new-club" target="_blank" rel="noopener">Open a quick request</a> and we'll add you!
-    </div>
-  `;
+  list.innerHTML = cards + tommyNote;
 }
 
 // ── weekend callout ───────────────────────────────────────────────────────────
@@ -670,6 +666,7 @@ async function init() {
     renderRaces(races);
     setupSearch(races);
     setupRaceFilters(races);
+    if (typeof initCountyMap === 'function') initCountyMap(races);
 
     const updated = document.getElementById('last-updated');
     if (updated && clubs.lastUpdated) updated.textContent = clubs.lastUpdated;
