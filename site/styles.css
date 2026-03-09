@@ -92,6 +92,8 @@
 [data-theme="strava"] .btn-dark-toggle { background: rgba(252,76,2,0.15); border-color: rgba(252,76,2,0.3); }
 [data-theme="strava"] .race-card--linked { box-shadow: 0 0 0 3px #FC4C02, var(--card-shadow-hover); }
 [data-theme="strava"] mark.highlight { background: rgba(252, 76, 2, 0.3); }
+[data-theme="strava"] .race-date-block { background: #FC4C02; color: #fff; }
+[data-theme="strava"] .theme-hint { background: #222; border-color: #3D3D3D; }
 
 /* ---- Garmin ---- */
 [data-theme="garmin"] {
@@ -134,6 +136,8 @@
 [data-theme="garmin"] .btn-dark-toggle { background: rgba(0,160,210,0.15); border-color: rgba(0,160,210,0.3); }
 [data-theme="garmin"] .race-card--linked { box-shadow: 0 0 0 3px #00A0D2, var(--card-shadow-hover); }
 [data-theme="garmin"] mark.highlight { background: rgba(0, 160, 210, 0.3); }
+[data-theme="garmin"] .race-date-block { background: #00A0D2; color: #fff; }
+[data-theme="garmin"] .theme-hint { background: #142030; border-color: #243A50; }
 
 /* Shared dark-input styles for dark themes */
 [data-theme="dark"] .search-input,
@@ -216,22 +220,50 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .logo-icon { font-size: 1.4rem; }
 .logo-text { color: #fff; }
 
+/* ---- THEME HINT BANNER ---- */
+.theme-hint {
+  background: var(--cream-dark);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 0.83rem;
+  color: var(--text-muted);
+}
+.theme-hint strong { color: var(--text); }
+.theme-hint.hidden { display: none; }
+.theme-hint-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.theme-hint-close:hover { color: var(--text); background: var(--border); }
+
 /* ---- DARK MODE TOGGLE ---- */
 .btn-dark-toggle {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: var(--radius-sm);
   color: #fff;
-  font-size: 1.1rem;
-  width: 36px;
+  font-size: 1rem;
   height: 36px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
   transition: background 0.2s;
-  padding: 0;
+  padding: 0 10px;
+  white-space: nowrap;
 }
+.theme-btn-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.03em; }
 .btn-dark-toggle:hover { background: rgba(255,255,255,0.2); }
 
 /* ---- BUTTONS ---- */
@@ -847,6 +879,93 @@ a.race-location:hover { color: var(--green-mid); text-decoration: underline; }
 .site-footer p + p { margin-top: 6px; }
 .site-footer a { color: var(--gold-light); }
 .site-footer a:hover { color: var(--white); }
+
+/* ---- MUSIC PLAYER ---- */
+.music-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: var(--green-dark);
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding: 8px 20px;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.25);
+}
+.music-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.music-play-btn {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  cursor: pointer;
+  color: #fff;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  padding: 0;
+}
+.music-play-btn:hover { background: rgba(255,255,255,0.25); }
+.music-play-icon { font-style: normal; }
+.music-prev-btn,
+.music-next-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.65rem;
+  cursor: pointer;
+  padding: 4px 2px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.music-prev-btn:hover,
+.music-next-btn:hover { color: #fff; }
+.music-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.82rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.music-title { font-weight: 700; }
+.music-sep, .music-artist { color: rgba(255,255,255,0.55); }
+.music-vol-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.music-vol-icon { font-size: 0.9rem; }
+.music-volume {
+  width: 80px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+/* theme tints */
+[data-theme="strava"] .music-player { background: #111; border-top-color: #3D3D3D; }
+[data-theme="strava"] .music-volume { accent-color: #FC4C02; }
+[data-theme="garmin"] .music-player { background: #0A1520; border-top-color: #243A50; }
+[data-theme="garmin"] .music-volume { accent-color: #00A0D2; }
+
+/* push footer up so it's not hidden under the player */
+.site-footer { padding-bottom: 68px; }
 
 /* ---- NO RESULTS ---- */
 .no-results {

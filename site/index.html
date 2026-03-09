@@ -28,7 +28,7 @@
           <span class="logo-text">Running in Kentucky</span>
         </div>
         <div class="header-actions">
-          <button id="dark-mode-toggle" class="btn-dark-toggle" aria-label="Cycle theme" title="Cycle theme">🌿</button>
+          <button id="dark-mode-toggle" class="btn-dark-toggle" aria-label="Cycle theme" title="Cycle theme">🌿 <span class="theme-btn-label">Kentucky</span></button>
           <a href="https://github.com/thomas-weston-adams/runninginkentucky/issues/new?title=Add+Club+or+Event&labels=new-club"
              class="btn btn-primary" target="_blank" rel="noopener">
             + Add Your Club
@@ -37,6 +37,12 @@
       </div>
     </div>
   </header>
+
+  <!-- ── THEME HINT ── -->
+  <div class="theme-hint" id="theme-hint">
+    <span>🎨 Click the theme button in the top-right to switch between <strong>Kentucky</strong>, <strong>Strava</strong>, and <strong>Garmin</strong> styles</span>
+    <button class="theme-hint-close" id="theme-hint-close" aria-label="Dismiss">✕</button>
+  </div>
 
   <!-- ── HERO ── -->
   <section class="hero">
@@ -181,6 +187,28 @@
       </p>
     </div>
   </footer>
+
+  <!-- ── MUSIC PLAYER ── -->
+  <div class="music-player" id="music-player">
+    <audio id="site-audio" preload="none"></audio>
+    <div class="music-inner">
+      <button class="music-prev-btn" id="music-prev-btn" aria-label="Previous song">&#9664;&#9664;</button>
+      <button class="music-play-btn" id="music-play-btn" aria-label="Play">
+        <span class="music-play-icon"></span>
+      </button>
+      <button class="music-next-btn" id="music-next-btn" aria-label="Next song">&#9654;&#9654;</button>
+      <div class="music-info">
+        <span class="music-title" id="music-title"></span>
+        <span class="music-sep">·</span>
+        <span class="music-artist" id="music-artist"></span>
+      </div>
+      <label class="music-vol-label" aria-label="Volume">
+        <span class="music-vol-icon">🔈</span>
+        <input type="range" class="music-volume" id="music-volume"
+               min="0" max="1" step="0.05" value="0.25" aria-label="Volume">
+      </label>
+    </div>
+  </div>
 
   <script src="main.js"></script>
 </body>

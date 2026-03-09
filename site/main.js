@@ -427,7 +427,7 @@ function setupDarkMode() {
     } else {
       delete document.documentElement.dataset.theme;
     }
-    btn.textContent = theme.icon;
+    btn.innerHTML = `${theme.icon} <span class="theme-btn-label">${theme.label}</span>`;
     btn.setAttribute('title', `Theme: ${theme.label} — click to cycle`);
     btn.setAttribute('aria-label', `Current theme: ${theme.label}`);
     localStorage.setItem('rik-theme', theme.id);
@@ -439,11 +439,102 @@ function setupDarkMode() {
     idx = (idx + 1) % THEMES.length;
     apply(idx);
   });
+
+  // Theme hint banner — show once, dismiss permanently
+  const hint = document.getElementById('theme-hint');
+  const hintClose = document.getElementById('theme-hint-close');
+  if (hint) {
+    if (localStorage.getItem('rik-hint-dismissed')) {
+      hint.classList.add('hidden');
+    }
+    hintClose?.addEventListener('click', () => {
+      hint.classList.add('hidden');
+      localStorage.setItem('rik-hint-dismissed', '1');
+    });
+  }
+}
+
+// ── music player ──────────────────────────────────────────────────────────────
+const PLAYLIST = [
+  { src: 'The Distance.mp3',                          title: 'The Distance',        artist: 'Cake' },
+  { src: 'Matt Nathanson - Long Distance Runner.mp3', title: 'Long Distance Runner', artist: 'Matt Nathanson' },
+];
+
+function setupMusicPlayer() {
+  const audio    = document.getElementById('site-audio');
+  const playBtn  = document.getElementById('music-play-btn');
+  const prevBtn  = document.getElementById('music-prev-btn');
+  const nextBtn  = document.getElementById('music-next-btn');
+  const vol      = document.getElementById('music-volume');
+  const titleEl  = document.getElementById('music-title');
+  const artistEl = document.getElementById('music-artist');
+  if (!audio || !playBtn) return;
+
+  let trackIndex = 0;
+  let wasPlaying = false;
+
+  function loadTrack(index, autoplay) {
+    const t = PLAYLIST[index];
+    audio.src = t.src;
+    audio.loop = PLAYLIST.length === 1;
+    if (titleEl)  titleEl.textContent  = t.title;
+    if (artistEl) artistEl.textContent = t.artist;
+    playBtn.setAttribute('aria-label', `Play ${t.title} by ${t.artist}`);
+    if (autoplay) audio.play().then(() => setPlayingState(true)).catch(() => {});
+    else setPlayingState(false);
+  }
+
+  function setPlayingState(playing) {
+    const icon = playBtn.querySelector('.music-play-icon');
+    if (playing) {
+      playBtn.classList.add('playing');
+      playBtn.setAttribute('aria-label', 'Pause');
+      if (icon) icon.textContent = '⏸';
+    } else {
+      playBtn.classList.remove('playing');
+      const t = PLAYLIST[trackIndex];
+      playBtn.setAttribute('aria-label', `Play ${t.title} by ${t.artist}`);
+      if (icon) icon.textContent = '▶';
+    }
+  }
+
+  audio.volume = parseFloat(vol.value);
+  loadTrack(0, false);
+
+  playBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().then(() => setPlayingState(true)).catch(() => {});
+    } else {
+      audio.pause();
+      setPlayingState(false);
+    }
+  });
+
+  prevBtn?.addEventListener('click', () => {
+    wasPlaying = !audio.paused;
+    trackIndex = (trackIndex - 1 + PLAYLIST.length) % PLAYLIST.length;
+    loadTrack(trackIndex, wasPlaying);
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    wasPlaying = !audio.paused;
+    trackIndex = (trackIndex + 1) % PLAYLIST.length;
+    loadTrack(trackIndex, wasPlaying);
+  });
+
+  // auto-advance to next track when one ends (only matters if not looping single)
+  audio.addEventListener('ended', () => {
+    trackIndex = (trackIndex + 1) % PLAYLIST.length;
+    loadTrack(trackIndex, true);
+  });
+
+  vol.addEventListener('input', () => { audio.volume = parseFloat(vol.value); });
 }
 
 // ── init ──────────────────────────────────────────────────────────────────────
 async function init() {
   setupDarkMode();
+  setupMusicPlayer();
 
   try {
     const [clubsRes, racesRes] = await Promise.all([fetch(CLUBS_URL), fetch(RACES_URL)]);
