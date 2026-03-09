@@ -159,6 +159,165 @@
       .catch(() => prompt('Copy this link:', text));
   }
 
+  // ── Map image export ──────────────────────────────────────────────────────────
+  function fillRoundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.arcTo(x + w, y, x + w, y + r, r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+    ctx.lineTo(x + r, y + h);
+    ctx.arcTo(x, y + h, x, y + h - r, r);
+    ctx.lineTo(x, y + r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.closePath();
+  }
+
+  async function generateMapImage() {
+    const origSvg = document.getElementById('county-map');
+    if (!origSvg) return null;
+
+    // Clone SVG and bake computed fill/stroke into attributes so they survive serialization
+    const svgClone = origSvg.cloneNode(true);
+    svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+    origSvg.querySelectorAll('path').forEach((path, i) => {
+      const clone = svgClone.querySelectorAll('path')[i];
+      if (!clone) return;
+      const cs = window.getComputedStyle(path);
+      clone.setAttribute('fill',         cs.fill        || 'none');
+      clone.setAttribute('stroke',       cs.stroke      || 'none');
+      clone.setAttribute('stroke-width', cs.strokeWidth || '0');
+      clone.removeAttribute('class');
+      clone.removeAttribute('style');
+    });
+
+    // Canvas: 1200×675 (16:9 — standard social card)
+    const CW    = 1200, CH = 675;
+    const PAD   = 50;
+    const HDR   = 86;
+    const MAP_W = CW - PAD * 2;
+    const MAP_H = Math.round(MAP_W * 0.50); // 2:1 KY map aspect
+    const BAR_Y = HDR + MAP_H + 14;
+
+    const canvas = document.createElement('canvas');
+    canvas.width  = CW;
+    canvas.height = CH;
+    const ctx = canvas.getContext('2d');
+
+    // Background
+    const bg = ctx.createLinearGradient(0, 0, CW, CH);
+    bg.addColorStop(0, '#0B1A10');
+    bg.addColorStop(1, '#142218');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, CW, CH);
+
+    // Draw SVG map
+    const vb = origSvg.getAttribute('viewBox') || '0 0 800 400';
+    svgClone.setAttribute('viewBox', vb);
+    svgClone.setAttribute('width',   String(MAP_W));
+    svgClone.setAttribute('height',  String(MAP_H));
+
+    const svgStr  = new XMLSerializer().serializeToString(svgClone);
+    const svgBlob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+    const svgUrl  = URL.createObjectURL(svgBlob);
+
+    await new Promise((resolve, reject) => {
+      const img   = new Image();
+      img.onload  = () => { ctx.drawImage(img, PAD, HDR, MAP_W, MAP_H); URL.revokeObjectURL(svgUrl); resolve(); };
+      img.onerror = (e) => { URL.revokeObjectURL(svgUrl); reject(e); };
+      img.src = svgUrl;
+    });
+
+    // Header — name
+    const me    = getMyProfile();
+    const name  = me ? me.name : 'Kentucky County Challenge';
+    const count = me ? me.counties.length : 0;
+
+    ctx.fillStyle = '#F5F0E8';
+    ctx.font      = 'bold 38px Montserrat, "Arial Black", Arial, sans-serif';
+    ctx.fillText(name, PAD, 44);
+
+    // County count in gold
+    ctx.fillStyle = '#C8A84B';
+    ctx.font      = 'bold 26px Montserrat, "Arial Black", Arial, sans-serif';
+    ctx.fillText(`${count} / 120 Kentucky Counties`, PAD, 78);
+
+    // Progress bar track
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    fillRoundRect(ctx, PAD, BAR_Y, MAP_W, 10, 5);
+    ctx.fill();
+
+    // Progress bar fill
+    const pct = count / 120;
+    if (pct > 0) {
+      ctx.fillStyle = '#4a9e6b';
+      fillRoundRect(ctx, PAD, BAR_Y, Math.max(12, Math.round(MAP_W * pct)), 10, 5);
+      ctx.fill();
+    }
+
+    // Percentage label
+    ctx.fillStyle = '#4a9e6b';
+    ctx.font      = 'bold 16px Arial, sans-serif';
+    ctx.fillText(`${Math.round(pct * 100)}% complete`, PAD, BAR_Y + 28);
+
+    // Watermark
+    ctx.fillStyle = 'rgba(255,255,255,0.28)';
+    ctx.font      = '15px Arial, sans-serif';
+    const wm  = 'runninginkentucky.com';
+    const wmW = ctx.measureText(wm).width;
+    ctx.fillText(wm, CW - PAD - wmW, BAR_Y + 28);
+
+    return canvas;
+  }
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a   = document.createElement('a');
+    a.href     = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  async function saveOrShareMap(triggerBtn) {
+    const me = getMyProfile();
+    if (!me) return;
+
+    const origLabel = triggerBtn ? triggerBtn.textContent : '';
+    if (triggerBtn) { triggerBtn.textContent = 'Generating…'; triggerBtn.disabled = true; }
+
+    try {
+      const canvas = await generateMapImage();
+      if (!canvas) throw new Error('Canvas generation failed');
+
+      canvas.toBlob(async blob => {
+        const filename = `ky-county-challenge-${me.name.replace(/\s+/g, '-').toLowerCase()}.png`;
+        const file     = new File([blob], filename, { type: 'image/png' });
+        const payload  = {
+          files: [file],
+          title: `${me.name} — KY County Challenge`,
+          text:  `I've run in ${me.counties.length}/120 Kentucky counties! runninginkentucky.com`,
+        };
+
+        if (navigator.share && navigator.canShare && navigator.canShare(payload)) {
+          navigator.share(payload).catch(() => downloadBlob(blob, filename));
+        } else {
+          downloadBlob(blob, filename);
+        }
+
+        if (triggerBtn) { triggerBtn.textContent = origLabel; triggerBtn.disabled = false; }
+      }, 'image/png');
+    } catch (e) {
+      console.error('Map export error:', e);
+      if (triggerBtn) { triggerBtn.textContent = origLabel; triggerBtn.disabled = false; }
+      alert('Could not generate the map image. Try taking a screenshot instead.');
+    }
+  }
+
   // ── Render ────────────────────────────────────────────────────────────────────
   function render() {
     const wrap = document.getElementById('county-profile-wrap');
@@ -225,6 +384,9 @@
         </div>`;
     }).join('');
 
+    const canShareFiles = !!(navigator.share && navigator.canShare);
+    const saveBtnLabel  = canShareFiles ? 'Share map image' : 'Download map';
+
     wrap.innerHTML = `
       <div class="prof-header">
         <div class="prof-mine">
@@ -234,11 +396,17 @@
             <span class="prof-mine-count">${myCount} / ${TOTAL}</span>
           </div>
         </div>
-        ${compareActive && comparePerson ? `
-          <div class="prof-compare-badge">
-            Comparing with <strong>${esc(comparePerson.name)}</strong>
-            <button class="btn btn-sm" id="prof-clear-compare">Clear</button>
-          </div>` : ''}
+        <div class="prof-header-actions">
+          ${compareActive && comparePerson ? `
+            <div class="prof-compare-badge">
+              Comparing with <strong>${esc(comparePerson.name)}</strong>
+              <button class="btn btn-sm" id="prof-clear-compare">Clear</button>
+            </div>` : ''}
+          <button class="btn btn-sm prof-save-map-btn" id="prof-save-map-btn"
+            title="Download or share a PNG of your county map">
+            ${saveBtnLabel}
+          </button>
+        </div>
       </div>
 
       <details class="prof-lb-details" ${compareActive || all.length > 1 ? 'open' : ''}>
@@ -255,6 +423,10 @@
       </details>`;
 
     document.getElementById('prof-clear-compare')?.addEventListener('click', clearCompare);
+
+    document.getElementById('prof-save-map-btn')?.addEventListener('click', function () {
+      saveOrShareMap(this);
+    });
 
     wrap.querySelectorAll('.prof-view-btn').forEach(btn => {
       btn.addEventListener('click', () => {
