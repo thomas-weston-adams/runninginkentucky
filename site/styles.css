@@ -916,9 +916,21 @@ a.race-location:hover { color: var(--green-mid); text-decoration: underline; }
   padding: 0;
 }
 .music-play-btn:hover { background: rgba(255,255,255,0.25); }
-.music-play-btn.playing .music-play-icon::before { content: '⏸'; }
-.music-play-btn:not(.playing) .music-play-icon::before { content: '▶'; }
 .music-play-icon { font-style: normal; }
+.music-prev-btn,
+.music-next-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.65rem;
+  cursor: pointer;
+  padding: 4px 2px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.music-prev-btn:hover,
+.music-next-btn:hover { color: #fff; }
 .music-info {
   display: flex;
   align-items: center;

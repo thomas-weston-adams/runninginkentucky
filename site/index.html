@@ -190,15 +190,17 @@
 
   <!-- ── MUSIC PLAYER ── -->
   <div class="music-player" id="music-player">
-    <audio id="site-audio" src="The Distance.mp3" loop preload="none"></audio>
+    <audio id="site-audio" preload="none"></audio>
     <div class="music-inner">
-      <button class="music-play-btn" id="music-play-btn" aria-label="Play The Distance by Cake">
-        <span class="music-play-icon">▶</span>
+      <button class="music-prev-btn" id="music-prev-btn" aria-label="Previous song">&#9664;&#9664;</button>
+      <button class="music-play-btn" id="music-play-btn" aria-label="Play">
+        <span class="music-play-icon"></span>
       </button>
+      <button class="music-next-btn" id="music-next-btn" aria-label="Next song">&#9654;&#9654;</button>
       <div class="music-info">
-        <span class="music-title">The Distance</span>
+        <span class="music-title" id="music-title"></span>
         <span class="music-sep">·</span>
-        <span class="music-artist">Cake</span>
+        <span class="music-artist" id="music-artist"></span>
       </div>
       <label class="music-vol-label" aria-label="Volume">
         <span class="music-vol-icon">🔈</span>

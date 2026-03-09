@@ -455,24 +455,77 @@ function setupDarkMode() {
 }
 
 // ── music player ──────────────────────────────────────────────────────────────
+const PLAYLIST = [
+  { src: 'The Distance.mp3',                          title: 'The Distance',        artist: 'Cake' },
+  { src: 'Matt Nathanson - Long Distance Runner.mp3', title: 'Long Distance Runner', artist: 'Matt Nathanson' },
+];
+
 function setupMusicPlayer() {
-  const audio  = document.getElementById('site-audio');
-  const btn    = document.getElementById('music-play-btn');
-  const vol    = document.getElementById('music-volume');
-  if (!audio || !btn || !vol) return;
+  const audio    = document.getElementById('site-audio');
+  const playBtn  = document.getElementById('music-play-btn');
+  const prevBtn  = document.getElementById('music-prev-btn');
+  const nextBtn  = document.getElementById('music-next-btn');
+  const vol      = document.getElementById('music-volume');
+  const titleEl  = document.getElementById('music-title');
+  const artistEl = document.getElementById('music-artist');
+  if (!audio || !playBtn) return;
+
+  let trackIndex = 0;
+  let wasPlaying = false;
+
+  function loadTrack(index, autoplay) {
+    const t = PLAYLIST[index];
+    audio.src = t.src;
+    audio.loop = PLAYLIST.length === 1;
+    if (titleEl)  titleEl.textContent  = t.title;
+    if (artistEl) artistEl.textContent = t.artist;
+    playBtn.setAttribute('aria-label', `Play ${t.title} by ${t.artist}`);
+    if (autoplay) audio.play().then(() => setPlayingState(true)).catch(() => {});
+    else setPlayingState(false);
+  }
+
+  function setPlayingState(playing) {
+    const icon = playBtn.querySelector('.music-play-icon');
+    if (playing) {
+      playBtn.classList.add('playing');
+      playBtn.setAttribute('aria-label', 'Pause');
+      if (icon) icon.textContent = '⏸';
+    } else {
+      playBtn.classList.remove('playing');
+      const t = PLAYLIST[trackIndex];
+      playBtn.setAttribute('aria-label', `Play ${t.title} by ${t.artist}`);
+      if (icon) icon.textContent = '▶';
+    }
+  }
 
   audio.volume = parseFloat(vol.value);
+  loadTrack(0, false);
 
-  btn.addEventListener('click', () => {
+  playBtn.addEventListener('click', () => {
     if (audio.paused) {
-      audio.play();
-      btn.classList.add('playing');
-      btn.setAttribute('aria-label', 'Pause');
+      audio.play().then(() => setPlayingState(true)).catch(() => {});
     } else {
       audio.pause();
-      btn.classList.remove('playing');
-      btn.setAttribute('aria-label', 'Play The Distance by Cake');
+      setPlayingState(false);
     }
+  });
+
+  prevBtn?.addEventListener('click', () => {
+    wasPlaying = !audio.paused;
+    trackIndex = (trackIndex - 1 + PLAYLIST.length) % PLAYLIST.length;
+    loadTrack(trackIndex, wasPlaying);
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    wasPlaying = !audio.paused;
+    trackIndex = (trackIndex + 1) % PLAYLIST.length;
+    loadTrack(trackIndex, wasPlaying);
+  });
+
+  // auto-advance to next track when one ends (only matters if not looping single)
+  audio.addEventListener('ended', () => {
+    trackIndex = (trackIndex + 1) % PLAYLIST.length;
+    loadTrack(trackIndex, true);
   });
 
   vol.addEventListener('input', () => { audio.volume = parseFloat(vol.value); });
