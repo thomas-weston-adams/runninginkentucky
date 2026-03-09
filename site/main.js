@@ -54,6 +54,162 @@ function countdownLabel(days) {
   return '';
 }
 
+// ── weekly schedule overrides ─────────────────────────────────────────────────
+const REPORT_EMAIL   = 'thomaswestonadams@gmail.com';
+const OVERRIDES_KEY  = 'ky_schedule_overrides_v1';
+
+function weekOf(date = new Date()) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  const dow = d.getDay();
+  d.setDate(d.getDate() - (dow === 0 ? 6 : dow - 1)); // Monday
+  return d.toISOString().slice(0, 10);
+}
+
+function loadOverrides() {
+  try {
+    const all = JSON.parse(localStorage.getItem(OVERRIDES_KEY) || '{}');
+    const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 14);
+    const cutoffStr = cutoff.toISOString().slice(0, 10);
+    let changed = false;
+    Object.keys(all).forEach(k => { if (all[k].weekOf < cutoffStr) { delete all[k]; changed = true; } });
+    if (changed) localStorage.setItem(OVERRIDES_KEY, JSON.stringify(all));
+    return all;
+  } catch { return {}; }
+}
+
+function saveOverride(override) {
+  try {
+    const all = loadOverrides();
+    all[`${override.day}::${override.name}::${override.weekOf}`] = override;
+    localStorage.setItem(OVERRIDES_KEY, JSON.stringify(all));
+  } catch { /* ignore */ }
+}
+
+function checkUrlOverride() {
+  const wc = new URLSearchParams(location.search).get('wc');
+  if (!wc) return;
+  try {
+    const override = JSON.parse(atob(wc));
+    if (override?.day && override?.name && override?.weekOf) {
+      saveOverride(override);
+      const url = new URL(location.href);
+      url.searchParams.delete('wc');
+      history.replaceState(null, '', url.toString());
+    }
+  } catch { /* ignore */ }
+}
+
+function applyOverrides(grid) {
+  const now = weekOf();
+  Object.values(loadOverrides())
+    .filter(o => o.weekOf === now)
+    .forEach(override => {
+      grid.querySelectorAll('.day-column').forEach(col => {
+        if (col.dataset.day !== override.day) return;
+        col.querySelectorAll('.event-card').forEach(card => {
+          if (card.dataset.eventName !== override.name) return;
+          card.querySelectorAll('.override-badge').forEach(b => b.remove());
+          const badge = document.createElement('div');
+          badge.className = `override-badge override-badge--${override.type}`;
+          const typeLabel = {
+            cancelled: '✕ CANCELLED THIS WEEK',
+            time:      `⏰ Time changed: ${override.newTime || ''}`,
+            location:  `📍 Location changed: ${override.newLocation || ''}`,
+            other:     '⚠️ Schedule update this week',
+          }[override.type] || '⚠️ Schedule update this week';
+          badge.textContent = override.notes ? `${typeLabel} — ${override.notes}` : typeLabel;
+          card.prepend(badge);
+          if (override.type === 'cancelled') card.classList.add('event-card--cancelled');
+        });
+      });
+    });
+}
+
+let _overrideTarget = null;
+
+function openReportModal(day, name, time) {
+  _overrideTarget = { day, name, time };
+  document.getElementById('override-event-label').textContent = `${name} (${day}s at ${time})`;
+  document.getElementById('override-type').value = 'cancelled';
+  document.getElementById('override-newtime-row').hidden = true;
+  document.getElementById('override-newlocation-row').hidden = true;
+  document.getElementById('override-newtime').value = '';
+  document.getElementById('override-newlocation').value = '';
+  document.getElementById('override-notes').value = '';
+  document.getElementById('override-modal').hidden = false;
+}
+
+function setupOverrideModal(grid) {
+  checkUrlOverride();
+  applyOverrides(grid);
+
+  const modal = document.getElementById('override-modal');
+  if (!modal) return;
+
+  document.getElementById('override-modal-close').addEventListener('click', () => { modal.hidden = true; });
+  modal.addEventListener('click', e => { if (e.target === modal) modal.hidden = true; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) modal.hidden = true; });
+
+  const typeSelect = document.getElementById('override-type');
+  typeSelect.addEventListener('change', () => {
+    document.getElementById('override-newtime-row').hidden     = typeSelect.value !== 'time';
+    document.getElementById('override-newlocation-row').hidden = typeSelect.value !== 'location';
+  });
+
+  document.getElementById('override-form').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!_overrideTarget) return;
+    const type        = typeSelect.value;
+    const newTime     = document.getElementById('override-newtime').value.trim();
+    const newLocation = document.getElementById('override-newlocation').value.trim();
+    const notes       = document.getElementById('override-notes').value.trim();
+
+    const override = {
+      day: _overrideTarget.day, name: _overrideTarget.name, weekOf: weekOf(),
+      type, reportedAt: new Date().toISOString(),
+      ...(newTime && { newTime }), ...(newLocation && { newLocation }), ...(notes && { notes }),
+    };
+
+    saveOverride(override);
+    applyOverrides(grid);
+    modal.hidden = true;
+
+    // Build shareable URL + email
+    const shareUrl = (() => {
+      const u = new URL(location.href);
+      u.searchParams.set('wc', btoa(JSON.stringify(override)));
+      return u.toString();
+    })();
+    const changeDesc = type === 'cancelled' ? 'Cancelled this week'
+      : type === 'time'     ? `Time changed to ${newTime}`
+      : type === 'location' ? `Location changed to ${newLocation}`
+      : 'Other schedule update';
+    const body = [
+      `A one-time schedule change was reported on Running in Kentucky:`,
+      ``,
+      `Club: ${_overrideTarget.name}`,
+      `Day:  ${_overrideTarget.day}`,
+      `Week: ${override.weekOf}`,
+      `Change: ${changeDesc}`,
+      notes ? `Notes: ${notes}` : '',
+      ``,
+      `Shareable link (anyone who visits this URL will see the change):`,
+      shareUrl,
+    ].filter(l => l !== undefined).join('\n');
+    const subject = `[Running in KY] Change reported: ${_overrideTarget.name} — ${_overrideTarget.day}`;
+    window.location.href = `mailto:${REPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    _overrideTarget = null;
+  });
+
+  // Delegation for report buttons (rendered dynamically)
+  grid.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-report');
+    if (!btn) return;
+    openReportModal(btn.dataset.day, btn.dataset.name, btn.dataset.time);
+  });
+}
+
 // ── calendar helpers ──────────────────────────────────────────────────────────
 const calPad = n => String(n).padStart(2, '0');
 
@@ -288,9 +444,11 @@ function renderCalendar(schedule) {
         if (ev.mapUrl) links.push(`<a href="${esc(ev.mapUrl)}" class="btn btn-map" target="_blank" rel="noopener">Map</a>`);
         if (ev.websiteUrl) links.push(`<a href="${esc(ev.websiteUrl)}" class="btn btn-link" target="_blank" rel="noopener">Website</a>`);
         links.push(`<button ${calTriggerAttrs(clubCalData(day, ev))}>📅</button>`);
+        links.push(`<button class="btn btn-report" data-day="${esc(day)}" data-name="${esc(ev.name)}" data-time="${esc(ev.time)}" title="Report a one-time cancellation or change">📢</button>`);
 
         const card = document.createElement('div');
         card.className = 'event-card';
+        card.dataset.eventName = ev.name;
         card.dataset.search = [ev.name, ev.location, ev.address, ev.notes].filter(Boolean).join(' ').toLowerCase();
         card.innerHTML = `
           <div class="event-time">${esc(ev.time)}</div>
@@ -309,6 +467,7 @@ function renderCalendar(schedule) {
   });
 
   setupCalPickers(grid);
+  setupOverrideModal(grid);
 }
 
 // ── render groups ─────────────────────────────────────────────────────────────
