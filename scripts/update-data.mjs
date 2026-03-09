@@ -21,7 +21,11 @@ const GOOGLE_DOC_URL = process.env.GOOGLE_DOC_URL;
 
 // ── fetch raw doc if URL provided ─────────────────────────────────────────────
 async function fetchDoc(url) {
-  const res = await fetch(url);
+  // Append a cache-buster so Google serves the latest export, not a cached copy
+  const busted = `${url}&cachebust=${Date.now()}`;
+  const res = await fetch(busted, {
+    headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+  });
   if (!res.ok) throw new Error(`HTTP ${res.status} fetching doc`);
   return res.text();
 }
@@ -174,24 +178,20 @@ function parseDoc(text) {
 async function main() {
   let rawText;
 
-  if (GOOGLE_DOC_URL) {
-    console.log('Fetching Google Doc…');
-    try {
-      rawText = await fetchDoc(GOOGLE_DOC_URL);
-      writeFileSync(RAW_FILE, rawText, 'utf8');
-      console.log('Saved raw-doc.txt');
-    } catch (e) {
-      console.warn('Fetch failed, falling back to raw-doc.txt:', e.message);
-    }
+  if (!GOOGLE_DOC_URL) {
+    console.error('ERROR: GOOGLE_DOC_URL secret is not set — cannot fetch live doc.');
+    process.exit(1);
   }
 
-  if (!rawText) {
-    if (!existsSync(RAW_FILE)) {
-      console.error('No raw-doc.txt and no GOOGLE_DOC_URL set. Nothing to parse.');
-      process.exit(1);
-    }
-    rawText = readFileSync(RAW_FILE, 'utf8');
-    console.log('Parsing existing raw-doc.txt…');
+  console.log('Fetching Google Doc…');
+  try {
+    rawText = await fetchDoc(GOOGLE_DOC_URL);
+    writeFileSync(RAW_FILE, rawText, 'utf8');
+    console.log('Saved raw-doc.txt');
+  } catch (e) {
+    console.error(`ERROR: Fetch failed — ${e.message}`);
+    console.error('Fix the fetch issue rather than silently using stale data.');
+    process.exit(1);
   }
 
   const data = parseDoc(rawText);
