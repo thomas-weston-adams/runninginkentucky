@@ -300,48 +300,6 @@
     </div>
   </section>
 
-  <!-- ── WEEKLY CHANGE REPORT MODAL ── -->
-  <div id="override-modal" class="modal-backdrop" hidden aria-modal="true" role="dialog" aria-labelledby="override-modal-title">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="override-modal-title" class="modal-title">Report a Schedule Change</h3>
-        <button class="modal-close" id="override-modal-close" aria-label="Close">✕</button>
-      </div>
-      <p class="modal-intro">Reporting a one-time change for <strong id="override-event-label"></strong>. This only affects the current week — permanent changes should go in the <a href="https://docs.google.com/document/d/1beFCZMKbfp2xjZYN6fv-25TWa-3m3gjnWRTy1oo2LdQ/edit" target="_blank" rel="noopener">Google Doc</a>.</p>
-      <form id="override-form" novalidate>
-        <div class="modal-field">
-          <label class="modal-label">What changed?
-            <select id="override-type" class="modal-input">
-              <option value="cancelled">Run is cancelled this week</option>
-              <option value="time">Start time has changed</option>
-              <option value="location">Location has changed</option>
-              <option value="other">Other update</option>
-            </select>
-          </label>
-        </div>
-        <div class="modal-field" id="override-newtime-row" hidden>
-          <label class="modal-label">New time
-            <input type="text" id="override-newtime" class="modal-input" placeholder="e.g. 7:00 AM">
-          </label>
-        </div>
-        <div class="modal-field" id="override-newlocation-row" hidden>
-          <label class="modal-label">New location
-            <input type="text" id="override-newlocation" class="modal-input" placeholder="e.g. Central Park main entrance">
-          </label>
-        </div>
-        <div class="modal-field">
-          <label class="modal-label">Notes <span class="modal-opt">(optional)</span>
-            <input type="text" id="override-notes" class="modal-input" placeholder="Reason or any other details…">
-          </label>
-        </div>
-        <div class="modal-actions">
-          <button type="submit" class="btn btn-primary">Save &amp; Notify Admin</button>
-          <p class="modal-note">Saves immediately on your screen. Also opens your email app to notify the site admin — they can then share the shareable link with everyone.</p>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <!-- ── FOOTER ── -->
   <footer class="site-footer">
     <div class="container">
