@@ -88,9 +88,9 @@
         <div style="grid-column:1/-1;padding:30px;text-align:center;color:#5C6B73">Loading schedule…</div>
       </div>
       <p class="schedule-disclaimer">
-        📅 Click the calendar icon on any run to add a weekly reminder to Google Calendar.
-        Schedules are listed as published — always check with the club for last-minute changes or cancellations, especially for weather.
-        Many clubs will post updates on their social pages, but plenty of runners will still head out in rain, cold, and all sorts of conditions!
+        📅 Click the calendar icon on any run to add it to your calendar.
+        Schedules are listed as published — always check with the club for last-minute changes.
+        Source: <a href="https://docs.google.com/document/d/1beFCZMKbfp2xjZYN6fv-25TWa-3m3gjnWRTy1oo2LdQ/edit" target="_blank" rel="noopener">Lexington Run Club Google Doc</a>
       </p>
     </div>
   </section>
@@ -125,7 +125,13 @@
       <div class="races-section-header">
         <div>
           <h2 class="section-title">Upcoming Races</h2>
-          <p class="section-subtitle">Kentucky &amp; surrounding area — sourced from John's Run Walk Shop, RaceRise &amp; UltraSignup</p>
+          <div class="race-sources">
+            <span class="race-sources-label">Sources:</span>
+            <a class="race-source-badge" href="https://www.johnsrunwalkshop.com/races" target="_blank" rel="noopener">John's Run Walk Shop</a>
+            <a class="race-source-badge" href="https://www.racerise.com/upcoming-races" target="_blank" rel="noopener">RaceRise</a>
+            <a class="race-source-badge" href="https://ultrasignup.com/events/search.aspx" target="_blank" rel="noopener">UltraSignup</a>
+            <a class="race-source-badge" href="https://frontrunnerslex.com/kyraces/" target="_blank" rel="noopener">Front Runners Lex</a>
+          </div>
         </div>
         <button id="export-ics" class="btn btn-secondary btn-sm" title="Download all upcoming races as a calendar file">
           ⬇ Export .ics
@@ -245,6 +251,40 @@
     </div>
   </section>
 
+  <!-- ── ABOUT / EXPLAINER ── -->
+  <section class="about-section">
+    <div class="container">
+      <details class="about-details" id="about-details">
+        <summary class="about-summary">
+          <span class="about-summary-chevron">›</span>
+          About this site
+        </summary>
+        <div class="about-body">
+          <p>Running in Kentucky is a community-built directory for run clubs and races in the Lexington area. It's a work in progress — no ads, no accounts, just a free resource for local runners.</p>
+
+          <div class="about-grid">
+            <div class="about-col">
+              <h4>Run Club Schedule</h4>
+              <p>Weekly runs and club info come from a <a href="https://docs.google.com/document/d/1beFCZMKbfp2xjZYN6fv-25TWa-3m3gjnWRTy1oo2LdQ/edit" target="_blank" rel="noopener">shared Google Doc</a> that anyone can edit. If your club is missing, meets at a different time, or has changed locations — open the doc and update it. Changes appear on this site within 6 hours automatically.</p>
+            </div>
+            <div class="about-col">
+              <h4>Race Listings</h4>
+              <p>Races are pulled automatically from multiple regional sources and merged:</p>
+              <ul class="about-sources">
+                <li><a href="https://www.johnsrunwalkshop.com/races" target="_blank" rel="noopener">John's Run Walk Shop</a> — local race calendar</li>
+                <li><a href="https://www.racerise.com/upcoming-races" target="_blank" rel="noopener">RaceRise</a> — Kentucky &amp; regional races</li>
+                <li><a href="https://frontrunnerslex.com/kyraces/" target="_blank" rel="noopener">Front Runners Lexington</a> — Kentucky race list</li>
+                <li><a href="https://ultrasignup.com/events/search.aspx" target="_blank" rel="noopener">UltraSignup</a> — trail &amp; ultra events</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="about-note">This is an independent community project — not affiliated with any club or race organization. More features are in progress. Have a suggestion or found something broken? <a href="mailto:thomaswestonadams@gmail.com">Send a note.</a></p>
+        </div>
+      </details>
+    </div>
+  </section>
+
   <!-- ── CTA ── -->
   <section class="cta-section">
     <div class="container">
@@ -259,6 +299,48 @@
       <p class="cta-note">Data updates automatically every 6 hours from our 4 sources.</p>
     </div>
   </section>
+
+  <!-- ── WEEKLY CHANGE REPORT MODAL ── -->
+  <div id="override-modal" class="modal-backdrop" hidden aria-modal="true" role="dialog" aria-labelledby="override-modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="override-modal-title" class="modal-title">Report a Schedule Change</h3>
+        <button class="modal-close" id="override-modal-close" aria-label="Close">✕</button>
+      </div>
+      <p class="modal-intro">Reporting a one-time change for <strong id="override-event-label"></strong>. This only affects the current week — permanent changes should go in the <a href="https://docs.google.com/document/d/1beFCZMKbfp2xjZYN6fv-25TWa-3m3gjnWRTy1oo2LdQ/edit" target="_blank" rel="noopener">Google Doc</a>.</p>
+      <form id="override-form" novalidate>
+        <div class="modal-field">
+          <label class="modal-label">What changed?
+            <select id="override-type" class="modal-input">
+              <option value="cancelled">Run is cancelled this week</option>
+              <option value="time">Start time has changed</option>
+              <option value="location">Location has changed</option>
+              <option value="other">Other update</option>
+            </select>
+          </label>
+        </div>
+        <div class="modal-field" id="override-newtime-row" hidden>
+          <label class="modal-label">New time
+            <input type="text" id="override-newtime" class="modal-input" placeholder="e.g. 7:00 AM">
+          </label>
+        </div>
+        <div class="modal-field" id="override-newlocation-row" hidden>
+          <label class="modal-label">New location
+            <input type="text" id="override-newlocation" class="modal-input" placeholder="e.g. Central Park main entrance">
+          </label>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Notes <span class="modal-opt">(optional)</span>
+            <input type="text" id="override-notes" class="modal-input" placeholder="Reason or any other details…">
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Save &amp; Notify Admin</button>
+          <p class="modal-note">Saves immediately on your screen. Also opens your email app to notify the site admin — they can then share the shareable link with everyone.</p>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- ── FOOTER ── -->
   <footer class="site-footer">
