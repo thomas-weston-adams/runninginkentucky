@@ -32,6 +32,7 @@ jobs:
 
       - name: Fetch race data
         run: node scripts/fetch-races.mjs
+        continue-on-error: true  # if external sources are down, deploy with existing data
 
       - name: Build site
         run: node scripts/build-site.mjs
