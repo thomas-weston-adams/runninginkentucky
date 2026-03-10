@@ -364,6 +364,13 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   margin-bottom: 28px;
   position: relative;
 }
+.hero-personal-note {
+  color: rgba(255,255,255,0.82);
+  font-size: 1rem;
+  line-height: 1.65;
+  margin: 0 0 22px;
+  max-width: 580px;
+}
 .hero-quote {
   margin: 0 0 24px;
   padding: 0;
