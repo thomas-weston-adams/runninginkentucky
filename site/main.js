@@ -127,34 +127,43 @@ function applyOverrides(grid) {
 }
 
 let _overrideTarget = null;
+let _overrideModalReady = false;
+
+function closeReportModal() {
+  document.getElementById('override-modal').classList.remove('is-open');
+}
 
 function openReportModal(day, name, time) {
   _overrideTarget = { day, name, time };
   document.getElementById('override-event-label').textContent = `${name} (${day}s at ${time})`;
   document.getElementById('override-type').value = 'cancelled';
-  document.getElementById('override-newtime-row').hidden = true;
-  document.getElementById('override-newlocation-row').hidden = true;
+  document.getElementById('override-newtime-row').classList.add('is-hidden');
+  document.getElementById('override-newlocation-row').classList.add('is-hidden');
   document.getElementById('override-newtime').value = '';
   document.getElementById('override-newlocation').value = '';
   document.getElementById('override-notes').value = '';
-  document.getElementById('override-modal').hidden = false;
+  document.getElementById('override-modal').classList.add('is-open');
 }
 
 function setupOverrideModal(grid) {
   checkUrlOverride();
   applyOverrides(grid);
 
+  // Only wire up listeners once
+  if (_overrideModalReady) return;
+  _overrideModalReady = true;
+
   const modal = document.getElementById('override-modal');
   if (!modal) return;
 
-  document.getElementById('override-modal-close').addEventListener('click', () => { modal.hidden = true; });
-  modal.addEventListener('click', e => { if (e.target === modal) modal.hidden = true; });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) modal.hidden = true; });
+  document.getElementById('override-modal-close').addEventListener('click', closeReportModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeReportModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeReportModal(); });
 
   const typeSelect = document.getElementById('override-type');
   typeSelect.addEventListener('change', () => {
-    document.getElementById('override-newtime-row').hidden     = typeSelect.value !== 'time';
-    document.getElementById('override-newlocation-row').hidden = typeSelect.value !== 'location';
+    document.getElementById('override-newtime-row').classList.toggle('is-hidden',     typeSelect.value !== 'time');
+    document.getElementById('override-newlocation-row').classList.toggle('is-hidden', typeSelect.value !== 'location');
   });
 
   document.getElementById('override-form').addEventListener('submit', e => {
@@ -172,8 +181,8 @@ function setupOverrideModal(grid) {
     };
 
     saveOverride(override);
-    applyOverrides(grid);
-    modal.hidden = true;
+    applyOverrides(document.getElementById('weekly-calendar'));
+    closeReportModal();
 
     // Build shareable URL + mailto — use a temporary <a> click so the page never navigates
     const shareUrl = (() => {

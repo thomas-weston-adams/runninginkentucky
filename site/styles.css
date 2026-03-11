@@ -1832,16 +1832,19 @@ details[open] .prof-lb-summary::before { content: '▼ '; }
 .event-card--cancelled .btn-report { pointer-events: auto; opacity: 0.7; }
 
 /* ── Weekly change report modal ── */
-.modal-backdrop[hidden] { display: none; }
+.is-hidden { display: none !important; }
 .modal-backdrop {
+  display: none;
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.55);
   z-index: 900;
-  display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
+}
+.modal-backdrop.is-open {
+  display: flex;
 }
 .modal-box {
   background: var(--cream);
