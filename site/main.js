@@ -127,34 +127,92 @@ function applyOverrides(grid) {
 }
 
 let _overrideTarget = null;
+let _overrideModalReady = false;
+let _schedule = {};
 
-function openReportModal(day, name, time) {
-  _overrideTarget = { day, name, time };
-  document.getElementById('override-event-label').textContent = `${name} (${day}s at ${time})`;
+function closeReportModal() {
+  document.getElementById('override-modal').classList.remove('is-open');
+}
+
+function openReportModal() {
+  _overrideTarget = null;
+
+  // Populate day dropdown from days that have events
+  const daySelect = document.getElementById('override-day');
+  daySelect.innerHTML = '<option value="">Select a day…</option>';
+  DAYS.forEach(day => {
+    if ((_schedule[day] || []).length > 0) {
+      const opt = document.createElement('option');
+      opt.value = day;
+      opt.textContent = day;
+      daySelect.appendChild(opt);
+    }
+  });
+
+  // Reset club + details
+  document.getElementById('override-club').innerHTML = '<option value="">Select a run…</option>';
+  document.getElementById('override-club-row').classList.add('is-hidden');
+  document.getElementById('override-details-row').classList.add('is-hidden');
   document.getElementById('override-type').value = 'cancelled';
-  document.getElementById('override-newtime-row').hidden = true;
-  document.getElementById('override-newlocation-row').hidden = true;
+  document.getElementById('override-newtime-row').classList.add('is-hidden');
+  document.getElementById('override-newlocation-row').classList.add('is-hidden');
   document.getElementById('override-newtime').value = '';
   document.getElementById('override-newlocation').value = '';
   document.getElementById('override-notes').value = '';
-  document.getElementById('override-modal').hidden = false;
+
+  document.getElementById('override-modal').classList.add('is-open');
 }
 
 function setupOverrideModal(grid) {
   checkUrlOverride();
   applyOverrides(grid);
 
+  // Only wire up listeners once
+  if (_overrideModalReady) return;
+  _overrideModalReady = true;
+
   const modal = document.getElementById('override-modal');
   if (!modal) return;
 
-  document.getElementById('override-modal-close').addEventListener('click', () => { modal.hidden = true; });
-  modal.addEventListener('click', e => { if (e.target === modal) modal.hidden = true; });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) modal.hidden = true; });
+  document.getElementById('override-modal-close').addEventListener('click', closeReportModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeReportModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeReportModal(); });
+
+  document.getElementById('open-report-modal').addEventListener('click', openReportModal);
+
+  const daySelect  = document.getElementById('override-day');
+  const clubSelect = document.getElementById('override-club');
+
+  daySelect.addEventListener('change', () => {
+    const day = daySelect.value;
+    clubSelect.innerHTML = '<option value="">Select a run…</option>';
+    document.getElementById('override-club-row').classList.toggle('is-hidden', !day);
+    document.getElementById('override-details-row').classList.add('is-hidden');
+    _overrideTarget = null;
+    if (!day) return;
+    (_schedule[day] || []).forEach(ev => {
+      const opt = document.createElement('option');
+      opt.value = JSON.stringify({ name: ev.name, time: ev.time });
+      opt.textContent = `${ev.name} — ${ev.time}`;
+      clubSelect.appendChild(opt);
+    });
+  });
+
+  clubSelect.addEventListener('change', () => {
+    if (!clubSelect.value) {
+      document.getElementById('override-details-row').classList.add('is-hidden');
+      _overrideTarget = null;
+      return;
+    }
+    const { name, time } = JSON.parse(clubSelect.value);
+    _overrideTarget = { day: daySelect.value, name, time };
+    document.getElementById('override-details-row').classList.remove('is-hidden');
+  });
 
   const typeSelect = document.getElementById('override-type');
   typeSelect.addEventListener('change', () => {
-    document.getElementById('override-newtime-row').hidden     = typeSelect.value !== 'time';
-    document.getElementById('override-newlocation-row').hidden = typeSelect.value !== 'location';
+    document.getElementById('override-newtime-row').classList.toggle('is-hidden',     typeSelect.value !== 'time');
+    document.getElementById('override-newlocation-row').classList.toggle('is-hidden', typeSelect.value !== 'location');
   });
 
   document.getElementById('override-form').addEventListener('submit', e => {
@@ -172,10 +230,10 @@ function setupOverrideModal(grid) {
     };
 
     saveOverride(override);
-    applyOverrides(grid);
-    modal.hidden = true;
+    applyOverrides(document.getElementById('weekly-calendar'));
+    closeReportModal();
 
-    // Build shareable URL + mailto — use a temporary <a> click so the page never navigates
+    // Build shareable URL + mailto
     const shareUrl = (() => {
       const u = new URL(location.href);
       u.searchParams.set('wc', btoa(JSON.stringify(override)));
@@ -207,13 +265,6 @@ function setupOverrideModal(grid) {
     document.body.removeChild(a);
 
     _overrideTarget = null;
-  });
-
-  // Delegation for report buttons (rendered dynamically)
-  grid.addEventListener('click', e => {
-    const btn = e.target.closest('.btn-report');
-    if (!btn) return;
-    openReportModal(btn.dataset.day, btn.dataset.name, btn.dataset.time);
   });
 }
 
@@ -427,6 +478,7 @@ function renderTodaysBanner(schedule) {
 
 // ── render weekly calendar ────────────────────────────────────────────────────
 function renderCalendar(schedule) {
+  _schedule = schedule;
   const grid = document.getElementById('weekly-calendar');
   const todayName = todayDayName();
   grid.innerHTML = '';
@@ -451,7 +503,6 @@ function renderCalendar(schedule) {
         if (ev.mapUrl) links.push(`<a href="${esc(ev.mapUrl)}" class="btn btn-map" target="_blank" rel="noopener">Map</a>`);
         if (ev.websiteUrl) links.push(`<a href="${esc(ev.websiteUrl)}" class="btn btn-link" target="_blank" rel="noopener">Website</a>`);
         links.push(`<button ${calTriggerAttrs(clubCalData(day, ev))}>📅</button>`);
-        links.push(`<button class="btn-report" data-day="${esc(day)}" data-name="${esc(ev.name)}" data-time="${esc(ev.time)}" title="Report a one-time cancellation or change">📢</button>`);
 
         const card = document.createElement('div');
         card.className = 'event-card';
