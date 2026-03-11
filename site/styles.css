@@ -661,6 +661,18 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   border-left: 3px solid var(--gold);
   border-radius: var(--radius-sm);
 }
+.btn-report-change {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-style: italic;
+  font-size: inherit;
+  color: var(--forest);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.btn-report-change:hover { color: var(--gold); }
 
 /* ---- GROUPS ---- */
 .groups-grid {
