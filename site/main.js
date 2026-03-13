@@ -54,9 +54,10 @@ function countdownLabel(days) {
   return '';
 }
 
-// ── weekly schedule overrides ─────────────────────────────────────────────────
+// ── weekly schedule overrides (Supabase backend) ──────────────────────────────
 const REPORT_EMAIL  = 'thomaswestonadams@gmail.com';
-const OVERRIDES_KEY = 'ky_schedule_overrides_v1';
+const SUPABASE_URL  = 'https://bqqvlwakrwumppcsaxvj.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxcXZsd2Frcnd1bXBwY3NheHZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MjE2NzUsImV4cCI6MjA4ODk5NzY3NX0.gJwKF8bAH0nIBzKbP117R05cIwpgq8To9jsnVjbJFgo';
 
 function weekOf(date = new Date()) {
   const d = new Date(date);
@@ -66,33 +67,51 @@ function weekOf(date = new Date()) {
   return d.toISOString().slice(0, 10);
 }
 
-function loadOverrides() {
+async function loadOverrides() {
   try {
-    const all = JSON.parse(localStorage.getItem(OVERRIDES_KEY) || '{}');
-    const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 14);
-    const cutoffStr = cutoff.toISOString().slice(0, 10);
-    let changed = false;
-    Object.keys(all).forEach(k => { if (all[k].weekOf < cutoffStr) { delete all[k]; changed = true; } });
-    if (changed) localStorage.setItem(OVERRIDES_KEY, JSON.stringify(all));
-    return all;
-  } catch { return {}; }
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/schedule_overrides?week_of=eq.${weekOf()}&select=*`,
+      { headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` } }
+    );
+    if (!res.ok) return [];
+    const rows = await res.json();
+    return rows.map(r => ({
+      day: r.day, name: r.name, weekOf: r.week_of, type: r.type,
+      ...(r.new_time     && { newTime:     r.new_time }),
+      ...(r.new_location && { newLocation: r.new_location }),
+      ...(r.notes        && { notes:       r.notes }),
+    }));
+  } catch { return []; }
 }
 
-function saveOverride(override) {
+async function saveOverride(override) {
   try {
-    const all = loadOverrides();
-    all[`${override.day}::${override.name}::${override.weekOf}`] = override;
-    localStorage.setItem(OVERRIDES_KEY, JSON.stringify(all));
+    await fetch(`${SUPABASE_URL}/rest/v1/schedule_overrides`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON,
+        'Authorization': `Bearer ${SUPABASE_ANON}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates',
+      },
+      body: JSON.stringify({
+        day: override.day, name: override.name, week_of: override.weekOf,
+        type: override.type,
+        new_time:     override.newTime     || null,
+        new_location: override.newLocation || null,
+        notes:        override.notes       || null,
+      }),
+    });
   } catch { /* ignore */ }
 }
 
-function checkUrlOverride() {
+async function checkUrlOverride() {
   const wc = new URLSearchParams(location.search).get('wc');
   if (!wc) return;
   try {
     const override = JSON.parse(atob(wc));
     if (override?.day && override?.name && override?.weekOf) {
-      saveOverride(override);
+      await saveOverride(override);
       const url = new URL(location.href);
       url.searchParams.delete('wc');
       history.replaceState(null, '', url.toString());
@@ -100,29 +119,43 @@ function checkUrlOverride() {
   } catch { /* ignore */ }
 }
 
-function applyOverrides(grid) {
-  const now = weekOf();
-  Object.values(loadOverrides())
-    .filter(o => o.weekOf === now)
-    .forEach(override => {
+function applyOverrideBadge(card, override, cancelClass) {
+  card.querySelectorAll('.override-badge').forEach(b => b.remove());
+  const badge = document.createElement('div');
+  badge.className = `override-badge override-badge--${override.type}`;
+  const typeLabel = {
+    cancelled: '✕ CANCELLED THIS WEEK',
+    time:      `⏰ Time changed: ${override.newTime || ''}`,
+    location:  `📍 Location changed: ${override.newLocation || ''}`,
+    other:     '⚠️ Schedule update this week',
+  }[override.type] || '⚠️ Schedule update this week';
+  badge.textContent = override.notes ? `${typeLabel} — ${override.notes}` : typeLabel;
+  card.prepend(badge);
+  if (override.type === 'cancelled') card.classList.add(cancelClass);
+}
+
+async function applyOverrides(grid) {
+  const todayName = todayDayName();
+  const banner = document.getElementById('todays-promo');
+  const overrides = await loadOverrides();
+
+  overrides.forEach(override => {
+      // Weekly calendar
       grid.querySelectorAll('.day-column').forEach(col => {
         if (col.dataset.day !== override.day) return;
         col.querySelectorAll('.event-card').forEach(card => {
           if (card.dataset.eventName !== override.name) return;
-          card.querySelectorAll('.override-badge').forEach(b => b.remove());
-          const badge = document.createElement('div');
-          badge.className = `override-badge override-badge--${override.type}`;
-          const typeLabel = {
-            cancelled: '✕ CANCELLED THIS WEEK',
-            time:      `⏰ Time changed: ${override.newTime || ''}`,
-            location:  `📍 Location changed: ${override.newLocation || ''}`,
-            other:     '⚠️ Schedule update this week',
-          }[override.type] || '⚠️ Schedule update this week';
-          badge.textContent = override.notes ? `${typeLabel} — ${override.notes}` : typeLabel;
-          card.prepend(badge);
-          if (override.type === 'cancelled') card.classList.add('event-card--cancelled');
+          applyOverrideBadge(card, override, 'event-card--cancelled');
         });
       });
+
+      // Today's promo banner
+      if (banner && override.day === todayName) {
+        banner.querySelectorAll('.promo-card').forEach(card => {
+          if (card.dataset.eventName !== override.name) return;
+          applyOverrideBadge(card, override, 'promo-card--cancelled');
+        });
+      }
     });
 }
 
@@ -164,8 +197,8 @@ function openReportModal() {
 }
 
 function setupOverrideModal(grid) {
-  checkUrlOverride();
-  applyOverrides(grid);
+  // Fire async ops without blocking — listeners set up synchronously below
+  checkUrlOverride().then(() => applyOverrides(grid));
 
   // Only wire up listeners once
   if (_overrideModalReady) return;
@@ -215,30 +248,27 @@ function setupOverrideModal(grid) {
     document.getElementById('override-newlocation-row').classList.toggle('is-hidden', typeSelect.value !== 'location');
   });
 
-  document.getElementById('override-form').addEventListener('submit', e => {
+  document.getElementById('override-form').addEventListener('submit', async e => {
     e.preventDefault();
     if (!_overrideTarget) return;
+    const target      = _overrideTarget; // capture before async ops
     const type        = typeSelect.value;
     const newTime     = document.getElementById('override-newtime').value.trim();
     const newLocation = document.getElementById('override-newlocation').value.trim();
     const notes       = document.getElementById('override-notes').value.trim();
 
     const override = {
-      day: _overrideTarget.day, name: _overrideTarget.name, weekOf: weekOf(),
+      day: target.day, name: target.name, weekOf: weekOf(),
       type, reportedAt: new Date().toISOString(),
       ...(newTime && { newTime }), ...(newLocation && { newLocation }), ...(notes && { notes }),
     };
 
-    saveOverride(override);
-    applyOverrides(document.getElementById('weekly-calendar'));
+    await saveOverride(override);
+    await applyOverrides(document.getElementById('weekly-calendar'));
     closeReportModal();
+    _overrideTarget = null;
 
-    // Build shareable URL + mailto
-    const shareUrl = (() => {
-      const u = new URL(location.href);
-      u.searchParams.set('wc', btoa(JSON.stringify(override)));
-      return u.toString();
-    })();
+    // Build mailto so the reporter can optionally notify the admin directly
     const changeDesc = type === 'cancelled' ? 'Cancelled this week'
       : type === 'time'     ? `Time changed to ${newTime}`
       : type === 'location' ? `Location changed to ${newLocation}`
@@ -246,16 +276,15 @@ function setupOverrideModal(grid) {
     const body = [
       `A one-time schedule change was reported on Running in Kentucky:`,
       ``,
-      `Club: ${_overrideTarget.name}`,
-      `Day:  ${_overrideTarget.day}`,
+      `Club: ${target.name}`,
+      `Day:  ${target.day}`,
       `Week: ${override.weekOf}`,
       `Change: ${changeDesc}`,
       notes ? `Notes: ${notes}` : '',
       ``,
-      `Shareable link (anyone who visits this URL will see the change):`,
-      shareUrl,
+      `The change is now live on the site for all visitors.`,
     ].filter(l => l !== undefined).join('\n');
-    const subject = `[Running in KY] Change reported: ${_overrideTarget.name} — ${_overrideTarget.day}`;
+    const subject = `[Running in KY] Change reported: ${target.name} — ${target.day}`;
     const mailtoUrl = `mailto:${REPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     const a = document.createElement('a');
@@ -263,8 +292,6 @@ function setupOverrideModal(grid) {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-
-    _overrideTarget = null;
   });
 }
 
@@ -454,7 +481,7 @@ function renderTodaysBanner(schedule) {
     if (ev.websiteUrl) links.push(`<a href="${esc(ev.websiteUrl)}" class="btn btn-link" target="_blank" rel="noopener">Website</a>`);
     links.push(`<button ${calTriggerAttrs(clubCalData(todayName, ev))}>📅</button>`);
     return `
-      <div class="promo-card">
+      <div class="promo-card" data-event-name="${esc(ev.name)}">
         <div class="promo-card-time">${esc(ev.time)}</div>
         <div class="promo-card-name">${esc(ev.name)}</div>
         <div class="promo-card-location">${ev.mapUrl ? `<a href="${esc(ev.mapUrl)}" class="promo-location-link" target="_blank" rel="noopener">${esc(ev.location)}</a>` : esc(ev.location)}</div>
@@ -986,10 +1013,110 @@ function setupMusicPlayer() {
   vol.addEventListener('input', () => { audio.volume = parseFloat(vol.value); });
 }
 
+// ── weather alerts ────────────────────────────────────────────────────────────
+// NWS public API — no key required. KYC067 = Fayette County (Lexington).
+const NWS_ZONE = 'KYC067';
+
+// Alert types that directly affect outdoor running
+const RUNNING_ALERTS = new Set([
+  'Tornado Warning', 'Tornado Watch',
+  'Severe Thunderstorm Warning', 'Severe Thunderstorm Watch',
+  'Flash Flood Warning', 'Flash Flood Watch', 'Flood Warning', 'Flood Watch',
+  'Winter Storm Warning', 'Winter Storm Watch', 'Winter Storm Advisory',
+  'Ice Storm Warning', 'Freezing Rain Advisory', 'Sleet Advisory',
+  'Wind Advisory', 'High Wind Warning', 'High Wind Watch',
+  'Excessive Heat Warning', 'Heat Advisory', 'Extreme Cold Warning', 'Wind Chill Warning',
+  'Dense Fog Advisory', 'Freezing Fog Advisory',
+  'Snow Squall Warning', 'Blizzard Warning', 'Blizzard Watch',
+  'Special Weather Statement',
+]);
+
+function formatAlertExpiry(expiresStr) {
+  if (!expiresStr) return '';
+  try {
+    const d = new Date(expiresStr);
+    const now = new Date();
+    const diffH = (d - now) / 3600000;
+    if (diffH < 0) return '';
+    if (diffH < 1) return `expires in ${Math.round(diffH * 60)} min`;
+    if (diffH < 24) {
+      const h = d.getHours() % 12 || 12;
+      const m = String(d.getMinutes()).padStart(2, '0');
+      const ampm = d.getHours() < 12 ? 'AM' : 'PM';
+      return `until ${h}:${m} ${ampm}`;
+    }
+    return `until ${MONTHS[d.getMonth()]} ${d.getDate()}`;
+  } catch { return ''; }
+}
+
+async function fetchWeatherAlerts() {
+  const banner = document.getElementById('weather-alert-banner');
+  if (!banner) return;
+  try {
+    const res = await fetch(
+      `https://api.weather.gov/alerts/active?zone=${NWS_ZONE}`,
+      { headers: { 'User-Agent': 'RunningInKentucky/1.0 (thomaswestonadams@gmail.com)' } }
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+
+    const alerts = (data.features || []).filter(f => {
+      const p = f.properties;
+      return p.status === 'Actual' && p.messageType !== 'Cancel' &&
+        ['Extreme', 'Severe', 'Moderate', 'Minor'].includes(p.severity);
+    });
+
+    if (alerts.length === 0) { banner.hidden = true; return; }
+
+    // Sort: running-relevant first, then by severity
+    const severityOrder = { Extreme: 0, Severe: 1, Moderate: 2, Minor: 3 };
+    alerts.sort((a, b) => {
+      const aRun = RUNNING_ALERTS.has(a.properties.event) ? 0 : 1;
+      const bRun = RUNNING_ALERTS.has(b.properties.event) ? 0 : 1;
+      if (aRun !== bRun) return aRun - bRun;
+      return (severityOrder[a.properties.severity] ?? 9) - (severityOrder[b.properties.severity] ?? 9);
+    });
+
+    const top = alerts[0].properties;
+    const level = top.severity === 'Extreme' ? 'extreme'
+      : top.severity === 'Severe'   ? 'severe'
+      : top.severity === 'Moderate' ? 'moderate' : 'minor';
+
+    const expiry = formatAlertExpiry(top.expires);
+    const expiryHtml = expiry ? ` <span class="weather-alert-expiry">${esc(expiry)}</span>` : '';
+
+    const otherCount = alerts.length - 1;
+    const extrasHtml = otherCount > 0
+      ? ` <span class="weather-alert-count">+${otherCount} more</span>` : '';
+
+    const isRunningAlert = RUNNING_ALERTS.has(top.event);
+    const runningNote = isRunningAlert
+      ? `<div class="weather-alert-running-note">Check with your club before heading out.</div>` : '';
+
+    banner.className = `weather-alert-banner weather-alert--${level}`;
+    banner.innerHTML = `
+      <div class="weather-alert-inner">
+        <span class="weather-alert-icon" aria-hidden="true">⚠️</span>
+        <div class="weather-alert-body">
+          <div class="weather-alert-top">
+            <strong class="weather-alert-event">${esc(top.event)}</strong>${expiryHtml}${extrasHtml}
+          </div>
+          <div class="weather-alert-headline">${esc(top.headline || '')}</div>
+          ${runningNote}
+        </div>
+        <a class="weather-alert-link" href="https://www.weather.gov/lmk/" target="_blank" rel="noopener">NWS →</a>
+      </div>`;
+    banner.hidden = false;
+  } catch { /* silently ignore — non-critical */ }
+}
+
+
 // ── init ──────────────────────────────────────────────────────────────────────
 async function init() {
   setupDarkMode();
   setupMusicPlayer();
+  fetchWeatherAlerts();
+  setInterval(fetchWeatherAlerts, 30 * 60 * 1000); // refresh every 30 min
 
   try {
     const [clubsRes, racesRes] = await Promise.all([fetch(CLUBS_URL), fetch(RACES_URL)]);
