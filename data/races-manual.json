@@ -15,6 +15,11 @@
       "key": "UltraSignup",
       "name": "UltraSignup",
       "url": "https://ultrasignup.com/events/search.aspx"
+    },
+    {
+      "key": "RunSignUp",
+      "name": "RunSignUp",
+      "url": "https://runsignup.com"
     }
   ],
   "races": [
@@ -89,6 +94,14 @@
       "location": "Lexington, KY",
       "source": "RaceRise",
       "sourceUrl": "https://www.racerise.com/upcoming-races"
+    },
+    {
+      "name": "Howlin' Wolfe 25K/50K",
+      "date": "2026-04-11",
+      "location": "Slade, KY",
+      "source": "RunSignUp",
+      "sourceUrl": "https://runsignup.com/Race/KY/Slade/HowlinWolfe25k50k",
+      "notes": "25K, 50K"
     },
     {
       "name": "Brandon True Memorial Heroes For The Homeless 5K",
