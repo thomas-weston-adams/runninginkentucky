@@ -1006,6 +1006,38 @@ function setupMusicPlayer() {
 // NWS public API — no key required. KYC067 = Fayette County (Lexington).
 const NWS_ZONE = 'KYC067';
 
+// Alert types that directly affect outdoor running
+const RUNNING_ALERTS = new Set([
+  'Tornado Warning', 'Tornado Watch',
+  'Severe Thunderstorm Warning', 'Severe Thunderstorm Watch',
+  'Flash Flood Warning', 'Flash Flood Watch', 'Flood Warning', 'Flood Watch',
+  'Winter Storm Warning', 'Winter Storm Watch', 'Winter Storm Advisory',
+  'Ice Storm Warning', 'Freezing Rain Advisory', 'Sleet Advisory',
+  'Wind Advisory', 'High Wind Warning', 'High Wind Watch',
+  'Excessive Heat Warning', 'Heat Advisory', 'Extreme Cold Warning', 'Wind Chill Warning',
+  'Dense Fog Advisory', 'Freezing Fog Advisory',
+  'Snow Squall Warning', 'Blizzard Warning', 'Blizzard Watch',
+  'Special Weather Statement',
+]);
+
+function formatAlertExpiry(expiresStr) {
+  if (!expiresStr) return '';
+  try {
+    const d = new Date(expiresStr);
+    const now = new Date();
+    const diffH = (d - now) / 3600000;
+    if (diffH < 0) return '';
+    if (diffH < 1) return `expires in ${Math.round(diffH * 60)} min`;
+    if (diffH < 24) {
+      const h = d.getHours() % 12 || 12;
+      const m = String(d.getMinutes()).padStart(2, '0');
+      const ampm = d.getHours() < 12 ? 'AM' : 'PM';
+      return `until ${h}:${m} ${ampm}`;
+    }
+    return `until ${MONTHS[d.getMonth()]} ${d.getDate()}`;
+  } catch { return ''; }
+}
+
 async function fetchWeatherAlerts() {
   const banner = document.getElementById('weather-alert-banner');
   if (!banner) return;
@@ -1025,37 +1057,55 @@ async function fetchWeatherAlerts() {
 
     if (alerts.length === 0) { banner.hidden = true; return; }
 
-    // Sort: Extreme → Severe → Moderate → Minor
-    const order = { Extreme: 0, Severe: 1, Moderate: 2, Minor: 3 };
-    alerts.sort((a, b) => (order[a.properties.severity] ?? 9) - (order[b.properties.severity] ?? 9));
+    // Sort: running-relevant first, then by severity
+    const severityOrder = { Extreme: 0, Severe: 1, Moderate: 2, Minor: 3 };
+    alerts.sort((a, b) => {
+      const aRun = RUNNING_ALERTS.has(a.properties.event) ? 0 : 1;
+      const bRun = RUNNING_ALERTS.has(b.properties.event) ? 0 : 1;
+      if (aRun !== bRun) return aRun - bRun;
+      return (severityOrder[a.properties.severity] ?? 9) - (severityOrder[b.properties.severity] ?? 9);
+    });
 
     const top = alerts[0].properties;
     const level = top.severity === 'Extreme' ? 'extreme'
       : top.severity === 'Severe'   ? 'severe'
       : top.severity === 'Moderate' ? 'moderate' : 'minor';
 
-    const extras = alerts.length > 1
-      ? ` <span class="weather-alert-count">+${alerts.length - 1} more alert${alerts.length > 2 ? 's' : ''}</span>` : '';
+    const expiry = formatAlertExpiry(top.expires);
+    const expiryHtml = expiry ? ` <span class="weather-alert-expiry">${esc(expiry)}</span>` : '';
+
+    const otherCount = alerts.length - 1;
+    const extrasHtml = otherCount > 0
+      ? ` <span class="weather-alert-count">+${otherCount} more</span>` : '';
+
+    const isRunningAlert = RUNNING_ALERTS.has(top.event);
+    const runningNote = isRunningAlert
+      ? `<div class="weather-alert-running-note">Check with your club before heading out.</div>` : '';
 
     banner.className = `weather-alert-banner weather-alert--${level}`;
     banner.innerHTML = `
       <div class="weather-alert-inner">
         <span class="weather-alert-icon" aria-hidden="true">⚠️</span>
         <div class="weather-alert-body">
-          <strong class="weather-alert-event">${esc(top.event)}</strong>
-          <span class="weather-alert-headline">${esc(top.headline || '')}</span>${extras}
+          <div class="weather-alert-top">
+            <strong class="weather-alert-event">${esc(top.event)}</strong>${expiryHtml}${extrasHtml}
+          </div>
+          <div class="weather-alert-headline">${esc(top.headline || '')}</div>
+          ${runningNote}
         </div>
-        <a class="weather-alert-link" href="https://www.weather.gov/lmk/" target="_blank" rel="noopener">NWS details →</a>
+        <a class="weather-alert-link" href="https://www.weather.gov/lmk/" target="_blank" rel="noopener">NWS →</a>
       </div>`;
     banner.hidden = false;
   } catch { /* silently ignore — non-critical */ }
 }
+
 
 // ── init ──────────────────────────────────────────────────────────────────────
 async function init() {
   setupDarkMode();
   setupMusicPlayer();
   fetchWeatherAlerts();
+  setInterval(fetchWeatherAlerts, 30 * 60 * 1000); // refresh every 30 min
 
   try {
     const [clubsRes, racesRes] = await Promise.all([fetch(CLUBS_URL), fetch(RACES_URL)]);

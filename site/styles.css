@@ -1858,25 +1858,40 @@ details[open] .prof-lb-summary::before { content: '▼ '; }
 .weather-alert--minor   { background: var(--cream); color: var(--text-main); border-left: 4px solid var(--gold); }
 .weather-alert-inner {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   gap: 10px;
   flex-wrap: wrap;
 }
-.weather-alert-icon { flex-shrink: 0; }
+.weather-alert-icon { flex-shrink: 0; margin-top: 1px; }
 .weather-alert-body { flex: 1; min-width: 0; }
+.weather-alert-top { margin-bottom: 2px; }
 .weather-alert-event { margin-right: 6px; }
-.weather-alert-headline { opacity: 0.9; }
+.weather-alert-expiry {
+  font-size: 0.82em;
+  opacity: 0.8;
+  margin-right: 4px;
+}
 .weather-alert-count {
-  margin-left: 6px;
   font-size: 0.8em;
   opacity: 0.75;
+}
+.weather-alert-headline {
+  opacity: 0.9;
+  font-size: 0.9em;
+}
+.weather-alert-running-note {
+  margin-top: 4px;
+  font-style: italic;
+  opacity: 0.85;
+  font-size: 0.85em;
 }
 .weather-alert-link {
   flex-shrink: 0;
   font-size: 0.8rem;
   color: inherit;
-  opacity: 0.85;
+  opacity: 0.8;
   white-space: nowrap;
+  align-self: flex-start;
 }
 .weather-alert-link:hover { opacity: 1; }
 
