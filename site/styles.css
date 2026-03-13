@@ -661,18 +661,37 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   border-left: 3px solid var(--gold);
   border-radius: var(--radius-sm);
 }
-.btn-report-change {
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  font-style: italic;
-  font-size: inherit;
-  color: var(--forest);
-  text-decoration: underline;
-  cursor: pointer;
+.report-change-cta {
+  margin-top: 16px;
+  padding: 18px 20px;
+  background: var(--forest);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-.btn-report-change:hover { color: var(--gold); }
+.report-change-cta__text {
+  margin: 0;
+  color: #fff;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+.btn-report-change {
+  background: var(--gold);
+  border: none;
+  padding: 10px 20px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--forest);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.btn-report-change:hover { opacity: 0.85; }
 
 /* ---- GROUPS ---- */
 .groups-grid {
