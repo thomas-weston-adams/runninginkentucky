@@ -664,13 +664,14 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
 .report-change-cta {
   margin-top: 16px;
   padding: 18px 20px;
-  background: var(--forest);
+  background: var(--green-dark);
   border-radius: var(--radius);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
 }
 .report-change-cta__text {
   margin: 0;
@@ -685,7 +686,7 @@ a:hover { text-decoration: underline; color: var(--green-dark); }
   font: inherit;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--forest);
+  color: var(--green-dark);
   border-radius: var(--radius-sm);
   cursor: pointer;
   white-space: nowrap;
