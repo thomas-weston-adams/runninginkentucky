@@ -100,29 +100,45 @@ function checkUrlOverride() {
   } catch { /* ignore */ }
 }
 
+function applyOverrideBadge(card, override, cancelClass) {
+  card.querySelectorAll('.override-badge').forEach(b => b.remove());
+  const badge = document.createElement('div');
+  badge.className = `override-badge override-badge--${override.type}`;
+  const typeLabel = {
+    cancelled: '✕ CANCELLED THIS WEEK',
+    time:      `⏰ Time changed: ${override.newTime || ''}`,
+    location:  `📍 Location changed: ${override.newLocation || ''}`,
+    other:     '⚠️ Schedule update this week',
+  }[override.type] || '⚠️ Schedule update this week';
+  badge.textContent = override.notes ? `${typeLabel} — ${override.notes}` : typeLabel;
+  card.prepend(badge);
+  if (override.type === 'cancelled') card.classList.add(cancelClass);
+}
+
 function applyOverrides(grid) {
   const now = weekOf();
+  const todayName = todayDayName();
+  const banner = document.getElementById('todays-promo');
+
   Object.values(loadOverrides())
     .filter(o => o.weekOf === now)
     .forEach(override => {
+      // Weekly calendar
       grid.querySelectorAll('.day-column').forEach(col => {
         if (col.dataset.day !== override.day) return;
         col.querySelectorAll('.event-card').forEach(card => {
           if (card.dataset.eventName !== override.name) return;
-          card.querySelectorAll('.override-badge').forEach(b => b.remove());
-          const badge = document.createElement('div');
-          badge.className = `override-badge override-badge--${override.type}`;
-          const typeLabel = {
-            cancelled: '✕ CANCELLED THIS WEEK',
-            time:      `⏰ Time changed: ${override.newTime || ''}`,
-            location:  `📍 Location changed: ${override.newLocation || ''}`,
-            other:     '⚠️ Schedule update this week',
-          }[override.type] || '⚠️ Schedule update this week';
-          badge.textContent = override.notes ? `${typeLabel} — ${override.notes}` : typeLabel;
-          card.prepend(badge);
-          if (override.type === 'cancelled') card.classList.add('event-card--cancelled');
+          applyOverrideBadge(card, override, 'event-card--cancelled');
         });
       });
+
+      // Today's promo banner
+      if (banner && override.day === todayName) {
+        banner.querySelectorAll('.promo-card').forEach(card => {
+          if (card.dataset.eventName !== override.name) return;
+          applyOverrideBadge(card, override, 'promo-card--cancelled');
+        });
+      }
     });
 }
 
@@ -454,7 +470,7 @@ function renderTodaysBanner(schedule) {
     if (ev.websiteUrl) links.push(`<a href="${esc(ev.websiteUrl)}" class="btn btn-link" target="_blank" rel="noopener">Website</a>`);
     links.push(`<button ${calTriggerAttrs(clubCalData(todayName, ev))}>📅</button>`);
     return `
-      <div class="promo-card">
+      <div class="promo-card" data-event-name="${esc(ev.name)}">
         <div class="promo-card-time">${esc(ev.time)}</div>
         <div class="promo-card-name">${esc(ev.name)}</div>
         <div class="promo-card-location">${ev.mapUrl ? `<a href="${esc(ev.mapUrl)}" class="promo-location-link" target="_blank" rel="noopener">${esc(ev.location)}</a>` : esc(ev.location)}</div>
