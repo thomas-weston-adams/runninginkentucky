@@ -55,7 +55,7 @@ function countdownLabel(days) {
 }
 
 // ── weekly schedule overrides (Supabase backend) ──────────────────────────────
-const REPORT_EMAIL  = 'thomaswestonadams@gmail.com';
+const NTFY_TOPIC    = 'rik-changes-twa-k9m4';
 const SUPABASE_URL  = 'https://bqqvlwakrwumppcsaxvj.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxcXZsd2Frcnd1bXBwY3NheHZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MjE2NzUsImV4cCI6MjA4ODk5NzY3NX0.gJwKF8bAH0nIBzKbP117R05cIwpgq8To9jsnVjbJFgo';
 
@@ -268,30 +268,17 @@ function setupOverrideModal(grid) {
     closeReportModal();
     _overrideTarget = null;
 
-    // Build mailto so the reporter can optionally notify the admin directly
+    // Silently notify admin via push notification
     const changeDesc = type === 'cancelled' ? 'Cancelled this week'
       : type === 'time'     ? `Time changed to ${newTime}`
       : type === 'location' ? `Location changed to ${newLocation}`
       : 'Other schedule update';
-    const body = [
-      `A one-time schedule change was reported on Running in Kentucky:`,
-      ``,
-      `Club: ${target.name}`,
-      `Day:  ${target.day}`,
-      `Week: ${override.weekOf}`,
-      `Change: ${changeDesc}`,
-      notes ? `Notes: ${notes}` : '',
-      ``,
-      `The change is now live on the site for all visitors.`,
-    ].filter(l => l !== undefined).join('\n');
-    const subject = `[Running in KY] Change reported: ${target.name} — ${target.day}`;
-    const mailtoUrl = `mailto:${REPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-    const a = document.createElement('a');
-    a.href = mailtoUrl;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const pushBody = `${target.name} (${target.day}): ${changeDesc}${notes ? ' — ' + notes : ''}`;
+    fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+      method: 'POST',
+      headers: { 'Title': 'Schedule change reported', 'Priority': 'default' },
+      body: pushBody,
+    }).catch(() => {});
   });
 }
 
