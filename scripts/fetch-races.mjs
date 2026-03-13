@@ -406,6 +406,65 @@ async function fetchJohns() {
   return races;
 }
 
+// ── RunSignUp ─────────────────────────────────────────────────────────────────
+// Public REST API — no key required for basic race search
+const RUNSIGNUP_API = 'https://runsignup.com/REST/races';
+
+async function fetchRunSignUp() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const startDate = today.toISOString().slice(0, 10);
+
+  // Search within 100 miles of Lexington, KY (40502)
+  const url =
+    `${RUNSIGNUP_API}?format=json&zipcode=40502&radius=100` +
+    `&start_date=${startDate}&results_per_page=250&sort=date ASC`;
+
+  console.log(`Fetching RunSignUp: ${url}`);
+
+  const res = await fetch(url, {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+        '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      Accept: 'application/json',
+    },
+  });
+
+  if (!res.ok) throw new Error(`HTTP ${res.status} from RunSignUp`);
+
+  const data = await res.json();
+  const races = data.races ?? [];
+
+  console.log(`Received ${races.length} races from RunSignUp`);
+
+  return races
+    .map(entry => {
+      const r = entry.race;
+      if (!r) return null;
+
+      // next_date is ISO string "YYYY-MM-DD HH:MM:SS" or "YYYY-MM-DD"
+      const rawDate = r.next_date || r.last_date;
+      if (!rawDate) return null;
+      const date = new Date(rawDate);
+      if (isNaN(date.getTime()) || date < today) return null;
+
+      const name = r.name;
+      if (!name) return null;
+
+      const city  = r.address?.city  || r.city  || '';
+      const state = r.address?.state || r.state || '';
+      const location = [city, state].filter(Boolean).join(', ') || 'Kentucky';
+
+      const sourceUrl = r.url
+        ? `https://runsignup.com/Race/${r.url}`
+        : `https://runsignup.com/Race/${r.race_id}`;
+
+      return { name, date: toISODate(date), location, source: 'RunSignUp', sourceUrl };
+    })
+    .filter(Boolean);
+}
+
 // ── RaceRise ───────────────────────────────────────────────────────────────────
 const RACERISE_URL = 'https://www.racerise.com/upcoming-races';
 
@@ -571,6 +630,13 @@ async function fetchRaceRise() {
     console.warn('RaceRise fetch failed:', e.message);
   }
 
+  let rsRaces = [];
+  try {
+    rsRaces = await fetchRunSignUp();
+  } catch (e) {
+    console.warn('RunSignUp fetch failed:', e.message);
+  }
+
   // Merge strategy:
   // 1. Non-UltraSignup manual entries take top priority
   // 2. Fetched UltraSignup entries come next (they have real event IDs / registration links)
@@ -594,7 +660,7 @@ async function fetchRaceRise() {
     const k = normKey(r.name, r.date);
     if (!seen.has(k)) { seen.add(k); merged.push(r); }
   }
-  for (const r of [...frRaces, ...rrRaces, ...farRaces]) {
+  for (const r of [...frRaces, ...rrRaces, ...farRaces, ...rsRaces]) {
     const k = normKey(r.name, r.date);
     if (!seen.has(k)) { seen.add(k); merged.push(r); }
   }
@@ -605,9 +671,10 @@ async function fetchRaceRise() {
   const frSource    = { key: 'FrontRunnersLex',  name: 'Front Runners Lexington',  url: FRONTRUNNERS_URL };
   const rrSource    = { key: 'RaceRise',          name: 'RaceRise',                 url: RACERISE_URL };
   const farSource   = { key: 'FindARace',         name: 'FindARace',                url: FINDARACE_URL };
+  const rsSource    = { key: 'RunSignUp',         name: 'RunSignUp',                url: 'https://runsignup.com' };
   const sources = manualData.sources
-    .filter(s => !['UltraSignup', 'FrontRunnersLex', 'RaceRise', 'FindARace'].includes(s.key))
-    .concat(ultraSource, frSource, rrSource, farSource);
+    .filter(s => !['UltraSignup', 'FrontRunnersLex', 'RaceRise', 'FindARace', 'RunSignUp'].includes(s.key))
+    .concat(ultraSource, frSource, rrSource, farSource, rsSource);
 
   const output = {
     lastUpdated: new Date().toISOString().slice(0, 10),
@@ -619,7 +686,7 @@ async function fetchRaceRise() {
   console.log(
     `\nWrote races.json — ${merged.length} total races` +
     ` (${manualRaces.length} manual + ${ultraRaces.length} UltraSignup +` +
-    ` ${frRaces.length} FrontRunners + ${rrRaces.length} RaceRise + ${farRaces.length} FindARace, deduped)`
+    ` ${frRaces.length} FrontRunners + ${rrRaces.length} RaceRise + ${farRaces.length} FindARace + ${rsRaces.length} RunSignUp, deduped)`
   );
 }
 
