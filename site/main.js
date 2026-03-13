@@ -1002,10 +1002,60 @@ function setupMusicPlayer() {
   vol.addEventListener('input', () => { audio.volume = parseFloat(vol.value); });
 }
 
+// ── weather alerts ────────────────────────────────────────────────────────────
+// NWS public API — no key required. KYC067 = Fayette County (Lexington).
+const NWS_ZONE = 'KYC067';
+
+async function fetchWeatherAlerts() {
+  const banner = document.getElementById('weather-alert-banner');
+  if (!banner) return;
+  try {
+    const res = await fetch(
+      `https://api.weather.gov/alerts/active?zone=${NWS_ZONE}`,
+      { headers: { 'User-Agent': 'RunningInKentucky/1.0 (thomaswestonadams@gmail.com)' } }
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+
+    const alerts = (data.features || []).filter(f => {
+      const p = f.properties;
+      return p.status === 'Actual' && p.messageType !== 'Cancel' &&
+        ['Extreme', 'Severe', 'Moderate', 'Minor'].includes(p.severity);
+    });
+
+    if (alerts.length === 0) { banner.hidden = true; return; }
+
+    // Sort: Extreme → Severe → Moderate → Minor
+    const order = { Extreme: 0, Severe: 1, Moderate: 2, Minor: 3 };
+    alerts.sort((a, b) => (order[a.properties.severity] ?? 9) - (order[b.properties.severity] ?? 9));
+
+    const top = alerts[0].properties;
+    const level = top.severity === 'Extreme' ? 'extreme'
+      : top.severity === 'Severe'   ? 'severe'
+      : top.severity === 'Moderate' ? 'moderate' : 'minor';
+
+    const extras = alerts.length > 1
+      ? ` <span class="weather-alert-count">+${alerts.length - 1} more alert${alerts.length > 2 ? 's' : ''}</span>` : '';
+
+    banner.className = `weather-alert-banner weather-alert--${level}`;
+    banner.innerHTML = `
+      <div class="weather-alert-inner">
+        <span class="weather-alert-icon" aria-hidden="true">⚠️</span>
+        <div class="weather-alert-body">
+          <strong class="weather-alert-event">${esc(top.event)}</strong>
+          <span class="weather-alert-headline">${esc(top.headline || '')}</span>${extras}
+        </div>
+        <a class="weather-alert-link" href="https://www.weather.gov/lmk/" target="_blank" rel="noopener">NWS details →</a>
+      </div>`;
+    banner.hidden = false;
+  } catch { /* silently ignore — non-critical */ }
+}
+
 // ── init ──────────────────────────────────────────────────────────────────────
 async function init() {
   setupDarkMode();
   setupMusicPlayer();
+  fetchWeatherAlerts();
 
   try {
     const [clubsRes, racesRes] = await Promise.all([fetch(CLUBS_URL), fetch(RACES_URL)]);
