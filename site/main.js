@@ -54,9 +54,10 @@ function countdownLabel(days) {
   return '';
 }
 
-// ── weekly schedule overrides ─────────────────────────────────────────────────
+// ── weekly schedule overrides (Supabase backend) ──────────────────────────────
 const REPORT_EMAIL  = 'thomaswestonadams@gmail.com';
-const OVERRIDES_KEY = 'ky_schedule_overrides_v1';
+const SUPABASE_URL  = 'https://bqqvlwakrwumppcsaxvj.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxcXZsd2Frcnd1bXBwY3NheHZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MjE2NzUsImV4cCI6MjA4ODk5NzY3NX0.gJwKF8bAH0nIBzKbP117R05cIwpgq8To9jsnVjbJFgo';
 
 function weekOf(date = new Date()) {
   const d = new Date(date);
@@ -66,33 +67,51 @@ function weekOf(date = new Date()) {
   return d.toISOString().slice(0, 10);
 }
 
-function loadOverrides() {
+async function loadOverrides() {
   try {
-    const all = JSON.parse(localStorage.getItem(OVERRIDES_KEY) || '{}');
-    const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 14);
-    const cutoffStr = cutoff.toISOString().slice(0, 10);
-    let changed = false;
-    Object.keys(all).forEach(k => { if (all[k].weekOf < cutoffStr) { delete all[k]; changed = true; } });
-    if (changed) localStorage.setItem(OVERRIDES_KEY, JSON.stringify(all));
-    return all;
-  } catch { return {}; }
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/schedule_overrides?week_of=eq.${weekOf()}&select=*`,
+      { headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` } }
+    );
+    if (!res.ok) return [];
+    const rows = await res.json();
+    return rows.map(r => ({
+      day: r.day, name: r.name, weekOf: r.week_of, type: r.type,
+      ...(r.new_time     && { newTime:     r.new_time }),
+      ...(r.new_location && { newLocation: r.new_location }),
+      ...(r.notes        && { notes:       r.notes }),
+    }));
+  } catch { return []; }
 }
 
-function saveOverride(override) {
+async function saveOverride(override) {
   try {
-    const all = loadOverrides();
-    all[`${override.day}::${override.name}::${override.weekOf}`] = override;
-    localStorage.setItem(OVERRIDES_KEY, JSON.stringify(all));
+    await fetch(`${SUPABASE_URL}/rest/v1/schedule_overrides`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON,
+        'Authorization': `Bearer ${SUPABASE_ANON}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates',
+      },
+      body: JSON.stringify({
+        day: override.day, name: override.name, week_of: override.weekOf,
+        type: override.type,
+        new_time:     override.newTime     || null,
+        new_location: override.newLocation || null,
+        notes:        override.notes       || null,
+      }),
+    });
   } catch { /* ignore */ }
 }
 
-function checkUrlOverride() {
+async function checkUrlOverride() {
   const wc = new URLSearchParams(location.search).get('wc');
   if (!wc) return;
   try {
     const override = JSON.parse(atob(wc));
     if (override?.day && override?.name && override?.weekOf) {
-      saveOverride(override);
+      await saveOverride(override);
       const url = new URL(location.href);
       url.searchParams.delete('wc');
       history.replaceState(null, '', url.toString());
@@ -115,14 +134,12 @@ function applyOverrideBadge(card, override, cancelClass) {
   if (override.type === 'cancelled') card.classList.add(cancelClass);
 }
 
-function applyOverrides(grid) {
-  const now = weekOf();
+async function applyOverrides(grid) {
   const todayName = todayDayName();
   const banner = document.getElementById('todays-promo');
+  const overrides = await loadOverrides();
 
-  Object.values(loadOverrides())
-    .filter(o => o.weekOf === now)
-    .forEach(override => {
+  overrides.forEach(override => {
       // Weekly calendar
       grid.querySelectorAll('.day-column').forEach(col => {
         if (col.dataset.day !== override.day) return;
@@ -180,8 +197,8 @@ function openReportModal() {
 }
 
 function setupOverrideModal(grid) {
-  checkUrlOverride();
-  applyOverrides(grid);
+  // Fire async ops without blocking — listeners set up synchronously below
+  checkUrlOverride().then(() => applyOverrides(grid));
 
   // Only wire up listeners once
   if (_overrideModalReady) return;
@@ -231,30 +248,27 @@ function setupOverrideModal(grid) {
     document.getElementById('override-newlocation-row').classList.toggle('is-hidden', typeSelect.value !== 'location');
   });
 
-  document.getElementById('override-form').addEventListener('submit', e => {
+  document.getElementById('override-form').addEventListener('submit', async e => {
     e.preventDefault();
     if (!_overrideTarget) return;
+    const target      = _overrideTarget; // capture before async ops
     const type        = typeSelect.value;
     const newTime     = document.getElementById('override-newtime').value.trim();
     const newLocation = document.getElementById('override-newlocation').value.trim();
     const notes       = document.getElementById('override-notes').value.trim();
 
     const override = {
-      day: _overrideTarget.day, name: _overrideTarget.name, weekOf: weekOf(),
+      day: target.day, name: target.name, weekOf: weekOf(),
       type, reportedAt: new Date().toISOString(),
       ...(newTime && { newTime }), ...(newLocation && { newLocation }), ...(notes && { notes }),
     };
 
-    saveOverride(override);
-    applyOverrides(document.getElementById('weekly-calendar'));
+    await saveOverride(override);
+    await applyOverrides(document.getElementById('weekly-calendar'));
     closeReportModal();
+    _overrideTarget = null;
 
-    // Build shareable URL + mailto
-    const shareUrl = (() => {
-      const u = new URL(location.href);
-      u.searchParams.set('wc', btoa(JSON.stringify(override)));
-      return u.toString();
-    })();
+    // Build mailto so the reporter can optionally notify the admin directly
     const changeDesc = type === 'cancelled' ? 'Cancelled this week'
       : type === 'time'     ? `Time changed to ${newTime}`
       : type === 'location' ? `Location changed to ${newLocation}`
@@ -262,16 +276,15 @@ function setupOverrideModal(grid) {
     const body = [
       `A one-time schedule change was reported on Running in Kentucky:`,
       ``,
-      `Club: ${_overrideTarget.name}`,
-      `Day:  ${_overrideTarget.day}`,
+      `Club: ${target.name}`,
+      `Day:  ${target.day}`,
       `Week: ${override.weekOf}`,
       `Change: ${changeDesc}`,
       notes ? `Notes: ${notes}` : '',
       ``,
-      `Shareable link (anyone who visits this URL will see the change):`,
-      shareUrl,
+      `The change is now live on the site for all visitors.`,
     ].filter(l => l !== undefined).join('\n');
-    const subject = `[Running in KY] Change reported: ${_overrideTarget.name} — ${_overrideTarget.day}`;
+    const subject = `[Running in KY] Change reported: ${target.name} — ${target.day}`;
     const mailtoUrl = `mailto:${REPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     const a = document.createElement('a');
@@ -279,8 +292,6 @@ function setupOverrideModal(grid) {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-
-    _overrideTarget = null;
   });
 }
 
